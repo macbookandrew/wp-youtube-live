@@ -108,8 +108,6 @@ add_shortcode( 'youtube_live', 'output_youtube_live' );
 function output_youtube_live( $atts ) {
     // get shortcode attributes
     $shortcode_attributes = shortcode_atts( array (
-        'not_live_text'     => NULL,
-        'autoplay'          => false,
         'width'             => 640,
         'height'            => 360,
         'autoplay'          => 0,
