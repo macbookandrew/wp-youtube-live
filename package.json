@@ -1,0 +1,27 @@
+{
+  "name": "wp-youtube-live",
+  "version": "1.0.0",
+  "description": "Displays the current YouTube live video from a specified channel",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/macbookandrew/wp-youtube-live.git"
+  },
+  "author": "AndrewRMinion Design",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/macbookandrew/wp-youtube-live/issues"
+  },
+  "homepage": "https://github.com/macbookandrew/wp-youtube-live#readme",
+  "devDependencies": {
+    "browser-sync": "^2.17.6",
+    "grunt": "^1.0.1",
+    "grunt-browser-sync": "^2.2.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-wp-readme": "^0.2.0"
+  }
+}
