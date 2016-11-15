@@ -12,7 +12,16 @@ Displays the current YouTube live video from a specified channel.
 
 == Description ==
 
-Displays the current YouTube live video from a specified channel.
+Displays the current YouTube live video from a specified channel via the shortcode `[youtube_live]`.
+
+= Shortcode Options =
+
+- width: player width in pixels; defaults to 640
+- height: player height in pixels; defaults to 360
+- autoplay: whether or not to start playing immediately on load; defaults to false
+- playsinline: whether or not the video plays full-screen on iOS devices (false) or inline in the page (true)
+
+Example shortcode: `[youtube_live width="720" height="360" autoplay="true"]`
 
 Development of this plugin is done on [GitHub](https://github.com/macbookandrew/wp-youtube-live/). Pull requests are always welcome.
 
