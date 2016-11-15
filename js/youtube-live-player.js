@@ -3,6 +3,7 @@
 
         var player,
             urlString = 'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video' + '&channelId=' + youtubeLiveSettings['channelId'] + '&key=' + youtubeLiveSettings['apiKey'];
+        console.info('YouTube search URL: '+urlString);
 
         // search YouTube channel
         $.ajax({
