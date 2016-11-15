@@ -25,11 +25,50 @@ module.exports = function (grunt) {
             },
         },
     },
+    addtextdomain: {
+        options: {
+            textdomain: 'wp-youtube-live',
+        },
+        target: {
+            files: {
+                src: [ '*.php', '**/*.php', '!node_modules/**', '!php-tests/**', '!bin/**' ]
+            }
+        }
+    },
+    wp_readme_to_markdown: {
+        custom: {
+            files: {
+                'README.md': ['readme.txt'],
+            }
+        },
+        options: {
+            screenshot_url: 'http://ps.w.org/wp-youtube-live/assets/{screenshot}.png',
+        }
+    },
+    makepot: {
+        target: {
+            options: {
+                domainPath: '/languages',
+                mainFile: 'wp-youtube-live.php',
+                potFilename: 'wp-youtube-live.pot',
+                potHeaders: {
+                    poedit: true,
+                    'x-poedit-keywordslist': true
+                },
+                type: 'wp-plugin',
+                updateTimestamp: true
+            }
+        }
+    },
   });
 
+    grunt.loadNpmTasks('grunt-wp-i18n');
+    grunt.loadNpmTasks('grunt-wp-readme-to-markdown');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browser-sync');
+    grunt.registerTask('i18n', ['addtextdomain', 'makepot']);
+    grunt.registerTask('readme', ['wp_readme_to_markdown']);
     grunt.registerTask('default', [
         'browserSync',
         'watch',
