@@ -19,9 +19,18 @@ Displays the current YouTube live video from a specified channel via the shortco
 - width: player width in pixels; defaults to 640
 - height: player height in pixels; defaults to 360
 - autoplay: whether or not to start playing immediately on load; defaults to false
-- playsinline: whether or not the video plays full-screen on iOS devices (false) or inline in the page (true)
 
 Example shortcode: `[youtube_live width="720" height="360" autoplay="true"]`
+
+The filter `youtube_live_no_stream_available` is available to customize the message viewers see if there is no live stream currently playing. For example, add this to your theme’s `functions.php` file:
+
+```
+add_filter( 'youtube_live_no_stream_available', 'my_ytl_custom_message' );
+function my_ytl_custom_message( $message ) {-
+    $message = '<p>Please check back later for a live video.</p>';
+    return $message;
+}
+```
 
 Development of this plugin is done on [GitHub](https://github.com/macbookandrew/wp-youtube-live/). Pull requests are always welcome.
 

@@ -12,13 +12,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Register scripts
-add_action( 'wp_enqueue_scripts', 'youtube_live_enqueue_scripts' );
-function youtube_live_enqueue_scripts() {
-    wp_register_script( 'youtube-live-iframe', 'https://www.youtube.com/player_api', NULL, NULL, true );
-    wp_register_script( 'youtube-live-player', plugins_url( '/js/youtube-live-player.min.js', __FILE__ ), array( 'youtube-live-iframe' ), NULL, true );
-}
-
 // Add settings page
 add_action( 'admin_menu', 'youtube_live_add_admin_menu' );
 add_action( 'admin_init', 'youtube_live_settings_init' );
@@ -119,20 +112,29 @@ function output_youtube_live( $atts ) {
     $youtube_options = get_option( 'youtube_live_settings' );
     $youtube_api_key = $youtube_options['youtube_live_api_key'];
     $youtube_channel_id = $youtube_options['youtube_live_channel_id'];
-    $youtube_live_array = json_encode( array(
+    $youtube_live_array = array(
         'apiKey'            => $youtube_api_key,
         'channelId'         => $youtube_channel_id,
         'width'             => esc_attr( $shortcode_attributes['width'] ),
         'height'            => esc_attr( $shortcode_attributes['height'] ),
         'autoplay'          => ( esc_attr($shortcode_attributes['autoplay'] ) == true ) ? 1 : 0,
-        'modestbranding'    => ( esc_attr( $shortcode_attributes['modestbranding'] ) == 'true' ) ? 1 : 0,
-        'playsinline'       => ( esc_attr( $shortcode_attributes['playsinline'] ) == 'true' ) ? 1 : 0,
-    ));
+    );
+
+    // load embed class
+    require_once( 'inc/EmbedYoutubeLiveStreaming.php' );
+
+    // set up player
+    $youtube_live = new EmbedYoutubeLiveStreaming( $youtube_live_array['channelId'], $youtube_live_array['apiKey'] );
+    $youtube_live->embed_width = $youtube_live_array['width'];
+    $youtube_live->embed_height = $youtube_live_array['height'];
+    $youtube_live->embed_autoplay = $youtube_live_array['autoplay'];
 
     // start output
-    $shortcode_content = '<div id="youtube-live-player">Getting the latest video&hellip;</div>';
-    wp_enqueue_script( 'youtube-live-player' );
-    wp_add_inline_script( 'youtube-live-player', 'var youtubeLiveSettings = ' . $youtube_live_array );
-
-    return $shortcode_content;
+    ob_start();
+    if ( $youtube_live->isLive ) {
+        echo $youtube_live->embedCode();
+    } else {
+        echo apply_filters( 'youtube_live_no_stream_available', '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_live_array['channelId'] . '">all our videos</a>.</p>' );
+    }
+    return ob_get_clean();
 }

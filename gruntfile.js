@@ -10,7 +10,6 @@ module.exports = function (grunt) {
     uglify: {
         custom: {
             files: {
-                'js/youtube-live-player.min.js': ['js/youtube-live-player.js'],
             },
         },
     },
