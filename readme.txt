@@ -4,7 +4,7 @@ Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
 Tested up to:      4.6.1
-Stable tag:        1.0.0
+Stable tag:        1.1.0
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,7 +41,30 @@ Development of this plugin is done on [GitHub](https://github.com/macbookandrew/
 1. Add your Google API key and YouTube Channel ID in the settings page (Settings > YouTube Live)
 1. Add the shortcode `[youtube_live]` into any post/page to show the live player
 
+== Frequently asked questions ==
+
+= How does this work? =
+
+This plugin uses Google’s [YouTube Data API](https://developers.google.com/youtube/v3/) to search for in-progress live videos and if one is found, embeds it in the page.
+
+= API-what? =
+
+API stands for “Application Programming Interface,” which basically means computer code that is able to talk to other computer systems and get or send information. Most API providers require an API key of some sort (similar to a username and password) to ensure that only authorized people are able to use their services.
+
+= What info is sent or received? =
+
+When the shortcode is used in a page, your web server makes a request to YouTube’s servers asking for information about the videos in your channel, using your channel ID and API key to authenticate. If you don’t have an API key set up or it’s not authorized for the YouTube Data API, the request will be denied.
+
+For more information on setting up an API key, see the [YouTube Data API reference](https://developers.google.com/youtube/registering_an_application); for purposes of this plugin, you’ll need a “browser key.”
+
+== Screenshots ==
+
+1. Settings screen
+
 == Changelog ==
+
+= 1.1.0 =
+Use PHP class instead of unreliable client-side JS to search for live videos
 
 = 1.0.0 =
 Initial release

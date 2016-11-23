@@ -3,7 +3,7 @@
 Plugin Name: YouTube Live
 Plugin URI: https://github.com/macbookandrew/wp-youtube-live
 Description: Displays the current YouTube live video from a specified channel
-Version: 1.0.0
+Version: 1.1.0
 Author: Andrew Minion
 Author URI: https://andrewrminion.com/
 */
@@ -57,13 +57,14 @@ function youtube_live_api_key_render() {
 
     <p>Don&rsquo;t have an API key?</p>
     <ol>
-        <li>Go to the <a href="https://console.developers.google.com/apis/" target="_blank">Google APIs developers console</a> (create an account if necessary)</li>
-        <li>Create a new project (if necessary)</li>
-        <li>Enable the YouTube Data API v3</li>
-        <li>Go to Credentials, click the blue button, and choose &ldquo;API key&rdquo;</li>
-        <li>Enter referrers if you wish to limit use to your website(s) (recommended)</li>
-        <li>Enter your API key above</li>
+        <li>Go to the <a href="https://console.developers.google.com/apis/" target="_blank">Google APIs developers console</a> (create an account if necessary).</li>
+        <li>Create a new project (if necessary).</li>
+        <li>Enable the YouTube Data API v3.</li>
+        <li>Go to Credentials, click the blue button, and choose &ldquo;API key&rdquo;.</li>
+        <li>Enter referrers if you wish to limit use to your website(s) (highly recommended).</li>
+        <li>Enter your API key above.</li>
     </ol>
+    <p>See <a href="https://developers.google.com/youtube/registering_an_application" target="_blank">this page</a> for more information.</p>
 
     <?php
 }
