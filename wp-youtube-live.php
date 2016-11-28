@@ -48,6 +48,14 @@ function youtube_live_settings_init() {
         'youtube_live_options',
         'youtube_live_options_keys_section'
     );
+
+    add_settings_field(
+        'youtube_live_debugging',
+        __( 'Debugging', 'youtube_live' ),
+        'youtube_live_debugging_render',
+        'youtube_live_options',
+        'youtube_live_options_keys_section'
+    );
 }
 
 // Print API Key field
@@ -75,6 +83,13 @@ function youtube_live_channel_id_render() {
     <input type="text" name="youtube_live_settings[youtube_live_channel_id]" placeholder="UcZliPwLMjeJbhOAnr1Md4gA" size="45" value="<?php echo $options['youtube_live_channel_id']; ?>">
 
     <p>Go to <a href="https://youtube.com/account_advanced/" target="_blank">YouTube Advanced Settings</a> to find your YouTube Channel ID.</p>
+    <?php
+}
+
+// Print debugging field
+function youtube_live_debugging_render() {
+    $options = get_option( 'youtube_live_settings' ); ?>
+    <label><input type="checkbox" name="youtube_live_settings[debugging]" value="true" <?php checked( $options['debugging'], 'true' ); ?>> Show debugging information in an HTML comment for logged-in users?</label>
     <?php
 }
 
@@ -137,5 +152,12 @@ function output_youtube_live( $atts ) {
     } else {
         echo apply_filters( 'youtube_live_no_stream_available', '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_live_array['channelId'] . '">all our videos</a>.</p>' );
     }
+
+    // debugging
+    $debugging_code = var_export( $youtube_live, true );
+    if ( get_option( 'youtube_live_settings', 'debugging' ) && is_user_logged_in() ) {
+        echo '<!-- YouTube Live debugging: ' . "\n" . $debugging_code . "\n" . ' -->';
+    }
+
     return ob_get_clean();
 }
