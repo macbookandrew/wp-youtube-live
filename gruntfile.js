@@ -10,6 +10,7 @@ module.exports = function (grunt) {
     uglify: {
         custom: {
             files: {
+                'js/wp-youtube-live.min.js': ['js/wp-youtube-live.js'],
             },
         },
     },

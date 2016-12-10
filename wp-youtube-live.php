@@ -112,45 +112,57 @@ function youtube_live_options_page() { ?>
     <?php
 }
 
+// Add JS
+add_action( 'wp_enqueue_scripts', 'youtube_live_scripts' );
+function youtube_live_scripts() {
+    wp_register_script( 'wp-youtube-live', plugin_dir_url( __FILE__ ) . 'js/wp-youtube-live.min.js', array( 'jquery' ), true );
+}
+
 // Add shortcode
 add_shortcode( 'youtube_live', 'output_youtube_live' );
 function output_youtube_live( $atts ) {
+    // enqueue script
+    wp_enqueue_script( 'wp-youtube-live' );
+
     // get shortcode attributes
     $shortcode_attributes = shortcode_atts( array (
-        'width'             => 640,
-        'height'            => 360,
-        'autoplay'          => 0,
-        'modestbranding'    => 0,
-        'playsinline'       => 0,
+        'width'     => 640,
+        'height'    => 360,
+        'autoplay'  => 0,
+        'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
     ), $atts );
 
-    // get saved options
-    $youtube_options = get_option( 'youtube_live_settings' );
-    $youtube_api_key = $youtube_options['youtube_live_api_key'];
-    $youtube_channel_id = $youtube_options['youtube_live_channel_id'];
-    $youtube_live_array = array(
-        'apiKey'            => $youtube_api_key,
-        'channelId'         => $youtube_channel_id,
-        'width'             => esc_attr( $shortcode_attributes['width'] ),
-        'height'            => esc_attr( $shortcode_attributes['height'] ),
-        'autoplay'          => ( esc_attr($shortcode_attributes['autoplay'] ) == true ) ? 1 : 0,
-    );
+    wp_add_inline_script( 'wp-youtube-live', 'var wpYouTubeLive = ' . json_encode( $shortcode_attributes ) );
 
+    return get_youtube_live_content( $shortcode_attributes );
+}
+
+// Add Ajax handler
+add_action( 'wp_ajax_load_youtube_live', 'get_youtube_live_content' );
+add_action( 'wp_ajax_nopriv_load_youtube_live', 'get_youtube_live_content' );
+
+// Output YouTube Live embed code
+function get_youtube_live_content( $youtube_settings ) {
     // load embed class
     require_once( 'inc/EmbedYoutubeLiveStreaming.php' );
 
+    // get saved options
+    $youtube_options = get_option( 'youtube_live_settings' );
+
     // set up player
-    $youtube_live = new EmbedYoutubeLiveStreaming( $youtube_live_array['channelId'], $youtube_live_array['apiKey'] );
-    $youtube_live->embed_width = $youtube_live_array['width'];
-    $youtube_live->embed_height = $youtube_live_array['height'];
-    $youtube_live->embed_autoplay = $youtube_live_array['autoplay'];
+    $youtube_live = new EmbedYoutubeLiveStreaming( $youtube_options['youtube_live_channel_id'], $youtube_options['youtube_live_api_key'] );
+    $youtube_live->embed_width = $youtube_settings['width'];
+    $youtube_live->embed_height = $youtube_settings['height'];
+    $youtube_live->embed_autoplay = $youtube_settings['autoplay'];
 
     // start output
     ob_start();
+    echo '<span class="wp-youtube-live">';
     if ( $youtube_live->isLive ) {
         echo $youtube_live->embedCode();
     } else {
-        echo apply_filters( 'youtube_live_no_stream_available', '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_live_array['channelId'] . '">all our videos</a>.</p>' );
+        echo apply_filters( 'youtube_live_no_stream_available', '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">all our videos</a>.</p>
+        <p><button type="button" class="button" id="check-again">Check again</button></p>' );
     }
 
     // debugging
@@ -158,6 +170,13 @@ function output_youtube_live( $atts ) {
     if ( get_option( 'youtube_live_settings', 'debugging' ) && is_user_logged_in() ) {
         echo '<!-- YouTube Live debugging: ' . "\n" . $debugging_code . "\n" . ' -->';
     }
+    echo '</span>';
 
-    return ob_get_clean();
+    // handle ajax
+    if ( $_POST['isAjax'] ) {
+        echo ob_get_clean();
+        wp_die();
+    } else {
+        return ob_get_clean();
+    }
 }
