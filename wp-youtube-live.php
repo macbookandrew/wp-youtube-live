@@ -12,6 +12,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+CONST WP_YOUTUBE_LIVE_VERSION = '1.4';
+
 // Add settings page
 add_action( 'admin_menu', 'youtube_live_add_admin_menu' );
 add_action( 'admin_init', 'youtube_live_settings_init' );
@@ -115,8 +117,8 @@ function youtube_live_options_page() { ?>
 // Add assets
 add_action( 'wp_enqueue_scripts', 'youtube_live_scripts' );
 function youtube_live_scripts() {
-    wp_register_script( 'wp-youtube-live', plugin_dir_url( __FILE__ ) . 'js/wp-youtube-live.min.js', array( 'jquery' ), true );
-    wp_register_style( 'wp-youtube-live', plugin_dir_url( __FILE__ ) . 'css/wp-youtube-live.css' );
+    wp_register_script( 'wp-youtube-live', plugin_dir_url( __FILE__ ) . 'js/wp-youtube-live.min.js', array( 'jquery' ), WP_YOUTUBE_LIVE_VERSION, true );
+    wp_register_style( 'wp-youtube-live', plugin_dir_url( __FILE__ ) . 'css/wp-youtube-live.css', array(), WP_YOUTUBE_LIVE_VERSION );
 }
 
 // Add shortcode
