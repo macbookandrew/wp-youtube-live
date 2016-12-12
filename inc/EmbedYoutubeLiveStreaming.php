@@ -64,24 +64,35 @@ class EmbedYoutubeLiveStreaming {
     }
 
     public function queryIt() {
-        $this->queryData = array(
-            "part" => $this->part,
-            "channelId" => $this->channelId,
-            "eventType" => $this->eventType,
-            "type" => $this->type,
-            "key" => $this->API_Key,
-        );
-        $this->getQuery = http_build_query($this->queryData); // transform array of data in url query
-        $this->queryString = $this->getAddress . $this->getQuery;
+        // check transient before performing query
+        $wp_youtube_live_transient = get_transient( 'wp-youtube-live-api-response' );
 
-        // request from API via curl
-        $curl = curl_init();
-        curl_setopt( $curl, CURLOPT_URL, $this->queryString );
-        curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
-        curl_setopt( $curl, CURLOPT_CAINFO, plugin_dir_path( __FILE__ ) . 'cacert.pem' );
-        curl_setopt( $curl, CURLOPT_CAPATH, plugin_dir_path( __FILE__ ) );
-        $this->jsonResponse = curl_exec( $curl );
-        curl_close( $curl );
+        // if no or expired transient, set up query
+        if ( false === $wp_youtube_live_transient ) {
+            $this->queryData = array(
+                "part" => $this->part,
+                "channelId" => $this->channelId,
+                "eventType" => $this->eventType,
+                "type" => $this->type,
+                "key" => $this->API_Key,
+            );
+            $this->getQuery = http_build_query($this->queryData); // transform array of data in url query
+            $this->queryString = $this->getAddress . $this->getQuery;
+
+            // request from API via curl
+            $curl = curl_init();
+            curl_setopt( $curl, CURLOPT_URL, $this->queryString );
+            curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+            curl_setopt( $curl, CURLOPT_CAINFO, plugin_dir_path( __FILE__ ) . 'cacert.pem' );
+            curl_setopt( $curl, CURLOPT_CAPATH, plugin_dir_path( __FILE__ ) );
+            $this->jsonResponse = curl_exec( $curl );
+            curl_close( $curl );
+
+            // save to 30-second transient to reduce API calls
+            set_transient( 'wp-youtube-live-api-response', $this->jsonResponse, 30 );
+        } else {
+            $this->jsonResponse = $wp_youtube_live_transient;
+        }
 
         $this->objectResponse = json_decode($this->jsonResponse); // decode as object
         $this->arrayResponse = json_decode($this->jsonResponse, TRUE); // decode as array
