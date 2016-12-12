@@ -89,7 +89,7 @@ class EmbedYoutubeLiveStreaming {
             curl_close( $curl );
 
             // save to 30-second transient to reduce API calls
-            set_transient( 'wp-youtube-live-api-response', $this->jsonResponse, apply_filters( 'wp_youtube-live_transient_timeout', '30' ) );
+            set_transient( 'wp-youtube-live-api-response', $this->jsonResponse, apply_filters( 'wp_youtube_live_transient_timeout', '30' ) );
         } else {
             $this->jsonResponse = $wp_youtube_live_transient;
         }

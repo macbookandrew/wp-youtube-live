@@ -163,7 +163,7 @@ function get_youtube_live_content( $youtube_settings ) {
     if ( $youtube_live->isLive ) {
         echo $youtube_live->embedCode();
     } else {
-        echo apply_filters( 'youtube_live_no_stream_available', '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">all our videos</a>.</p>
+        echo apply_filters( 'wp_youtube_live_no_stream_available', '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">all our videos</a>.</p>
         <p><button type="button" class="button" id="check-again">Check again</button><span class="spinner" style="display:none;"></span></p>' );
     }
 
