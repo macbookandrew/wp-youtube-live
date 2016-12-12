@@ -4,7 +4,7 @@
 **Tags:**              youtube, live, video, embed  
 **Requires at least:** 3.6  
 **Tested up to:**      4.6.1  
-**Stable tag:**        1.2  
+**Stable tag:**        1.4  
 **License:**           GPLv2 or later  
 **License URI:**       http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -22,13 +22,23 @@ Displays the current YouTube live video from a specified channel via the shortco
 
 Example shortcode: `[youtube_live width="720" height="360" autoplay="true"]`
 
-The filter `youtube_live_no_stream_available` is available to customize the message viewers see if there is no live stream currently playing. For example, add this to your theme’s `functions.php` file:
+The filter `wp_youtube_live_no_stream_available` is available to customize the message viewers see if there is no live stream currently playing. For example, add this to your theme’s `functions.php` file:
 
 ```
-add_filter( 'youtube_live_no_stream_available', 'my_ytl_custom_message' );
-function my_ytl_custom_message( $message ) {-
-    $message = '<p>Please check back later for a live video.</p>';
+add_filter( 'wp_youtube_live_no_stream_available', 'my_ytl_custom_message' );
+function my_ytl_custom_message( $message ) {
+    $message = '<p>Please check back later or subscribe to <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">our YouTube channel</a>.</p>
+    <p><button type="button" class="button" id="check-again">Check again</button><span class="spinner" style="display:none;"></span></p>';
     return $message;
+}
+```
+
+The filter `wp_youtube_live_transient_timeout` is available to customize the cache timeout length in seconds. For example, add this to your theme’s `functions.php` file to set the cache length to 15 seconds instead of the default 30:
+
+```
+add_filter( 'wp_youtube_live_transient_timeout', 'my_ytl_custom_timeout' );
+function my_ytl_custom_timeout( $message ) {
+    return '15';
 }
 ```
 
@@ -65,11 +75,19 @@ For more information on setting up an API key, see the [YouTube Data API referen
 
 ## Changelog ##
 
+### 1.4 ###
+- Use curl instead of file_get_contents as it didn’t work reliably on some hosting environments.
+- Add a visual spinner when checking via Ajax
+- Cache results to reduce API calls (defaults to 30-second expiration)
+
+### 1.3 ###
+- Add Ajax button to check from client-side for live video
+
 ### 1.2 ###
-Add debugging information for logged-in users
+- Add debugging information for logged-in users
 
 ### 1.1 ###
-Use PHP class instead of unreliable client-side JS to search for live videos
+- Use PHP class instead of unreliable client-side JS to search for live videos
 
 ### 1.0 ###
-Initial release
+- Initial release
