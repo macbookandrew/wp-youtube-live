@@ -8,18 +8,23 @@
 
         $('body').on('click', 'button#check-again', function() {
             event.preventDefault();
+            $('.wp-youtube-live .spinner').show();
             sendRequest(data);
         });
 
         // make request
         function sendRequest(data) {
-            $.post(
-                wpYouTubeLive.ajaxUrl,
-                data,
-                function(response) {
-                    $('.wp-youtube-live').replaceWith(response);
-                }
-            );
+            $.ajax({
+                method: "POST",
+                url: wpYouTubeLive.ajaxUrl,
+                data: data
+            })
+            .done(function(response) {
+                $('.wp-youtube-live').replaceWith(response);
+            })
+            .always(function() {
+                $('.wp-youtube-live .spinner').hide();
+            })
         }
     });
 })(jQuery);

@@ -112,17 +112,19 @@ function youtube_live_options_page() { ?>
     <?php
 }
 
-// Add JS
+// Add assets
 add_action( 'wp_enqueue_scripts', 'youtube_live_scripts' );
 function youtube_live_scripts() {
     wp_register_script( 'wp-youtube-live', plugin_dir_url( __FILE__ ) . 'js/wp-youtube-live.min.js', array( 'jquery' ), true );
+    wp_register_style( 'wp-youtube-live', plugin_dir_url( __FILE__ ) . 'css/wp-youtube-live.css' );
 }
 
 // Add shortcode
 add_shortcode( 'youtube_live', 'output_youtube_live' );
 function output_youtube_live( $atts ) {
-    // enqueue script
+    // enqueue asstes
     wp_enqueue_script( 'wp-youtube-live' );
+    wp_enqueue_style( 'wp-youtube-live' );
 
     // get shortcode attributes
     $shortcode_attributes = shortcode_atts( array (
@@ -162,7 +164,7 @@ function get_youtube_live_content( $youtube_settings ) {
         echo $youtube_live->embedCode();
     } else {
         echo apply_filters( 'youtube_live_no_stream_available', '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">all our videos</a>.</p>
-        <p><button type="button" class="button" id="check-again">Check again</button></p>' );
+        <p><button type="button" class="button" id="check-again">Check again</button><span class="spinner" style="display:none;"></span></p>' );
     }
 
     // debugging
