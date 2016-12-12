@@ -60,7 +60,7 @@ class EmbedYoutubeLiveStreaming {
 
         $this->embed_autoplay = true;
 
-        if($autoQuery == true) { $this->queryIt(); }
+        if ($autoQuery == true) { $this->queryIt(); }
     }
 
     public function queryIt() {
@@ -87,8 +87,7 @@ class EmbedYoutubeLiveStreaming {
         $this->arrayResponse = json_decode($this->jsonResponse, TRUE); // decode as array
 
         $this->isLive();
-        if($this->isLive)
-        {
+        if ($this->isLive) {
             $this->live_video_id = $this->objectResponse->items[0]->id->videoId;
             $this->live_video_title = $this->objectResponse->items[0]->snippet->title;
             $this->live_video_description = $this->objectResponse->items[0]->snippet->description;
@@ -104,20 +103,16 @@ class EmbedYoutubeLiveStreaming {
     }
 
     public function isLive($getOrNot = false) {
-        if($getOrNot==true)
-        {
+        if ($getOrNot==true) {
             $this->queryIt();
         }
 
         $live_items = count($this->objectResponse->items);
 
-        if($live_items>0)
-        {
+        if ($live_items>0) {
             $this->isLive = true;
             return true;
-        }
-        else
-        {
+        } else {
             $this->isLive = false;
             return false;
         }
@@ -128,7 +123,7 @@ class EmbedYoutubeLiveStreaming {
         $this->embed_width = $width;
         $this->embed_height = $width / $ratio;
 
-        if( $refill_code == true ) { $this->embedCode(); }
+        if ( $refill_code == true ) { $this->embedCode(); }
     }
 
     public function setEmbedSizeByHeight($height, $refill_code = true) {
@@ -136,7 +131,7 @@ class EmbedYoutubeLiveStreaming {
                 $this->embed_height = $height;
                 $this->embed_width = $height * $ratio;
 
-        if( $refill_code == true ) { $this->embedCode(); }
+        if ( $refill_code == true ) { $this->embedCode(); }
     }
 
     public function embedCode() {
