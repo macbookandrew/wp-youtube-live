@@ -151,9 +151,9 @@ function get_youtube_live_content( $youtube_settings ) {
 
     // set up player
     $youtube_live = new EmbedYoutubeLiveStreaming( $youtube_options['youtube_live_channel_id'], $youtube_options['youtube_live_api_key'] );
-    $youtube_live->embed_width = $youtube_settings['width'];
-    $youtube_live->embed_height = $youtube_settings['height'];
-    $youtube_live->embed_autoplay = $youtube_settings['autoplay'];
+    $youtube_live->embed_width = ( $_POST['isAjax'] ? esc_attr( $_POST['width'] ) : $youtube_settings['width'] );
+    $youtube_live->embed_height = ( $_POST['isAjax'] ? esc_attr( $_POST['height'] ) : $youtube_settings['height'] );
+    $youtube_live->embed_autoplay = ( $_POST['isAjax'] ? esc_attr( $_POST['autoplay'] ) : $youtube_settings['autoplay'] );
 
     // start output
     ob_start();
