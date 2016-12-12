@@ -4,7 +4,7 @@ Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
 Tested up to:      4.6.1
-Stable tag:        1.4
+Stable tag:        1.4.1
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,9 @@ For more information on setting up an API key, see the [YouTube Data API referen
 1. Settings screen
 
 == Changelog ==
+
+= 1.4.1 =
+- Fix minor issues
 
 = 1.4 =
 - Use curl instead of file_get_contents as it didn’t work reliably on some hosting environments.
