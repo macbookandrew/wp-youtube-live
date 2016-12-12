@@ -74,7 +74,15 @@ class EmbedYoutubeLiveStreaming {
         $this->getQuery = http_build_query($this->queryData); // transform array of data in url query
         $this->queryString = $this->getAddress . $this->getQuery;
 
-        $this->jsonResponse = file_get_contents($this->queryString); // pure server response
+        // request from API via curl
+        $curl = curl_init();
+        curl_setopt( $curl, CURLOPT_URL, $this->queryString );
+        curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $curl, CURLOPT_CAINFO, plugin_dir_path( __FILE__ ) . 'cacert.pem' );
+        curl_setopt( $curl, CURLOPT_CAPATH, plugin_dir_path( __FILE__ ) );
+        $this->jsonResponse = curl_exec( $curl );
+        curl_close( $curl );
+
         $this->objectResponse = json_decode($this->jsonResponse); // decode as object
         $this->arrayResponse = json_decode($this->jsonResponse, TRUE); // decode as array
 
