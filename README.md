@@ -24,23 +24,23 @@ Example shortcode: `[youtube_live width="720" height="360" autoplay="true"]`
 
 The filter `wp_youtube_live_no_stream_available` is available to customize the message viewers see if there is no live stream currently playing. For example, add this to your theme’s `functions.php` file:
 
-```
-add_filter( 'wp_youtube_live_no_stream_available', 'my_ytl_custom_message' );
-function my_ytl_custom_message( $message ) {
-    $message = '<p>Please check back later or subscribe to <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">our YouTube channel</a>.</p>
-    <p><button type="button" class="button" id="check-again">Check again</button><span class="spinner" style="display:none;"></span></p>';
-    return $message;
-}
-```
+
+	add_filter( 'wp_youtube_live_no_stream_available', 'my_ytl_custom_message' );
+	function my_ytl_custom_message( $message ) {
+	    $message = '<p>Please check back later or subscribe to <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">our YouTube channel</a>.</p>
+	    <p><button type="button" class="button" id="check-again">Check again</button><span class="spinner" style="display:none;"></span></p>';
+	    return $message;
+	}
+
 
 The filter `wp_youtube_live_transient_timeout` is available to customize the cache timeout length in seconds. For example, add this to your theme’s `functions.php` file to set the cache length to 15 seconds instead of the default 30:
 
-```
-add_filter( 'wp_youtube_live_transient_timeout', 'my_ytl_custom_timeout' );
-function my_ytl_custom_timeout( $message ) {
-    return '15';
-}
-```
+
+	add_filter( 'wp_youtube_live_transient_timeout', 'my_ytl_custom_timeout' );
+	function my_ytl_custom_timeout( $message ) {
+	    return '15';
+	}
+
 
 Development of this plugin is done on [GitHub](https://github.com/macbookandrew/wp-youtube-live/). Pull requests are always welcome.
 
