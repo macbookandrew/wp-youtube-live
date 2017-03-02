@@ -52,6 +52,14 @@ function youtube_live_settings_init() {
     );
 
     add_settings_field(
+        'youtube_subdomain',
+        __( 'YouTube Subdomain', 'youtube_live' ),
+        'youtube_live_subdomain_render',
+        'youtube_live_options',
+        'youtube_live_options_keys_section'
+    );
+
+    add_settings_field(
         'youtube_live_debugging',
         __( 'Debugging', 'youtube_live' ),
         'youtube_live_debugging_render',
@@ -85,6 +93,16 @@ function youtube_live_channel_id_render() {
     <input type="text" name="youtube_live_settings[youtube_live_channel_id]" placeholder="UcZliPwLMjeJbhOAnr1Md4gA" size="45" value="<?php echo $options['youtube_live_channel_id']; ?>">
 
     <p>Go to <a href="https://youtube.com/account_advanced/" target="_blank">YouTube Advanced Settings</a> to find your YouTube Channel ID.</p>
+    <?php
+}
+
+// Print subdomain field
+function youtube_live_subdomain_render() {
+    $options = get_option( 'youtube_live_settings' ); ?>
+    <label><select name="youtube_live_settings[subdomain]">
+        <option value="www" <?php selected( $options['subdomain'], 'www' ); ?>>Default (www.youtube.com)</option>
+        <option value="gaming" <?php selected( $options['subdomain'], 'gaming' ); ?>>Gaming (gaming.youtube.com)</option>
+    </select></label>
     <?php
 }
 
@@ -156,6 +174,7 @@ function get_youtube_live_content( $youtube_settings ) {
 
     // set up player
     $youtube_live = new EmbedYoutubeLiveStreaming( $youtube_options['youtube_live_channel_id'], $youtube_options['youtube_live_api_key'] );
+    $youtube_live->subdomain = $youtube_options['subdomain'];
     $youtube_live->embed_width = ( $_POST['isAjax'] ? esc_attr( $_POST['width'] ) : $youtube_settings['width'] );
     $youtube_live->embed_height = ( $_POST['isAjax'] ? esc_attr( $_POST['height'] ) : $youtube_settings['height'] );
     $youtube_live->embed_autoplay = ( $_POST['isAjax'] ? esc_attr( $_POST['autoplay'] ) : $youtube_settings['autoplay'] );

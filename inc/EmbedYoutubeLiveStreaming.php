@@ -20,6 +20,8 @@ class EmbedYoutubeLiveStreaming {
     public $eventType;
     public $type;
 
+    public $subdomain;
+
     public $default_embed_width;
     public $default_embed_height;
     public $default_ratio;
@@ -152,7 +154,7 @@ class EmbedYoutubeLiveStreaming {
 <iframe
     width="{$this->embed_width}"
     height="{$this->embed_height}"
-    src="//www.youtube.com/embed/{$this->live_video_id}{$autoplay}"
+    src="//$this->subdomain.youtube.com/embed/{$this->live_video_id}{$autoplay}"
     frameborder="0"
     allowfullscreen>
 </iframe>
