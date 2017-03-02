@@ -130,10 +130,11 @@ function output_youtube_live( $atts ) {
 
     // get shortcode attributes
     $shortcode_attributes = shortcode_atts( array (
-        'width'     => 640,
-        'height'    => 360,
-        'autoplay'  => 0,
-        'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
+        'width'             => 640,
+        'height'            => 360,
+        'autoplay'          => 0,
+        'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
+        'no_stream_message' => NULL,
     ), $atts );
 
     wp_add_inline_script( 'wp-youtube-live', 'var wpYouTubeLive = ' . json_encode( $shortcode_attributes ) );
@@ -159,14 +160,23 @@ function get_youtube_live_content( $youtube_settings ) {
     $youtube_live->embed_height = ( $_POST['isAjax'] ? esc_attr( $_POST['height'] ) : $youtube_settings['height'] );
     $youtube_live->embed_autoplay = ( $_POST['isAjax'] ? esc_attr( $_POST['autoplay'] ) : $youtube_settings['autoplay'] );
 
+    // set default message
+    if ( ! $youtube_settings['no_stream_message'] ) {
+        $no_stream_message = apply_filters( 'wp_youtube_live_no_stream_available', '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">all our videos</a>.</p>
+        <p><button type="button" class="button" id="check-again">Check again</button><span class="spinner" style="display:none;"></span></p>' );
+    } elseif ( 'no_message' == $youtube_settings['no_stream_message'] ) {
+        $no_stream_message = NULL;
+    }
+
     // start output
     ob_start();
-    echo '<span class="wp-youtube-live">';
+    if ( $no_stream_message || $youtube_live->isLive ) {
+        echo '<span class="wp-youtube-live">';
+    }
     if ( $youtube_live->isLive ) {
         echo $youtube_live->embedCode();
     } else {
-        echo apply_filters( 'wp_youtube_live_no_stream_available', '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">all our videos</a>.</p>
-        <p><button type="button" class="button" id="check-again">Check again</button><span class="spinner" style="display:none;"></span></p>' );
+        echo $no_stream_message;
     }
 
     // debugging
@@ -174,7 +184,9 @@ function get_youtube_live_content( $youtube_settings ) {
     if ( get_option( 'youtube_live_settings', 'debugging' ) && is_user_logged_in() ) {
         echo '<!-- YouTube Live debugging: ' . "\n" . $debugging_code . "\n" . ' -->';
     }
-    echo '</span>';
+    if ( $no_stream_message || $youtube_live->isLive ) {
+        echo '</span>';
+    }
 
     // handle ajax
     if ( $_POST['isAjax'] ) {

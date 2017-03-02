@@ -19,10 +19,11 @@ Displays the current YouTube live video from a specified channel via the shortco
 - width: player width in pixels; defaults to 640
 - height: player height in pixels; defaults to 360
 - autoplay: whether or not to start playing immediately on load; defaults to false
+- no_stream_message: simple text message to show when no stream is available; use `no_stream_message="no_message"` to show nothing at all.
 
 Example shortcode: `[youtube_live width="720" height="360" autoplay="true"]`
 
-The filter `wp_youtube_live_no_stream_available` is available to customize the message viewers see if there is no live stream currently playing. For example, add this to your theme’s `functions.php` file:
+The filter `wp_youtube_live_no_stream_available` is also available to customize the message viewers see if there is no live stream currently playing, and takes effect **before** the `no_stream_message` shortcode attribute is parsed (if `no_stream_message="no_message"` is set, it will override the filter). For example, add this to your theme’s `functions.php` file:
 
 
 	add_filter( 'wp_youtube_live_no_stream_available', 'my_ytl_custom_message' );
