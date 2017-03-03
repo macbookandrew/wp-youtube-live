@@ -3,7 +3,7 @@
 Plugin Name: YouTube Live
 Plugin URI: https://github.com/macbookandrew/wp-youtube-live
 Description: Displays the current YouTube live video from a specified channel
-Version: 1.5.2
+Version: 1.5.3
 Author: Andrew Minion
 Author URI: https://andrewrminion.com/
 */
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-CONST WP_YOUTUBE_LIVE_VERSION = '1.5.2';
+CONST WP_YOUTUBE_LIVE_VERSION = '1.5.3';
 
 // Add settings page
 add_action( 'admin_menu', 'youtube_live_add_admin_menu' );
@@ -187,11 +187,9 @@ function get_youtube_live_content( $youtube_settings ) {
     if ( 'no_message' == $youtube_settings['no_stream_message'] ) {
         $no_stream_message = NULL;
     } else {
-        $no_stream_message = '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">all our videos</a>.</p>
-        <p><button type="button" class="button" id="check-again">Check again</button><span class="spinner" style="display:none;"></span></p>';
+        $no_stream_message = apply_filters( 'wp_youtube_live_no_stream_available', '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">all our videos</a>.</p>
+        <p><button type="button" class="button" id="check-again">Check again</button><span class="spinner" style="display:none;"></span></p>' );
     }
-
-    $no_stream_message = apply_filters( 'wp_youtube_live_no_stream_available', $youtube_settings['no_stream_message'] );
 
     // start output
     ob_start();

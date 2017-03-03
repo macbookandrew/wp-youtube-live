@@ -4,7 +4,7 @@
 **Tags:**              youtube, live, video, embed  
 **Requires at least:** 3.6  
 **Tested up to:**      4.6.1  
-**Stable tag:**        1.5.2  
+**Stable tag:**        1.5.3  
 **License:**           GPLv2 or later  
 **License URI:**       http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -75,6 +75,9 @@ For more information on setting up an API key, see the [YouTube Data API referen
 
 
 ## Changelog ##
+
+### 1.5.3 ###
+- Minor fix for `no_stream_message` attribute handling
 
 ### 1.5.2 ###
 - Minor fix for `no_stream_message` attribute handling
