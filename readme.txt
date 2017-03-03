@@ -4,7 +4,7 @@ Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
 Tested up to:      4.6.1
-Stable tag:        1.4.2
+Stable tag:        1.5
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,6 +73,10 @@ For more information on setting up an API key, see the [YouTube Data API referen
 1. Settings screen
 
 == Changelog ==
+
+= 1.5 =
+- Add support for pre-shortcode “no stream available” message
+- Add support for gaming.youtube.com subdomain
 
 = 1.4.2 =
 - Fix minor readme formatting issues
