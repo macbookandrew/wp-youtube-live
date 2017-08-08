@@ -43,6 +43,12 @@ class EmbedYoutubeLiveStreaming {
 
     public $channel_title;
 
+    /**
+     * Set up the query
+     * @param string  $ChannelID  YouTube channel ID
+     * @param string  $API_Key    Google Developers API key
+     * @param boolean [$autoQuery = true]  whether to automatically run the query
+     */
     public function __construct($ChannelID, $API_Key, $autoQuery = true) {
         $this->channelId = $ChannelID;
         $this->API_Key = $API_Key;
@@ -62,21 +68,26 @@ class EmbedYoutubeLiveStreaming {
 
         $this->embed_autoplay = true;
 
-        if ($autoQuery == true) { $this->queryIt(); }
+        if ( $autoQuery == true ) {
+            $this->getVideoInfo();
+        }
     }
 
     public function queryIt() {
+    /**
+     * Get video info
+     */
         // check transient before performing query
         $wp_youtube_live_transient = get_transient( 'wp-youtube-live-api-response' );
 
         // if no or expired transient, set up query
         if ( false === $wp_youtube_live_transient ) {
             $this->queryData = array(
-                "part" => $this->part,
+                "part"      => $this->part,
                 "channelId" => $this->channelId,
                 "eventType" => $this->eventType,
-                "type" => $this->type,
-                "key" => $this->API_Key,
+                "type"      => $this->type,
+                "key"       => $this->API_Key,
             );
             $this->getQuery = http_build_query($this->queryData); // transform array of data in url query
             $this->queryString = $this->getAddress . $this->getQuery;
@@ -118,11 +129,16 @@ class EmbedYoutubeLiveStreaming {
     public function isLive($getOrNot = false) {
         if ($getOrNot==true) {
             $this->queryIt();
+    /**
+     * Determine whether there is a live video or not
+     * @param  boolean [$getOrNot = false] whether to run the query or not
+     * @return boolean whether or not a video is live
+     */
         }
 
-        $live_items = count($this->objectResponse->items);
+        $live_items = count( $this->objectResponse->items );
 
-        if ($live_items>0) {
+        if ( $live_items > 0 ) {
             $this->isLive = true;
             return true;
         } else {
@@ -131,22 +147,40 @@ class EmbedYoutubeLiveStreaming {
         }
     }
 
-    public function setEmbedSizeByWidth($width, $refill_code = true) {
+    /**
+     * Calculate embed size by width
+     * @param integer $width        width in pixels
+     * @param boolean [$refill_code = true] whether to generate embed code or not
+     */
+    public function setEmbedSizeByWidth( $width, $refill_code = true ) {
         $ratio = $this->default_embed_width / $this->default_embed_height;
         $this->embed_width = $width;
         $this->embed_height = $width / $ratio;
 
-        if ( $refill_code == true ) { $this->embedCode(); }
+        if ( $refill_code == true ) {
+            $this->embedCode();
+        }
     }
 
-    public function setEmbedSizeByHeight($height, $refill_code = true) {
-                $ratio = $this->default_embed_width / $this->default_embed_height;
-                $this->embed_height = $height;
-                $this->embed_width = $height * $ratio;
+    /**
+     * Calculate embed size by height
+     * @param integer $height       height in pixels
+     * @param boolean [$refill_code = true] whether to generate embed code or not
+     */
+    public function setEmbedSizeByHeight( $height, $refill_code = true ) {
+        $ratio = $this->default_embed_width / $this->default_embed_height;
+        $this->embed_height = $height;
+        $this->embed_width = $height * $ratio;
 
-        if ( $refill_code == true ) { $this->embedCode(); }
+        if ( $refill_code == true ) {
+            $this->embedCode();
+        }
     }
 
+    /**
+     * Generate embed code
+     * @return string HTML embed code
+     */
     public function embedCode() {
         $autoplay = $this->embed_autoplay ? "?autoplay=1" : "";
 
