@@ -41,6 +41,10 @@ class EmbedYoutubeLiveStreaming {
     public $live_video_thumb_medium;
     public $live_video_thumb_high;
 
+    public $resource_type;
+
+    public $uploads_id;
+
     public $channel_title;
 
     /**
@@ -57,7 +61,8 @@ class EmbedYoutubeLiveStreaming {
         $this->eventType = "live";
         $this->type = "video";
 
-        $this->getAddress = "https://www.googleapis.com/youtube/v3/search?";
+        $this->getAddress = "https://www.googleapis.com/youtube/v3/";
+        $this->resource = "search";
 
         $this->default_embed_width = "560";
         $this->default_embed_height = "315";
@@ -97,11 +102,7 @@ class EmbedYoutubeLiveStreaming {
             $this->jsonResponse = $wp_youtube_live_transient;
         }
 
-        $this->objectResponse = json_decode($this->jsonResponse); // decode as object
-        $this->arrayResponse = json_decode($this->jsonResponse, TRUE); // decode as array
-
-        $this->isLive();
-        if ($this->isLive) {
+        if ( $this->isLive( false ) ) {
             $this->live_video_id = $this->objectResponse->items[0]->id->videoId;
             $this->live_video_title = $this->objectResponse->items[0]->snippet->title;
             $this->live_video_description = $this->objectResponse->items[0]->snippet->description;
@@ -112,6 +113,21 @@ class EmbedYoutubeLiveStreaming {
             $this->live_video_thumb_high = $this->objectResponse->items[0]->snippet->thumbnails->high->url;
 
             $this->channel_title = $this->objectResponse->items[0]->snippet->channelTitle;
+            $this->embedCode();
+        } else {
+            $this->resource = 'channels';
+            $this->queryData = array(
+                "id"    => $this->channelId,
+                "key"   => $this->API_Key,
+                "part"  => 'contentDetails'
+            );
+            $this->queryAPI();
+
+            if ( $this->objectResponse ) {
+                $this->uploads_id = $this->objectResponse->items[0]->contentDetails->relatedPlaylists->uploads;
+                $this->resource_type = 'channel';
+            }
+
             $this->embedCode();
         }
     }
@@ -195,13 +211,19 @@ class EmbedYoutubeLiveStreaming {
      * @return string HTML embed code
      */
     public function embedCode() {
-        $autoplay = $this->embed_autoplay ? "?autoplay=1" : "";
+        $autoplay = $this->embed_autoplay ? "&autoplay=1" : "";
+        $related = $this->show_related ? "&rel=1" : "&rel=0";
+        if ( $this->resource_type == 'channel' ) {
+            $embedResource = '?listType=playlist&list=' . $this->uploads_id;
+        } else {
+            $embedResource = '/' . $this->live_video_id . '?';
+        }
 
         $this->embed_code = <<<EOT
 <iframe
     width="{$this->embed_width}"
     height="{$this->embed_height}"
-    src="//$this->subdomain.youtube.com/embed/{$this->live_video_id}{$autoplay}"
+    src="//$this->subdomain.youtube.com/embed{$embedResource}{$autoplay}{$related}"
     frameborder="0"
     allowfullscreen>
 </iframe>
