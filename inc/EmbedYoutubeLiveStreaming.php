@@ -81,9 +81,13 @@ class EmbedYoutubeLiveStreaming {
     /**
      * Get video info
      */
-    public function getVideoInfo() {
+    public function getVideoInfo( $resource_type = 'live' ) {
         // check transient before performing query
         $wp_youtube_live_transient = get_transient( 'wp-youtube-live-api-response' );
+
+        if ( ! $this->resource_type || $resource_type !== $this->resource_type ) {
+            $this->resource_type = $resource_type;
+        }
 
         // if no or expired transient, set up query
         if ( false === $wp_youtube_live_transient ) {
@@ -102,7 +106,7 @@ class EmbedYoutubeLiveStreaming {
             $this->jsonResponse = $wp_youtube_live_transient;
         }
 
-        if ( $this->isLive( false ) ) {
+        if ( $this->resource_type == 'live' && $this->isLive() ) {
             $this->live_video_id = $this->objectResponse->items[0]->id->videoId;
             $this->live_video_title = $this->objectResponse->items[0]->snippet->title;
             $this->live_video_description = $this->objectResponse->items[0]->snippet->description;
@@ -114,7 +118,7 @@ class EmbedYoutubeLiveStreaming {
 
             $this->channel_title = $this->objectResponse->items[0]->snippet->channelTitle;
             $this->embedCode();
-        } else {
+        } elseif ( $this->resource_type == 'channel' ) {
             $this->resource = 'channels';
             $this->queryData = array(
                 "id"    => $this->channelId,
