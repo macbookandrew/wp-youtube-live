@@ -73,10 +73,10 @@ class EmbedYoutubeLiveStreaming {
         }
     }
 
-    public function queryIt() {
     /**
      * Get video info
      */
+    public function getVideoInfo() {
         // check transient before performing query
         $wp_youtube_live_transient = get_transient( 'wp-youtube-live-api-response' );
 
@@ -89,17 +89,7 @@ class EmbedYoutubeLiveStreaming {
                 "type"      => $this->type,
                 "key"       => $this->API_Key,
             );
-            $this->getQuery = http_build_query($this->queryData); // transform array of data in url query
-            $this->queryString = $this->getAddress . $this->getQuery;
-
-            // request from API via curl
-            $curl = curl_init();
-            curl_setopt( $curl, CURLOPT_URL, $this->queryString );
-            curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
-            curl_setopt( $curl, CURLOPT_CAINFO, plugin_dir_path( __FILE__ ) . 'cacert.pem' );
-            curl_setopt( $curl, CURLOPT_CAPATH, plugin_dir_path( __FILE__ ) );
-            $this->jsonResponse = curl_exec( $curl );
-            curl_close( $curl );
+            $this->queryAPI();
 
             // save to 30-second transient to reduce API calls
             set_transient( 'wp-youtube-live-api-response', $this->jsonResponse, apply_filters( 'wp_youtube_live_transient_timeout', '30' ) );
@@ -129,6 +119,29 @@ class EmbedYoutubeLiveStreaming {
     public function isLive($getOrNot = false) {
         if ($getOrNot==true) {
             $this->queryIt();
+    /**
+     * Query the YouTube API
+     * @return string JSON API response
+     */
+    function queryAPI() {
+        $this->getQuery = http_build_query( $this->queryData ); // transform array of data in url query
+        $this->queryString = $this->getAddress . $this->resource . '?' . $this->getQuery;
+
+        // request from API via curl
+        $curl = curl_init();
+        curl_setopt( $curl, CURLOPT_URL, $this->queryString );
+        curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $curl, CURLOPT_CAINFO, plugin_dir_path( __FILE__ ) . 'cacert.pem' );
+        curl_setopt( $curl, CURLOPT_CAPATH, plugin_dir_path( __FILE__ ) );
+        $this->jsonResponse = curl_exec( $curl );
+        curl_close( $curl );
+
+        $this->objectResponse = json_decode( $this->jsonResponse ); // decode as object
+        $this->arrayResponse = json_decode( $this->jsonResponse, TRUE ); // decode as array
+
+        return $this->jsonResponse;
+    }
+
     /**
      * Determine whether there is a live video or not
      * @param  boolean [$getOrNot = false] whether to run the query or not
