@@ -205,8 +205,8 @@ function get_youtube_live_content( $youtube_settings ) {
     }
 
     // debugging
-    $debugging_code = var_export( $youtube_live, true );
     if ( get_option( 'youtube_live_settings', 'debugging' ) && is_user_logged_in() ) {
+        $debugging_code = var_export( $youtube_live, true );
         echo '<!-- YouTube Live debugging: ' . "\n" . $debugging_code . "\n" . ' -->';
     }
     if ( $no_stream_message || $youtube_live->isLive ) {
