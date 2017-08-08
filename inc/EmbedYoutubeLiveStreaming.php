@@ -116,9 +116,6 @@ class EmbedYoutubeLiveStreaming {
         }
     }
 
-    public function isLive($getOrNot = false) {
-        if ($getOrNot==true) {
-            $this->queryIt();
     /**
      * Query the YouTube API
      * @return string JSON API response
@@ -147,6 +144,9 @@ class EmbedYoutubeLiveStreaming {
      * @param  boolean [$getOrNot = false] whether to run the query or not
      * @return boolean whether or not a video is live
      */
+    public function isLive( $getOrNot = false ) {
+        if ( $getOrNot == true ) {
+            $this->getVideoInfo( 'live' );
         }
 
         $live_items = count( $this->objectResponse->items );
