@@ -162,7 +162,7 @@ class EmbedYoutubeLiveStreaming {
      */
     public function isLive( $getOrNot = false ) {
         if ( $getOrNot == true ) {
-            $this->getVideoInfo( 'live' );
+            $this->getVideoInfo();
         }
 
         $live_items = count( $this->objectResponse->items );
