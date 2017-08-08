@@ -74,6 +74,9 @@ For more information on setting up an API key, see the [YouTube Data API referen
 
 == Changelog ==
 
+= 1.6.0 =
+- Add support for a channel player if no live stream is available
+
 = 1.5.4 =
 - Minor fix for `no_stream_message` attribute handling for real this time
 

@@ -60,6 +60,14 @@ function youtube_live_settings_init() {
     );
 
     add_settings_field(
+        'show_channel_if_dead',
+        __( 'Show Channel Player', 'youtube_live' ),
+        'youtube_live_show_channel_render',
+        'youtube_live_options',
+        'youtube_live_options_keys_section'
+    );
+
+    add_settings_field(
         'youtube_live_debugging',
         __( 'Debugging', 'youtube_live' ),
         'youtube_live_debugging_render',
@@ -103,6 +111,17 @@ function youtube_live_subdomain_render() {
         <option value="www" <?php selected( $options['subdomain'], 'www' ); ?>>Default (www.youtube.com)</option>
         <option value="gaming" <?php selected( $options['subdomain'], 'gaming' ); ?>>Gaming (gaming.youtube.com)</option>
     </select></label>
+    <?php
+}
+
+// Print show channel field
+function youtube_live_show_channel_render() {
+    $options = get_option( 'youtube_live_settings' );
+    if ( ! array_key_exists( 'show_channel_if_dead', $options ) ) {
+        $options['show_channel_if_dead'] = false;
+    }
+    ?>
+    If you are not live-streaming, show a player with your recent videos? <label><input type="radio" name="youtube_live_settings[show_channel_if_dead]" value="true" <?php checked( $options['show_channel_if_dead'], 'true' ); ?>> Yes</label> <label><input type="radio" name="youtube_live_settings[show_channel_if_dead]" value="false" <?php checked( $options['show_channel_if_dead'], 'false' ); ?>> No</label>
     <?php
 }
 
@@ -202,6 +221,11 @@ function get_youtube_live_content( $youtube_settings ) {
         echo $youtube_live->embedCode();
     } else {
         echo $no_stream_message;
+
+        if ( $youtube_options['show_channel_if_dead'] === 'true' ) {
+            $youtube_live->getVideoInfo( 'channel' );
+            echo $youtube_live->embedCode();
+        }
     }
 
     // debugging
