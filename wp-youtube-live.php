@@ -215,8 +215,9 @@ function get_youtube_live_content( $youtube_settings ) {
     // start output
     ob_start();
     if ( $no_stream_message || $youtube_live->isLive ) {
-        echo '<span class="wp-youtube-live">';
+        echo '<span class="wp-youtube-live ' . ( $youtube_live->isLive ? 'live' : 'dead' ) . '">';
     }
+
     if ( $youtube_live->isLive ) {
         echo $youtube_live->embedCode();
     } else {
@@ -233,13 +234,17 @@ function get_youtube_live_content( $youtube_settings ) {
         $debugging_code = var_export( $youtube_live, true );
         echo '<!-- YouTube Live debugging: ' . "\n" . $debugging_code . "\n" . ' -->';
     }
+
     if ( $no_stream_message || $youtube_live->isLive ) {
         echo '</span>';
     }
 
     // handle ajax
     if ( $_POST['isAjax'] ) {
-        echo ob_get_clean();
+        echo json_encode( array(
+            'live'      => $youtube_live->isLive,
+            'content'   => ob_get_clean(),
+        ), JSON_FORCE_OBJECT );
         wp_die();
     } else {
         return ob_get_clean();
