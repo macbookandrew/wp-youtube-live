@@ -93,6 +93,8 @@ function get_youtube_live_content( $youtube_settings ) {
         if ( $youtube_options['show_channel_if_dead'] === 'true' ) {
             $youtube_live->getVideoInfo( 'channel' );
             echo $youtube_live->embedCode();
+        } elseif ( isset( $youtube_options['fallback_video'] ) ) {
+            echo wp_oembed_get( esc_attr( $youtube_options['fallback_video'] ) );
         }
     }
 

@@ -15,6 +15,7 @@ module.exports = function (grunt) {
         custom: {
             files: {
                 'js/wp-youtube-live.min.js': ['js/wp-youtube-live.js'],
+                'js/wp-youtube-live-backend.min.js': ['js/wp-youtube-live-backend.js'],
             },
         },
     },

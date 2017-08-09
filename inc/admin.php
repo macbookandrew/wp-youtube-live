@@ -5,6 +5,14 @@ if (!defined('ABSPATH')) {
 }
 
 // Add settings page
+/**
+ * Enqueue backend assets
+ */
+function youtube_live_backend_assets() {
+    wp_register_script( 'wp-youtube-live-backend', plugin_dir_url( __FILE__ ) . '../js/wp-youtube-live-backend.min.js', array( 'jquery' ), NULL, true );
+}
+add_action( 'admin_enqueue_scripts', 'youtube_live_backend_assets' );
+
 add_action( 'admin_menu', 'youtube_live_add_admin_menu' );
 add_action( 'admin_init', 'youtube_live_settings_init' );
 
@@ -74,6 +82,14 @@ function youtube_live_settings_init() {
     );
 
     add_settings_field(
+        'fallback_video',
+        __( 'Show Fallback Video', 'youtube_live' ),
+        'youtube_live_show_video_render',
+        'youtube_live_options',
+        'youtube_live_options_keys_section'
+    );
+
+    add_settings_field(
         'auto_refresh',
         __( 'Auto-Refresh', 'youtube_live' ),
         'youtube_live_auto_refresh_render',
@@ -92,6 +108,8 @@ function youtube_live_settings_init() {
 
 // Print API Key field
 function youtube_live_api_key_render() {
+    wp_enqueue_script( 'wp-youtube-live-backend' );
+
     $options = get_option( 'youtube_live_settings' ); ?>
     <input type="text" name="youtube_live_settings[youtube_live_api_key]" placeholder="AIzaSyD4iE2xVSpkLLOXoyqT-RuPwURN3ddScAI" size="45" value="<?php echo $options['youtube_live_api_key']; ?>">
 
@@ -162,6 +180,19 @@ function youtube_live_show_channel_render() {
 }
 
 // Print auto-refresh field
+/**
+ * Print fallback video field
+ */
+function youtube_live_show_video_render() {
+    $options = get_option( 'youtube_live_settings' );
+    if ( ! array_key_exists( 'fallback_video', $options ) ) {
+        $options['fallback_video'] = false;
+    }
+    ?>
+    If you are not live-streaming, show this video instead: <label><input type="text" name="youtube_live_settings[fallback_video]" size="60" placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ" value="<?php echo $options['fallback_video']; ?>"></label>
+    <?php
+}
+
 function youtube_live_auto_refresh_render() {
     $options = get_option( 'youtube_live_settings' );
     if ( ! array_key_exists( 'auto_refresh', $options ) ) {
