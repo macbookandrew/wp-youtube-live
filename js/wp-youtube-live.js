@@ -41,7 +41,7 @@
 
         /**
          * Check if a live stream has been loaded
-         * @param {object}   data     parameters for callback function
+         * @param {object} data parameters for callback function
          */
         function checkAgain(data) {
             console.log('checking again...');

@@ -26,7 +26,7 @@ function youtube_live_scripts() {
 // Add shortcode
 add_shortcode( 'youtube_live', 'output_youtube_live' );
 function output_youtube_live( $atts ) {
-    // enqueue asstes
+    // enqueue assets
     wp_enqueue_script( 'wp-youtube-live' );
     wp_enqueue_style( 'wp-youtube-live' );
 
