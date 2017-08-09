@@ -6,6 +6,10 @@ module.exports = function (grunt) {
             files: ["js/*.js", "!js/*.min.js"],
             tasks: ['uglify'],
         },
+        readme: {
+            files: ["readme.txt"],
+            tasks: ['readme'],
+        },
     },
     uglify: {
         custom: {
