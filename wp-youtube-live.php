@@ -14,146 +14,7 @@ if (!defined('ABSPATH')) {
 
 CONST WP_YOUTUBE_LIVE_VERSION = '1.6.0';
 
-// Add settings page
-add_action( 'admin_menu', 'youtube_live_add_admin_menu' );
-add_action( 'admin_init', 'youtube_live_settings_init' );
-
-// Add to menu
-function youtube_live_add_admin_menu() {
-    add_submenu_page( 'options-general.php', 'YouTube Live', 'YouTube Live Settings', 'manage_options', 'youtube-live', 'youtube_live_options_page' );
-}
-
-// Add settings section and fields
-function youtube_live_settings_init() {
-    register_setting( 'youtube_live_options', 'youtube_live_settings' );
-
-    // API settings
-    add_settings_section(
-        'youtube_live_options_keys_section',
-        __( 'YouTube Details', 'youtube_live' ),
-        'youtube_live_api_settings_section_callback',
-        'youtube_live_options'
-    );
-
-    add_settings_field(
-        'youtube_live_api_key',
-        __( 'YouTube API Key', 'youtube_live' ),
-        'youtube_live_api_key_render',
-        'youtube_live_options',
-        'youtube_live_options_keys_section'
-    );
-
-    add_settings_field(
-        'youtube_live_channel_id',
-        __( 'YouTube Channel ID', 'youtube_live' ),
-        'youtube_live_channel_id_render',
-        'youtube_live_options',
-        'youtube_live_options_keys_section'
-    );
-
-    add_settings_field(
-        'youtube_subdomain',
-        __( 'YouTube Subdomain', 'youtube_live' ),
-        'youtube_live_subdomain_render',
-        'youtube_live_options',
-        'youtube_live_options_keys_section'
-    );
-
-    add_settings_field(
-        'show_channel_if_dead',
-        __( 'Show Channel Player', 'youtube_live' ),
-        'youtube_live_show_channel_render',
-        'youtube_live_options',
-        'youtube_live_options_keys_section'
-    );
-
-    add_settings_field(
-        'youtube_live_debugging',
-        __( 'Debugging', 'youtube_live' ),
-        'youtube_live_debugging_render',
-        'youtube_live_options',
-        'youtube_live_options_keys_section'
-    );
-}
-
-// Print API Key field
-function youtube_live_api_key_render() {
-    $options = get_option( 'youtube_live_settings' ); ?>
-    <input type="text" name="youtube_live_settings[youtube_live_api_key]" placeholder="AIzaSyD4iE2xVSpkLLOXoyqT-RuPwURN3ddScAI" size="45" value="<?php echo $options['youtube_live_api_key']; ?>">
-
-    <p>Don&rsquo;t have an API key?</p>
-    <ol>
-        <li>Go to the <a href="https://console.developers.google.com/apis/" target="_blank">Google APIs developers console</a> (create an account if necessary).</li>
-        <li>Create a new project (if necessary).</li>
-        <li>Enable the YouTube Data API v3.</li>
-        <li>Go to Credentials, click the blue button, and choose &ldquo;API key&rdquo;.</li>
-        <li>Enter referrers if you wish to limit use to your website(s) (highly recommended).</li>
-        <li>Enter your API key above.</li>
-    </ol>
-    <p>See <a href="https://developers.google.com/youtube/registering_an_application" target="_blank">this page</a> for more information.</p>
-
-    <?php
-}
-
-// Print channel ID field
-function youtube_live_channel_id_render() {
-    $options = get_option( 'youtube_live_settings' ); ?>
-    <input type="text" name="youtube_live_settings[youtube_live_channel_id]" placeholder="UcZliPwLMjeJbhOAnr1Md4gA" size="45" value="<?php echo $options['youtube_live_channel_id']; ?>">
-
-    <p>Go to <a href="https://youtube.com/account_advanced/" target="_blank">YouTube Advanced Settings</a> to find your YouTube Channel ID.</p>
-    <?php
-}
-
-// Print subdomain field
-function youtube_live_subdomain_render() {
-    $options = get_option( 'youtube_live_settings' ); ?>
-    <label><select name="youtube_live_settings[subdomain]">
-        <option value="www" <?php selected( $options['subdomain'], 'www' ); ?>>Default (www.youtube.com)</option>
-        <option value="gaming" <?php selected( $options['subdomain'], 'gaming' ); ?>>Gaming (gaming.youtube.com)</option>
-    </select></label>
-    <?php
-}
-
-// Print show channel field
-function youtube_live_show_channel_render() {
-    $options = get_option( 'youtube_live_settings' );
-    if ( ! array_key_exists( 'show_channel_if_dead', $options ) ) {
-        $options['show_channel_if_dead'] = false;
-    }
-    ?>
-    If you are not live-streaming, show a player with your recent videos? <label><input type="radio" name="youtube_live_settings[show_channel_if_dead]" value="true" <?php checked( $options['show_channel_if_dead'], 'true' ); ?>> Yes</label> <label><input type="radio" name="youtube_live_settings[show_channel_if_dead]" value="false" <?php checked( $options['show_channel_if_dead'], 'false' ); ?>> No</label>
-    <?php
-}
-
-// Print debugging field
-function youtube_live_debugging_render() {
-    $options = get_option( 'youtube_live_settings' );
-    if ( ! array_key_exists( 'debugging', $options ) ) {
-        $options['debugging'] = false;
-    }
-    ?>
-    Show debugging information in an HTML comment for logged-in users? <label><input type="radio" name="youtube_live_settings[debugging]" value="true" <?php checked( $options['debugging'], 'true' ); ?>> Yes</label> <label><input type="radio" name="youtube_live_settings[debugging]" value="false" <?php checked( $options['debugging'], 'false' ); ?>> No</label>
-    <?php
-}
-
-// Print API settings description
-function youtube_live_api_settings_section_callback() {
-    echo __( 'Enter your YouTube details below. Once you&rsquo;ve entered the required details below, add the shortcode <code>[youtube_live]</code> to any post/page to display the live player.', 'youtube_live' );
-}
-
-// Print form
-function youtube_live_options_page() { ?>
-    <div class="wrap">
-        <form action="options.php" method="post">
-            <?php
-            settings_fields( 'youtube_live_options' );
-            do_settings_sections( 'youtube_live_options' );
-            submit_button();
-            ?>
-        </form>
-    </div>
-    <?php
-}
+include('inc/admin.php');
 
 // Add assets
 add_action( 'wp_enqueue_scripts', 'youtube_live_scripts' );
@@ -169,13 +30,17 @@ function output_youtube_live( $atts ) {
     wp_enqueue_script( 'wp-youtube-live' );
     wp_enqueue_style( 'wp-youtube-live' );
 
+    // get plugin settings
+    $settings = get_option( 'youtube_live_settings' );
+
     // get shortcode attributes
     $shortcode_attributes = shortcode_atts( array (
-        'width'             => 640,
-        'height'            => 360,
+        'width'             => $settings['default_width'],
+        'height'            => $settings['default_height'],
         'autoplay'          => 0,
         'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
         'no_stream_message' => NULL,
+        'autoRefresh'       => $settings['auto_refresh'],
     ), $atts );
 
     wp_add_inline_script( 'wp-youtube-live', 'var wpYouTubeLive = ' . json_encode( $shortcode_attributes ) );
