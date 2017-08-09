@@ -11,11 +11,12 @@
             checkAgain(data);
         });
 
-
-        // run every 30 seconds until we have a livestream
-        var checkAgainTimer = setInterval(function() {
-            checkAgain(data);
-        }, 30000);
+        // auto-refresh
+        if (wpYouTubeLive.autoRefresh == 'true') {
+            var checkAgainTimer = setInterval(function() {
+                checkAgain(data);
+            }, 30000);
+        }
 
         /**
          * Check for live-stream
