@@ -40,7 +40,8 @@ function output_youtube_live( $atts ) {
         'autoplay'          => 0,
         'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
         'no_stream_message' => NULL,
-        'autoRefresh'       => $settings['auto_refresh'],
+        'auto_refresh'      => $settings['auto_refresh'],
+        'refreshInterval'   => apply_filters( 'wp_youtube_live_transient_timeout', '30' ),
     ), $atts );
 
     wp_add_inline_script( 'wp-youtube-live', 'var wpYouTubeLive = ' . json_encode( $shortcode_attributes ) );

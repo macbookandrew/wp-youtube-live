@@ -16,11 +16,11 @@
         });
 
         // auto-refresh
-        if (wpYouTubeLive.autoRefresh == 'true') {
+        if (wpYouTubeLive.auto_refresh == 'true') {
             var checkAgainTimer = setInterval(function() {
                 data.requestType = 'refresh';
                 checkAgain(data);
-            }, 30000);
+            }, wpYouTubeLive.refreshInterval * 1000);
         }
 
         /**
