@@ -4,7 +4,7 @@
 **Tags:**              youtube, live, video, embed  
 **Requires at least:** 3.6  
 **Tested up to:**      4.8.1  
-**Stable tag:**        1.6.1  
+**Stable tag:**        1.6.2  
 **License:**           GPLv2 or later  
 **License URI:**       http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -54,6 +54,18 @@ The filter `wp_youtube_live_transient_timeout` is available to customize the cac
 	}
 
 
+### Event Listener ###
+
+When a live stream is loaded, the `wpYouTubeLiveStarted` event is fired; you can use this to create custom front-end features on your site by adding an event listener:
+
+
+	window.addEventListener('wpYouTubeLiveStarted', function() {
+	    /* your code here */
+	    console.log('stream started');
+	    /* your code here */
+	});
+
+
 Development of this plugin is done on [GitHub](https://github.com/macbookandrew/wp-youtube-live/). Pull requests are always welcome.
 
 ## Installation ##
@@ -86,6 +98,9 @@ For more information on setting up an API key, see the [YouTube Data API referen
 
 
 ## Changelog ##
+
+### 1.6.2 ###
+- Add a JS event for custom uses
 
 ### 1.6.1 ###
 - Add settings for default width and height

@@ -4,7 +4,9 @@
         var data = Object.assign(wpYouTubeLive, {
             'action': 'load_youtube_live',
             'isAjax': true,
-        });
+        }),
+            event = document.createEvent('Event');
+        event.initEvent('wpYouTubeLiveStarted', true, true);
 
         // run an initial check to clear caches
         sendRequest(data);
@@ -38,6 +40,7 @@
                 var data = JSON.parse(response);
                 if (data.live) {
                     $('.wp-youtube-live').replaceWith(data.content).addClass('live');
+                    window.dispatchEvent(event);
                 }
             })
             .always(function() {
