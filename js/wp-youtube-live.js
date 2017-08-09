@@ -6,14 +6,19 @@
             'isAjax': true,
         });
 
+        // run an initial check to clear caches
+        sendRequest(data);
+
         $('body').on('click', 'button#check-again', function(event) {
             event.preventDefault();
+            data.requestType = 'refresh';
             checkAgain(data);
         });
 
         // auto-refresh
         if (wpYouTubeLive.autoRefresh == 'true') {
             var checkAgainTimer = setInterval(function() {
+                data.requestType = 'refresh';
                 checkAgain(data);
             }, 30000);
         }
