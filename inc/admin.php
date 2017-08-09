@@ -4,7 +4,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Add settings page
 /**
  * Enqueue backend assets
  */
@@ -13,15 +12,22 @@ function youtube_live_backend_assets() {
 }
 add_action( 'admin_enqueue_scripts', 'youtube_live_backend_assets' );
 
+/**
+ * Add settings page
+ */
 add_action( 'admin_menu', 'youtube_live_add_admin_menu' );
 add_action( 'admin_init', 'youtube_live_settings_init' );
 
-// Add to menu
+/**
+ * Add settings page to admin menu
+ */
 function youtube_live_add_admin_menu() {
     add_submenu_page( 'options-general.php', 'YouTube Live', 'YouTube Live Settings', 'manage_options', 'youtube-live', 'youtube_live_options_page' );
 }
 
-// Add settings section and fields
+/**
+ * Add settings section and fields
+ */
 function youtube_live_settings_init() {
     register_setting( 'youtube_live_options', 'youtube_live_settings' );
 
@@ -106,7 +112,9 @@ function youtube_live_settings_init() {
     );
 }
 
-// Print API Key field
+/**
+ * Print API Key field
+ */
 function youtube_live_api_key_render() {
     wp_enqueue_script( 'wp-youtube-live-backend' );
 
@@ -127,7 +135,9 @@ function youtube_live_api_key_render() {
     <?php
 }
 
-// Print channel ID field
+/**
+ * Print Channel ID field
+ */
 function youtube_live_channel_id_render() {
     $options = get_option( 'youtube_live_settings' ); ?>
     <input type="text" name="youtube_live_settings[youtube_live_channel_id]" placeholder="UcZliPwLMjeJbhOAnr1Md4gA" size="45" value="<?php echo $options['youtube_live_channel_id']; ?>">
@@ -136,7 +146,9 @@ function youtube_live_channel_id_render() {
     <?php
 }
 
-// Print subdomain field
+/**
+ * Print subdomain field
+ */
 function youtube_live_subdomain_render() {
     $options = get_option( 'youtube_live_settings' ); ?>
     <label><select name="youtube_live_settings[subdomain]">
@@ -146,7 +158,9 @@ function youtube_live_subdomain_render() {
     <?php
 }
 
-// Print default width field
+/**
+ * Print default width field
+ */
 function youtube_live_default_width_render() {
     $options = get_option( 'youtube_live_settings' );
     if ( ! array_key_exists( 'default_width', $options ) || is_null( $options['default_width'] ) ) {
@@ -157,7 +171,9 @@ function youtube_live_default_width_render() {
     <?php
 }
 
-// Print default height field
+/**
+ * Print default height field
+ */
 function youtube_live_default_height_render() {
     $options = get_option( 'youtube_live_settings' );
     if ( ! array_key_exists( 'default_height', $options ) || is_null( $options['default_height'] ) ) {
@@ -168,7 +184,9 @@ function youtube_live_default_height_render() {
     <?php
 }
 
-// Print show channel field
+/**
+ * Print show channel field
+ */
 function youtube_live_show_channel_render() {
     $options = get_option( 'youtube_live_settings' );
     if ( ! array_key_exists( 'show_channel_if_dead', $options ) ) {
@@ -179,7 +197,6 @@ function youtube_live_show_channel_render() {
     <?php
 }
 
-// Print auto-refresh field
 /**
  * Print fallback video field
  */
@@ -193,6 +210,9 @@ function youtube_live_show_video_render() {
     <?php
 }
 
+/**
+ * Print auto-refresh field
+ */
 function youtube_live_auto_refresh_render() {
     $options = get_option( 'youtube_live_settings' );
     if ( ! array_key_exists( 'auto_refresh', $options ) ) {
@@ -204,7 +224,9 @@ function youtube_live_auto_refresh_render() {
     <?php
 }
 
-// Print debugging field
+/**
+ * Print debugging field
+ */
 function youtube_live_debugging_render() {
     $options = get_option( 'youtube_live_settings' );
     if ( ! array_key_exists( 'debugging', $options ) ) {
@@ -215,12 +237,16 @@ function youtube_live_debugging_render() {
     <?php
 }
 
-// Print API settings description
+/**
+ * Print API settings field
+ */
 function youtube_live_api_settings_section_callback() {
     echo __( 'Enter your YouTube details below. Once you&rsquo;ve entered the required details below, add the shortcode <code>[youtube_live]</code> to any post/page to display the live player.', 'youtube_live' );
 }
 
-// Print form
+/**
+ * Print settings form
+ */
 function youtube_live_options_page() { ?>
     <div class="wrap">
         <form action="options.php" method="post">

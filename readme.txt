@@ -14,16 +14,27 @@ Displays the current YouTube live video from a specified channel.
 
 Displays the current YouTube live video from a specified channel via the shortcode `[youtube_live]`.
 
+If no live video is available, you can display a specified video or a “channel player” showing all your recent videos.
+
+You can also enable auto-refresh to automatically check for a live video (warning: will increase server load, so use with caution).
+
+By default, the server will check YouTube’s API and then cache that response for 30 seconds before checking the API again. If auto-refresh is enabled, clients will check against your server every 30 seconds and likely will hit that cache as well, so it can potentially take up to 60 seconds before a client will get a live video.
+
+The length of both caches can be changed using the `wp_youtube_live_transient_timeout` filter (see below for more information).
+
 = Shortcode Options =
 
-- width: player width in pixels; defaults to 640
-- height: player height in pixels; defaults to 360
+- width: player width in pixels; defaults to what you set on the settings page
+- height: player height in pixels; defaults to whaty you set on the settings page
 - autoplay: whether or not to start playing immediately on load; defaults to false
 - no_stream_message: simple text message to show when no stream is available; use `no_stream_message="no_message"` to show nothing at all.
+- auto_refresh: (either `true` or `false`) overrides the auto-refresh setting on the settings page
 
 Example shortcode: `[youtube_live width="720" height="360" autoplay="true"]`
 
-The filter `wp_youtube_live_no_stream_available` is also available to customize the message viewers see if there is no live stream currently playing, and takes effect **before** the `no_stream_message` shortcode attribute is parsed (if `no_stream_message="no_message"` is set, it will override the filter). For example, add this to your theme’s `functions.php` file:
+= Filters =
+
+The filter `wp_youtube_live_no_stream_available` will customize the message viewers see if there is no live stream currently playing, and takes effect **before** the `no_stream_message` shortcode attribute is parsed (if `no_stream_message="no_message"` is set, it will override the filter). For example, add this to your theme’s `functions.php` file:
 
 `
 add_filter( 'wp_youtube_live_no_stream_available', 'my_ytl_custom_message' );
@@ -77,6 +88,7 @@ For more information on setting up an API key, see the [YouTube Data API referen
 = 1.6.1 =
 - Add settings for default width and height
 - Add setting for auto-refresh feature
+- Add support for a fallback video if no live stream is available
 
 = 1.6.0 =
 - Add support for a channel player if no live stream is available

@@ -16,15 +16,21 @@ CONST WP_YOUTUBE_LIVE_VERSION = '1.6.1';
 
 include('inc/admin.php');
 
-// Add assets
-add_action( 'wp_enqueue_scripts', 'youtube_live_scripts' );
+/**
+ * Enqueue frontend scripts
+ */
 function youtube_live_scripts() {
     wp_register_script( 'wp-youtube-live', plugin_dir_url( __FILE__ ) . 'js/wp-youtube-live.min.js', array( 'jquery' ), WP_YOUTUBE_LIVE_VERSION, true );
     wp_register_style( 'wp-youtube-live', plugin_dir_url( __FILE__ ) . 'css/wp-youtube-live.css', array(), WP_YOUTUBE_LIVE_VERSION );
 }
+add_action( 'wp_enqueue_scripts', 'youtube_live_scripts' );
 
-// Add shortcode
-add_shortcode( 'youtube_live', 'output_youtube_live' );
+
+/**
+ * Create shortcode
+ * @param  array  $atts shortcode parameters
+ * @return string HTML shortcode output
+ */
 function output_youtube_live( $atts ) {
     // enqueue assets
     wp_enqueue_script( 'wp-youtube-live' );
@@ -48,12 +54,19 @@ function output_youtube_live( $atts ) {
 
     return get_youtube_live_content( $shortcode_attributes );
 }
+add_shortcode( 'youtube_live', 'output_youtube_live' );
 
-// Add Ajax handler
+/**
+ * Add ajax handlers
+ */
 add_action( 'wp_ajax_load_youtube_live', 'get_youtube_live_content' );
 add_action( 'wp_ajax_nopriv_load_youtube_live', 'get_youtube_live_content' );
 
-// Output YouTube Live embed code
+/**
+ * Output YouTube Live content
+ * @param  array  $youtube_settings array of settings
+ * @return string JSON or HTML content
+ */
 function get_youtube_live_content( $youtube_settings ) {
     // load embed class
     require_once( 'inc/EmbedYoutubeLiveStreaming.php' );
