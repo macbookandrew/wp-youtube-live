@@ -12,6 +12,11 @@
         });
 
 
+        // run every 30 seconds until we have a livestream
+        var checkAgainTimer = setInterval(function() {
+            checkAgain(data);
+        }, 30000);
+
         /**
          * Check for live-stream
          * @param {object} data info to pass to WP
