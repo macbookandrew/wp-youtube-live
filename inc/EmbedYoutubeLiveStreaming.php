@@ -8,6 +8,9 @@ class EmbedYoutubeLiveStreaming {
     public $objectResponse; // response decoded as object
     public $arrayRespone; // response decoded as array
 
+    public $errorMessage; // error message
+    public $errorArray; // all error codes
+
     public $isLive; // true if there is a live streaming at the channel
 
     public $queryData; // query values as an array
@@ -156,6 +159,12 @@ class EmbedYoutubeLiveStreaming {
         $this->objectResponse = json_decode( $this->jsonResponse ); // decode as object
         $this->arrayResponse = json_decode( $this->jsonResponse, TRUE ); // decode as array
 
+        if ( $this->objectResponse->error ) {
+
+            $this->errorMessage = $this->objectResponse->error->message;
+            $this->errorArray = $this->arrayResponse['error']['errors'];
+        }
+
         return $this->jsonResponse;
     }
 
@@ -234,5 +243,21 @@ class EmbedYoutubeLiveStreaming {
 EOT;
 
         return $this->embed_code;
+    }
+
+    /**
+     * Get error message string
+     * @return string error message
+     */
+    public function getErrorMessage() {
+        return $this->errorMessage;
+    }
+
+    /**
+     * Get detailed array of error messages
+     * @return array array of all messages
+     */
+    public function getAllErrors() {
+        return $this->errorArray;
     }
 }

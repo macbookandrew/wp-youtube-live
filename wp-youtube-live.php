@@ -3,7 +3,7 @@
 Plugin Name: YouTube Live
 Plugin URI: https://github.com/macbookandrew/wp-youtube-live
 Description: Displays the current YouTube live video from a specified channel
-Version: 1.6.2
+Version: 1.6.3
 Author: Andrew Minion
 Author URI: https://andrewrminion.com/
 */
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-CONST WP_YOUTUBE_LIVE_VERSION = '1.6.2';
+CONST WP_YOUTUBE_LIVE_VERSION = '1.6.3';
 
 include('inc/admin.php');
 
@@ -68,6 +68,14 @@ add_action( 'wp_ajax_nopriv_load_youtube_live', 'get_youtube_live_content' );
  * @return string JSON or HTML content
  */
 function get_youtube_live_content( $youtube_settings ) {
+    // fix undefined errors in ajax context
+    if ( ! is_array( $youtube_settings ) ) {
+        $youtube_settings = array();
+    }
+    if ( ! array_key_exists( 'no_stream_message', $youtube_settings ) ) {
+        $youtube_settings['no_stream_message'] = NULL;
+    }
+
     // load embed class
     require_once( 'inc/EmbedYoutubeLiveStreaming.php' );
 
@@ -77,9 +85,9 @@ function get_youtube_live_content( $youtube_settings ) {
     // set up player
     $youtube_live = new EmbedYoutubeLiveStreaming( $youtube_options['youtube_live_channel_id'], $youtube_options['youtube_live_api_key'] );
     $youtube_live->subdomain = ( $youtube_options['subdomain'] ? $youtube_options['subdomain'] : 'www' );
-    $youtube_live->embed_width = ( $_POST['isAjax'] ? esc_attr( $_POST['width'] ) : $youtube_settings['width'] );
-    $youtube_live->embed_height = ( $_POST['isAjax'] ? esc_attr( $_POST['height'] ) : $youtube_settings['height'] );
-    $youtube_live->embed_autoplay = ( $_POST['isAjax'] ? esc_attr( $_POST['autoplay'] ) : $youtube_settings['autoplay'] );
+    $youtube_live->embed_width = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['width'] ) : $youtube_settings['width'] );
+    $youtube_live->embed_height = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['height'] ) : $youtube_settings['height'] );
+    $youtube_live->embed_autoplay = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['autoplay'] ) : $youtube_settings['autoplay'] );
 
     // set default message
     if ( 'no_message' == $youtube_settings['no_stream_message'] ) {
@@ -118,12 +126,30 @@ function get_youtube_live_content( $youtube_settings ) {
         echo '<!-- YouTube Live debugging: ' . "\n" . $debugging_code . "\n" . ' -->';
     }
 
+    // errors
+    if ( $youtube_live->getErrorMessage() ) {
+        $error_message = '<div class="wp-youtube-live-error">
+        <p><strong>WP YouTube Live error:</strong></p>
+        <ul>';
+        foreach ( $youtube_live->getAllErrors() as $error ) {
+            $error_message .= '<li><strong>Domain:</strong> ' . $error['domain'] . '</li>
+            <li><strong>Reason:</strong> ' . $error['reason'] . '</li>
+            <li><strong>Message:</strong> ' . $error['message'] . '</li>
+            <li><strong>Extended help:</strong> ' . $error['extendedHelp'] . '</li>';
+        }
+        $error_message .= '</ul>
+        </div>';
+        echo $error_message;
+        $json_data['error'] = $error_message;
+    }
+
+
     if ( $no_stream_message || $youtube_live->isLive ) {
-        echo '</span>';
+        echo '<span class="error"></span></span>';
     }
 
     // handle ajax
-    if ( $_POST['isAjax'] ) {
+    if ( $_POST && $_POST['isAjax'] ) {
         if ( $_POST['requestType'] != 'refresh' || $is_live ) {
             $json_data['content'] = ob_get_clean();
         } else {

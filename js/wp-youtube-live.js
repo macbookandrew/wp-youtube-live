@@ -38,7 +38,9 @@
             })
             .done(function(response) {
                 var data = JSON.parse(response);
-                if (data.live) {
+                if (data.error) {
+                    $('.wp-youtube-live-error').replaceWith(data.error);
+                } else if (data.live) {
                     $('.wp-youtube-live').replaceWith(data.content).addClass('live');
                     window.dispatchEvent(event);
                 }

@@ -31,3 +31,8 @@
         transform: rotate(359deg);
     }
 }
+.wp-youtube-live-error {
+    padding: 2em;
+    background-color: white;
+    color: red;
+}
