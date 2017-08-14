@@ -128,8 +128,7 @@ function get_youtube_live_content( $youtube_settings ) {
 
     // errors
     if ( $youtube_live->getErrorMessage() ) {
-        $error_message = '<div class="wp-youtube-live-error">
-        <p><strong>WP YouTube Live error:</strong></p>
+        $error_message = '<p><strong>WP YouTube Live error:</strong></p>
         <ul>';
         foreach ( $youtube_live->getAllErrors() as $error ) {
             $error_message .= '<li><strong>Domain:</strong> ' . $error['domain'] . '</li>
@@ -137,15 +136,14 @@ function get_youtube_live_content( $youtube_settings ) {
             <li><strong>Message:</strong> ' . $error['message'] . '</li>
             <li><strong>Extended help:</strong> ' . $error['extendedHelp'] . '</li>';
         }
-        $error_message .= '</ul>
-        </div>';
+        $error_message .= '</ul>';
         echo $error_message;
         $json_data['error'] = $error_message;
     }
 
 
     if ( $no_stream_message || $youtube_live->isLive ) {
-        echo '<span class="error"></span></span>';
+        echo '<span class="wp-youtube-live-error" style="display: none;"></span></span>';
     }
 
     // handle ajax

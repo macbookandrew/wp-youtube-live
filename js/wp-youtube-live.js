@@ -39,9 +39,10 @@
             .done(function(response) {
                 var data = JSON.parse(response);
                 if (data.error) {
-                    $('.wp-youtube-live-error').replaceWith(data.error);
+                    $('.wp-youtube-live-error').append(data.error).show();
                 } else if (data.live) {
                     $('.wp-youtube-live').replaceWith(data.content).addClass('live');
+                    $('.wp-youtube-live-error').hide();
                     window.dispatchEvent(event);
                 }
             })
