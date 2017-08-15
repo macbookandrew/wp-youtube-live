@@ -3,7 +3,7 @@
 Plugin Name: YouTube Live
 Plugin URI: https://github.com/macbookandrew/wp-youtube-live
 Description: Displays the current YouTube live video from a specified channel
-Version: 1.6.3
+Version: 1.6.4
 Author: Andrew Minion
 Author URI: https://andrewrminion.com/
 */
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-CONST WP_YOUTUBE_LIVE_VERSION = '1.6.3';
+CONST WP_YOUTUBE_LIVE_VERSION = '1.6.4';
 
 include('inc/admin.php');
 

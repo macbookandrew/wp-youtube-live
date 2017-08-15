@@ -4,7 +4,7 @@ Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
 Tested up to:      4.8.1
-Stable tag:        1.6.3
+Stable tag:        1.6.4
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,11 +91,24 @@ When the shortcode is used in a page, your web server makes a request to YouTube
 
 For more information on setting up an API key, see the [YouTube Data API reference](https://developers.google.com/youtube/registering_an_application); for purposes of this plugin, you’ll need a “browser key.”
 
+= Why doesn’t my live stream show up immediately? =
+
+Generally, it can take up to a minute or two for the streaming page with the shortcode to recognize that you have a live stream, for several reasons:
+
+1. YouTube’s API caches information about your videos for a short time (I couldn’t find any documentation on how long exactly, but seems to be around 30 seconds)
+2. To help you from exceeding the free API quota, this plugin caches YouTube’s API response for 30 seconds (configurable using the `wp_youtube_live_transient_timeout` filter) instead of checking the API every time an update is requested
+3. If you are using a caching plugin (WP Super Cache, W3 Total Cache, etc.), the page content is cached. However, this plugin provides a workaround by sending an Ajax request from the user’s browser when the page is loaded, and then every 30 seconds thereafter until a live video is available (also configurable using the `wp_youtube_live_transient_timeout` filter).
+
+In short, there’s a tradeoff between showing the live video immediately and minimizing API quota and server resource usage, and I’ve tried to strike a reasonable balance, while allowing you the ability to tweak the cache timeouts yourself to fit your needs.
+
 == Screenshots ==
 
 1. Settings screen
 
 == Changelog ==
+
+= 1.6.4 =
+- Fix error handling
 
 = 1.6.3 =
 - Add error handling for API key issues
