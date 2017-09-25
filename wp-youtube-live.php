@@ -72,9 +72,6 @@ function get_youtube_live_content( $youtube_settings ) {
     if ( ! is_array( $youtube_settings ) ) {
         $youtube_settings = array();
     }
-    if ( ! array_key_exists( 'no_stream_message', $youtube_settings ) ) {
-        $youtube_settings['no_stream_message'] = NULL;
-    }
 
     // load embed class
     require_once( 'inc/EmbedYoutubeLiveStreaming.php' );
@@ -87,21 +84,19 @@ function get_youtube_live_content( $youtube_settings ) {
     $youtube_live->subdomain = ( $youtube_options['subdomain'] ? $youtube_options['subdomain'] : 'www' );
     $youtube_live->embed_width = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['width'] ) : $youtube_settings['width'] );
     $youtube_live->embed_height = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['height'] ) : $youtube_settings['height'] );
-    $youtube_live->embed_autoplay = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['autoplay'] ) : $youtube_settings['autoplay'] );
+    $youtube_live->embed_autoplay = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['autoplay'] ) : $youtube_options['autoplay'] );
+    $youtube_live->show_related = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['show_related'] ) : $youtube_options['show_related'] );
 
     // set default message
-    if ( 'no_message' == $youtube_settings['no_stream_message'] ) {
-        $no_stream_message = NULL;
-    } elseif ( $youtube_settings['no_stream_message'] ) {
+    if ( array_key_exists( 'no_stream_message', $youtube_settings ) ) {
         $no_stream_message = $youtube_settings['no_stream_message'];
     } else {
-        $no_stream_message = apply_filters( 'wp_youtube_live_no_stream_available', '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">all our videos</a>.</p>
-        <p><button type="button" class="button" id="check-again">Check again</button><span class="spinner" style="display:none;"></span></p>' );
+        $no_stream_message = apply_filters( 'wp_youtube_live_no_stream_available', $youtube_options['fallback_message'] );
     }
 
     // start output
     ob_start();
-    if ( $no_stream_message || $youtube_live->isLive ) {
+    if ( $youtube_live->isLive && $no_stream_message != 'no_message' ) {
         echo '<span class="wp-youtube-live ' . ( $youtube_live->isLive ? 'live' : 'dead' ) . '">';
     }
 
@@ -110,13 +105,16 @@ function get_youtube_live_content( $youtube_settings ) {
         echo $youtube_live->embedCode();
     } else {
         $is_live = false;
-        echo $no_stream_message;
-
-        if ( $youtube_options['show_channel_if_dead'] === 'true' ) {
+        if ( $youtube_options['fallback_behavior'] === 'upcoming' ) {
+            $youtube_live->getVideoInfo( 'live', 'upcoming' );
+            echo $youtube_live->embedCode();
+        } elseif ( $youtube_options['fallback_behavior'] === 'channel' ) {
             $youtube_live->getVideoInfo( 'channel' );
             echo $youtube_live->embedCode();
-        } elseif ( isset( $youtube_options['fallback_video'] ) ) {
+        } elseif ( $youtube_options['fallback_behavior'] === 'video' && isset( $youtube_options['fallback_video'] ) ) {
             echo wp_oembed_get( esc_attr( $youtube_options['fallback_video'] ) );
+        } elseif ( $youtube_options['fallback_behavior'] === 'message' ) {
+            echo $no_stream_message;
         }
     }
 
@@ -142,8 +140,9 @@ function get_youtube_live_content( $youtube_settings ) {
     }
 
 
-    if ( $no_stream_message || $youtube_live->isLive ) {
-        echo '<span class="wp-youtube-live-error" style="display: none;"></span></span>';
+    if ( $youtube_live->isLive && $no_stream_message != 'no_message' ) {
+        echo '<span class="wp-youtube-live-error" style="display: none;"></span>
+        </span>';
     }
 
     // handle ajax

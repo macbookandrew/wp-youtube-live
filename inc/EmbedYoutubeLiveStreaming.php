@@ -84,7 +84,7 @@ class EmbedYoutubeLiveStreaming {
     /**
      * Get video info
      */
-    public function getVideoInfo( $resource_type = 'live' ) {
+    public function getVideoInfo( $resource_type = 'live', $event_type = 'live' ) {
         // check transient before performing query
         $wp_youtube_live_transient = get_transient( 'wp-youtube-live-api-response' );
 
@@ -92,8 +92,12 @@ class EmbedYoutubeLiveStreaming {
             $this->resource_type = $resource_type;
         }
 
+        if ( ! $this->eventType || $event_type !== $this->eventType ) {
+            $this->eventType = $event_type;
+        }
+
         // if no or expired transient, set up query
-        if ( false === $wp_youtube_live_transient ) {
+        if ( false === $wp_youtube_live_transient || $this->eventType === 'upcoming' ) {
             $this->queryData = array(
                 "part"      => $this->part,
                 "channelId" => $this->channelId,
@@ -109,7 +113,7 @@ class EmbedYoutubeLiveStreaming {
             $this->jsonResponse = $wp_youtube_live_transient;
         }
 
-        if ( $this->resource_type == 'live' && $this->isLive() ) {
+        if ( ( $this->resource_type == 'live' && $this->isLive() ) || ( $this->resource_type == 'live' && $this->eventType == 'upcoming' ) ) {
             $this->live_video_id = $this->objectResponse->items[0]->id->videoId;
             $this->live_video_title = $this->objectResponse->items[0]->snippet->title;
             $this->live_video_description = $this->objectResponse->items[0]->snippet->description;
@@ -178,13 +182,17 @@ class EmbedYoutubeLiveStreaming {
             $this->getVideoInfo();
         }
 
-        $live_items = count( $this->objectResponse->items );
+        if ( $this->objectResponse ) {
+            $live_items = count( $this->objectResponse->items );
 
-        if ( $live_items > 0 ) {
-            $this->isLive = true;
-            return true;
+            if ( $live_items > 0 ) {
+                $this->isLive = true;
+                return true;
+            } else {
+                $this->isLive = false;
+                return false;
+            }
         } else {
-            $this->isLive = false;
             return false;
         }
     }

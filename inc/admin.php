@@ -64,33 +64,17 @@ function youtube_live_settings_init() {
     );
 
     add_settings_field(
-        'youtube_live_default_width',
-        __( 'Default Player Width', 'youtube_live' ),
-        'youtube_live_default_width_render',
+        'youtube_live_player_settings',
+        __( 'Default Player Settings', 'youtube_live' ),
+        'youtube_live_player_settings_render',
         'youtube_live_options',
         'youtube_live_options_keys_section'
     );
 
     add_settings_field(
-        'youtube_live_default_height',
-        __( 'Default Player Height', 'youtube_live' ),
-        'youtube_live_default_height_render',
-        'youtube_live_options',
-        'youtube_live_options_keys_section'
-    );
-
-    add_settings_field(
-        'show_channel_if_dead',
-        __( 'Show Channel Player', 'youtube_live' ),
-        'youtube_live_show_channel_render',
-        'youtube_live_options',
-        'youtube_live_options_keys_section'
-    );
-
-    add_settings_field(
-        'fallback_video',
-        __( 'Show Fallback Video', 'youtube_live' ),
-        'youtube_live_show_video_render',
+        'fallback_behavior',
+        __( 'Fallback Behavior', 'youtube_live' ),
+        'fallback_behavior_render',
         'youtube_live_options',
         'youtube_live_options_keys_section'
     );
@@ -159,54 +143,79 @@ function youtube_live_subdomain_render() {
 }
 
 /**
- * Print default width field
+ * Print player settings fields
  */
-function youtube_live_default_width_render() {
+function youtube_live_player_settings_render() {
     $options = get_option( 'youtube_live_settings' );
     if ( ! array_key_exists( 'default_width', $options ) || is_null( $options['default_width'] ) ) {
         $options['default_width'] = 720;
     }
-    ?>
-    <input type="number" name="youtube_live_settings[default_width]" placeholder="720" value="<?php echo $options['default_width']; ?>">
-    <?php
-}
-
-/**
- * Print default height field
- */
-function youtube_live_default_height_render() {
-    $options = get_option( 'youtube_live_settings' );
     if ( ! array_key_exists( 'default_height', $options ) || is_null( $options['default_height'] ) ) {
         $options['default_height'] = 480;
     }
+    if ( ! array_key_exists( 'autoplay', $options ) ) {
+        $options['autoplay'] = true;
+    }
+    if ( ! array_key_exists( 'show_related', $options ) ) {
+        $options['show_related'] = false;
+    }
     ?>
-    <input type="number" name="youtube_live_settings[default_height]" placeholder="480" value="<?php echo $options['default_height']; ?>">
+    <p>
+        <label>Width: <input type="number" name="youtube_live_settings[default_width]" placeholder="720" value="<?php echo $options['default_width']; ?>">px</label><br/>
+        <label>Height: <input type="number" name="youtube_live_settings[default_height]" placeholder="480" value="<?php echo $options['default_height']; ?>">px</label>
+    </p>
+    <p>
+        Should the player auto-play when a live video is available? <label><input type="radio" name="youtube_live_settings[autoplay]" value="true" <?php checked( $options['autoplay'], 'true' ); ?>> Yes</label> <label><input type="radio" name="youtube_live_settings[autoplay]" value="false" <?php checked( $options['autoplay'], 'false' ); ?>> No</label>
+    </p>
+    <p>
+        Should the player show related videos when a video finishes? <label><input type="radio" name="youtube_live_settings[show_related]" value="true" <?php checked( $options['show_related'], 'true' ); ?>> Yes</label> <label><input type="radio" name="youtube_live_settings[show_related]" value="false" <?php checked( $options['show_related'], 'false' ); ?>> No</label>
+    </p>
     <?php
 }
 
 /**
- * Print show channel field
+ * Print fallback behavior fields
  */
-function youtube_live_show_channel_render() {
+function fallback_behavior_render() {
     $options = get_option( 'youtube_live_settings' );
-    if ( ! array_key_exists( 'show_channel_if_dead', $options ) ) {
-        $options['show_channel_if_dead'] = false;
+    if ( ! array_key_exists( 'fallback_behavior', $options ) ) {
+        $options['fallback_behavior'] = 'message';
+    }
+    if ( ! array_key_exists( 'fallback_message', $options ) ) {
+        $options['fallback_message'] = '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">all our videos</a>.</p>
+<p><button type="button" class="button" id="check-again">Check again</button><span class="spinner" style="display:none;"></span></p>';
     }
     ?>
-    If you are not live-streaming, show a player with your recent videos? <label><input type="radio" name="youtube_live_settings[show_channel_if_dead]" value="true" <?php checked( $options['show_channel_if_dead'], 'true' ); ?>> Yes</label> <label><input type="radio" name="youtube_live_settings[show_channel_if_dead]" value="false" <?php checked( $options['show_channel_if_dead'], 'false' ); ?>> No</label>
-    <?php
-}
+    <p>
+        <label for="youtube_live_settings[fallback_behavior]">If no live videos are available, what should be displayed?</label>
+        <select name="youtube_live_settings[fallback_behavior]">
+            <option value="message" <?php selected( $options['fallback_behavior'], 'message' ); ?>>Show a custom HTML message (no additional quota cost)</option>
+            <option value="upcoming" <?php selected( $options['fallback_behavior'], 'upcoming' ); ?>>Show upcoming videos (adds a quota unit cost of at least 100)</option>
+            <option value="channel" <?php selected( $options['fallback_behavior'], 'channel' ); ?>>Show recent videos from your channel (adds a quota unit cost of at least 3)</option>
+            <option value="video" <?php selected( $options['fallback_behavior'], 'video' ); ?>>Show a specified video ID (no additional quota cost)</option>
+            <option value="no_message" <?php selected( $options['fallback_behavior'], 'no_message' ); ?>>Show nothing at all (no additional quota cost)</option>
+        </select>
+    </p>
 
-/**
- * Print fallback video field
- */
-function youtube_live_show_video_render() {
-    $options = get_option( 'youtube_live_settings' );
-    if ( ! array_key_exists( 'fallback_video', $options ) ) {
-        $options['fallback_video'] = false;
-    }
-    ?>
-    If you are not live-streaming, show this video instead: <label><input type="text" name="youtube_live_settings[fallback_video]" size="60" placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ" value="<?php echo $options['fallback_video']; ?>"></label>
+    <p class="fallback message">
+        <label for="youtube_live_settings[fallback_message]">Custom HTML message:</label><br/>
+        <textarea cols="50" rows="8" name="youtube_live_settings[fallback_message]" placeholder="<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target='_blank' href='https://youtube.com/channel/<?php echo $options['youtube_live_channel_id']; ?>'>all our videos</a>.</p>
+        <p><button type='button' class='button' id='check-again'>Check again</button><span class='spinner' style='display:none;'></span></p>."><?php echo $options['fallback_message']; ?></textarea>
+    </p>
+
+    <p class="fallback video">
+        <label for="youtube_live_settings[fallback_video]">Fallback Video ID:</label><br/>
+        <input type="text" name="youtube_live_settings[fallback_video]" placeholder="https://youtu.be/dQw4w9WgXcQ" value="<?php echo $options['fallback_video']; ?>" />
+    </p>
+
+    <h3>Quota Usage</h3>
+    <p>More information about quota usage (read <a href="https://developers.google.com/youtube/v3/getting-started#quota" target="_blank">the documentation</a> for more information):</p>
+    <ul style="list-style-type: disc">
+        <li><code>search</code> API requests cost 100 quota units.<br/>
+        A <code>search</code> request happens when a page containing the shortcode is first loaded, and approximately every 30 seconds thereafter, depending on the frequency setting below. It also happens when you have the fallback set to “Next Upcoming Video”</li>
+        <li><code>channel</code> requests cost 3 quota units (1 for the request and 2 for the <code>contentDetails</code> part)<br/>
+        A <code>channel</code> request happens when you have the fallback set to “Display Channel”</li>
+    </ul>
     <?php
 }
 
