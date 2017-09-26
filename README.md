@@ -34,12 +34,12 @@ Example shortcode: `[youtube_live width="720" height="360" autoplay="true"]`
 
 ### Filters ###
 
-The filter `wp_youtube_live_no_stream_available` will customize the message viewers see if there is no live stream currently playing, and takes effect **before** the `no_stream_message` shortcode attribute is parsed (if `no_stream_message="no_message"` is set, it will override the filter). For example, add this to your theme’s `functions.php` file:
+The filter `wp_youtube_live_no_stream_available` will customize the message viewers see if there is no live stream currently playing, and takes effect **after** the `no_stream_message` shortcode attribute is parsed (if `no_stream_message="no_message"` is set in a shortcode, it will override the filter). For example, add this to your theme’s `functions.php` file:
 
 
 	add_filter( 'wp_youtube_live_no_stream_available', 'my_ytl_custom_message' );
 	function my_ytl_custom_message( $message ) {
-	    $message = '<p>Please check back later or subscribe to <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">our YouTube channel</a>.</p>
+	    $message = '<p>Please check back later or subscribe to <a target="_blank" href="https://youtube.com/channel/UCH…">our YouTube channel</a>.</p>
 	    <p><button type="button" class="button" id="check-again">Check again</button><span class="spinner" style="display:none;"></span></p>';
 	    return $message;
 	}
