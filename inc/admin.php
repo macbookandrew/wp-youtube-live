@@ -218,14 +218,7 @@ function fallback_behavior_render() {
     </p>
 
     <h3>Quota Usage</h3>
-    <p>More information about quota usage (read <a href="https://developers.google.com/youtube/v3/getting-started#quota" target="_blank">the documentation</a> for more information):</p>
-    <ul style="list-style-type: disc">
-        <li>Every uncached page load costs 100 quota units. API results are cached for 30 seconds (by default) on your server to help cut down on quota cost.</li>
-        <li>“Show scheduled live videos” fallback behavior costs 100 quota units for the call + 3 quota units for each upcoming video you have published</li>
-        <li>“Show last live video” fallback behavior costs 100 quota units for the call + 3 quota units for each upcoming video you have published</li>
-        <li>“Show recent videos from your channel” fallback behavior costs 1 quota unit for the call + 2 quota units for each video listed</li>
-        <li>“Show a specified playlist” fallback behavior costs 1 quota unit for the call + 2 quota units for each video in the playlist</li>
-    </ul>
+    <p>For more information on quota usage, read the <a href="https://github.com/macbookandrew/wp-youtube-live#quota-units">plugin documentation</a> as well as the <a href="https://developers.google.com/youtube/v3/getting-started#quota" target="_blank">YouTube API documentation</a></p>
     <?php
 }
 

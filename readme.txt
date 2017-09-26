@@ -101,6 +101,31 @@ Generally, it can take up to a minute or two for the streaming page with the sho
 
 In short, there’s a tradeoff between showing the live video immediately and minimizing API quota and server resource usage, and I’ve tried to strike a reasonable balance, while allowing you the ability to tweak the cache timeouts yourself to fit your needs.
 
+= Quota Units =
+
+- Every uncached page load costs 100 quota units. API results are cached for 30 seconds (by default) on your server to help cut down on quota cost.
+- End users’ browsers will request an update from the server every 30 seconds; when the API results cache is stale, your server will make another API request, which costs an additional 100 quota units.
+- Fallback behavior:
+    - “Show a custom HTML message” costs no additional quota units
+    - “Show scheduled live videos” fallback behavior costs an additional 100 quota units per API call
+    - “Show last completed live video” fallback behavior costs an additional 100 quota units per API call
+    - “Show recent videos from your channel” fallback behavior costs 1 quota unit for the call + 2 quota units for each video listed
+    - “Show a specified playlist” fallback behavior costs 1 quota unit for the call + 2 quota units for each video in the playlist
+    - “Show a specified video” costs no additional quota units
+    - “Show nothing at all” costs no additional quota units
+
+Estimated quota usage:
+
+- If the page containing the shortcode is open in a browser 24/7, it should cost 288,000 quota units per day, regardless of how many visitors (due to the plugin’s caching mechanism).
+- If fallback behavior is set to “scheduled live videos” or “last completed live video,” it should cost an additional 100 quota units per page load.
+- If fallback behavior is set to “specified playlist,” it should cost an additional 1 quota unit per page load plus 2 quota units per video in the playlist.
+- If fallback behavior is set to “specified playlist” or “specified video,” it should cost an additional 3 quota unit per page load.
+
+These are estimates; your usage may vary.
+
+The YouTube quota limit is pretty generous: as of September 26, 2017, it allows 1 million API requests per day, 300,000 API requests per 100 seconds per user, and 3 million API requests per 100 seconds.
+
+
 == Screenshots ==
 
 1. Settings screen
