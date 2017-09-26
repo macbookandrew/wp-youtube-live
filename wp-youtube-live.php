@@ -194,3 +194,45 @@ function wp_ytl_set_embed_size( $size ) {
 
     return $size;
 }
+
+/**
+ * Check plugin and database version numbers
+ */
+function wp_ytl_check_version() {
+    if ( WP_YOUTUBE_LIVE_VERSION !== get_option( 'youtube_live_version' ) ) {
+        wp_ytl_plugin_activation();
+    }
+}
+add_action( 'plugins_loaded', 'wp_ytl_check_version' );
+
+/**
+ * Handle database upgrades on activation/upgrade
+ */
+function wp_ytl_plugin_activation() {
+    $youtube_settings = get_option( 'youtube_live_settings' );
+
+    // removed in v1.7.0
+    if ( array_key_exists( 'show_channel_if_dead', $youtube_settings ) && $youtube_settings['show_channel_if_dead'] == 'true' ) {
+        $youtube_settings['fallback_behavior'] = 'channel';
+    }
+    unset( $youtube_settings['show_channel_if_dead'] );
+
+    // updated in v1.7.0
+    if ( array_key_exists( 'fallback_video', $youtube_settings ) && isset( $youtube_settings['fallback_video'] ) ) {
+        $youtube_settings['fallback_behavior'] = 'video';
+    }
+
+    // added in v1.7.0
+    if ( ! array_key_exists( 'autoplay', $youtube_settings ) ) {
+        $youtube_settings['autoplay'] = true;
+    }
+
+    // added in v1.7.0
+    if ( ! array_key_exists( 'show_relatetd', $youtube_settings ) ) {
+        $youtube_settings['show_relatetd'] = false;
+    }
+
+    update_option( 'youtube_live_settings', $youtube_settings );
+    update_option( 'youtube_live_version', WP_YOUTUBE_LIVE_VERSION );
+}
+register_activation_hook( __FILE__, 'wp_ytl_plugin_activation' );
