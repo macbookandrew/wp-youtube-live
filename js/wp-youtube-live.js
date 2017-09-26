@@ -58,8 +58,10 @@
         function checkAgain(data) {
             console.log('checking again...');
             if ($('.wp-youtube-live').hasClass('live')) {
+                console.log('aborting check since video is live');
                 clearInterval(checkAgainTimer);
             } else {
+                console.log('sending request...');
                 sendRequest(data);
             }
         }
