@@ -136,7 +136,7 @@ class EmbedYoutubeLiveStreaming {
             $this->objectResponse = json_decode( $this->jsonResponse );
         }
 
-        if ( ( $this->resource_type == 'live' && $this->isLive() ) || ( $this->resource_type == 'live' && in_array( $this->eventType, array( 'upcoming', 'completed' ) ) ) ) {
+        if ( count( $this->objectResponse->items ) > 0 && ( ( $this->resource_type == 'live' && $this->isLive() ) || ( $this->resource_type == 'live' && in_array( $this->eventType, array( 'upcoming', 'completed' ) ) ) ) ) {
             $this->live_video_id = $this->objectResponse->items[0]->id->videoId;
             $this->live_video_title = $this->objectResponse->items[0]->snippet->title;
             $this->live_video_description = $this->objectResponse->items[0]->snippet->description;
