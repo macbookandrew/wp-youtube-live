@@ -26,7 +26,7 @@ module.exports = function (grunt) {
             },
             options: {
                 watchTask: true,
-                proxy: "https://dev.abc.dev",
+                proxy: "https://dev.wordpress.dev",
                 https: {
                     key: "/Users/andrew/github/dotfiles/local-dev.key",
                     cert: "/Users/andrew/github/dotfiles/local-dev.crt",
