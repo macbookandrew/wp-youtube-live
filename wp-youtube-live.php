@@ -45,8 +45,11 @@ function output_youtube_live( $atts ) {
         'height'            => $settings['default_height'],
         'autoplay'          => 0,
         'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
-        'no_stream_message' => NULL,
         'auto_refresh'      => $settings['auto_refresh'],
+        'fallbackBehavior'  => $settings['fallback_behavior'],
+        'fallbackMessage'   => ( array_key_exists( 'no_stream_message', $settings ) ? $settings['no_stream_message'] : $settings['fallback_message'] ),
+        'fallbackPlaylist'  => $settings['fallback_playlist'],
+        'fallbackVideo'     => $settings['fallback_video'],
         'refreshInterval'   => apply_filters( 'wp_youtube_live_transient_timeout', '30' ),
     ), $atts );
 
@@ -88,13 +91,15 @@ function get_youtube_live_content( $youtube_settings ) {
     $youtube_live->show_related = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['show_related'] ) : $youtube_options['show_related'] );
 
     // set default message
-    if ( array_key_exists( 'no_stream_message', $youtube_settings ) ) {
-        $no_stream_message = apply_filters( 'wp_youtube_live_no_stream_available', $youtube_options['fallback_message'] );
+    if ( $youtube_options['fallback_message'] == 'no_message' ) {
+        $fallback_behavior = 'no_message';
+    } else {
+        $fallback_message = apply_filters( 'wp_youtube_live_no_stream_available', $youtube_options['fallback_message'] );
     }
 
     // start output
     ob_start();
-    if ( $youtube_live->isLive && $no_stream_message != 'no_message' ) {
+    if ( $youtube_live->isLive && $youtube_options['fallback_behavior'] != 'no_message' ) {
         echo '<span class="wp-youtube-live ' . ( $youtube_live->isLive ? 'live' : 'dead' ) . '">';
     }
 
@@ -119,7 +124,7 @@ function get_youtube_live_content( $youtube_settings ) {
         } elseif ( $youtube_options['fallback_behavior'] === 'video' && isset( $youtube_options['fallback_video'] ) ) {
             echo wp_oembed_get( esc_attr( $youtube_options['fallback_video'] ) );
         } elseif ( $youtube_options['fallback_behavior'] === 'message' ) {
-            echo $no_stream_message;
+            echo $fallback_message;
         }
     }
 
@@ -145,7 +150,7 @@ function get_youtube_live_content( $youtube_settings ) {
     }
 
 
-    if ( $youtube_live->isLive && $no_stream_message != 'no_message' ) {
+    if ( $youtube_live->isLive && $youtube_options['fallback_behavior'] != 'no_message' ) {
         echo '<span class="wp-youtube-live-error" style="display: none;"></span>
         </span>';
     }
