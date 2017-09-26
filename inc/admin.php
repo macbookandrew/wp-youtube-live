@@ -205,6 +205,8 @@ function fallback_behavior_render() {
         <p><button type='button' class='button' id='check-again'>Check again</button><span class='spinner' style='display:none;'></span></p>."><?php echo $options['fallback_message']; ?></textarea>
     </p>
 
+    <p class="fallback upcoming"><strong>Note:</strong> if you have no upcoming scheduled videos, a blank player will show up, and a playback error will show up if people try to play it.</p>
+
     <p class="fallback playlist">
         <label for="youtube_live_settings[fallback_playlist]">Fallback Playlist URL:</label><br/>
         <input type="text" name="youtube_live_settings[fallback_playlist]" size="45" placeholder="PLBCF2DAC6FFB574DE" value="<?php echo $options['fallback_playlist']; ?>" />
