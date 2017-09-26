@@ -194,6 +194,7 @@ function fallback_behavior_render() {
             <option value="completed" <?php selected( $options['fallback_behavior'], 'completed' ); ?>>Show last completed live video (adds a quota unit cost of at least 103)</option>
             <option value="channel" <?php selected( $options['fallback_behavior'], 'channel' ); ?>>Show recent videos from your channel (adds a quota unit cost of at least 3)</option>
             <option value="playlist" <?php selected( $options['fallback_behavior'], 'playlist' ); ?>>Show a specified playlist (adds a quota unit cost of at least 3)</option>
+            <option value="video" <?php selected( $options['fallback_behavior'], 'video' ); ?>>Show a specified video (no additional quota cost)</option>
             <option value="no_message" <?php selected( $options['fallback_behavior'], 'no_message' ); ?>>Show nothing at all (no additional quota cost)</option>
         </select>
     </p>
@@ -202,6 +203,11 @@ function fallback_behavior_render() {
         <label for="youtube_live_settings[fallback_message]">Custom HTML message:</label><br/>
         <textarea cols="50" rows="8" name="youtube_live_settings[fallback_message]" placeholder="<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target='_blank' href='https://youtube.com/channel/<?php echo $options['youtube_live_channel_id']; ?>'>all our videos</a>.</p>
         <p><button type='button' class='button' id='check-again'>Check again</button><span class='spinner' style='display:none;'></span></p>."><?php echo $options['fallback_message']; ?></textarea>
+    </p>
+
+    <p class="fallback playlist">
+        <label for="youtube_live_settings[fallback_playlist]">Fallback Playlist URL:</label><br/>
+        <input type="text" name="youtube_live_settings[fallback_playlist]" size="45" placeholder="PLBCF2DAC6FFB574DE" value="<?php echo $options['fallback_playlist']; ?>" />
     </p>
 
     <p class="fallback video">
@@ -216,6 +222,7 @@ function fallback_behavior_render() {
         <li>“Show scheduled live videos” fallback behavior costs 100 quota units for the call + 3 quota units for each upcoming video you have published</li>
         <li>“Show last live video” fallback behavior costs 100 quota units for the call + 3 quota units for each upcoming video you have published</li>
         <li>“Show recent videos from your channel” fallback behavior costs 1 quota unit for the call + 2 quota units for each video listed</li>
+        <li>“Show a specified playlist” fallback behavior costs 1 quota unit for the call + 2 quota units for each video in the playlist</li>
     </ul>
     <?php
 }

@@ -112,6 +112,8 @@ function get_youtube_live_content( $youtube_settings ) {
         } elseif ( $youtube_options['fallback_behavior'] === 'channel' ) {
             $youtube_live->getVideoInfo( 'channel' );
             echo $youtube_live->embedCode();
+        } elseif ( $youtube_options['fallback_behavior'] === 'playlist' ) {
+            echo wp_oembed_get( esc_attr( $youtube_options['fallback_playlist'] ) );
         } elseif ( $youtube_options['fallback_behavior'] === 'video' && isset( $youtube_options['fallback_video'] ) ) {
             echo wp_oembed_get( esc_attr( $youtube_options['fallback_video'] ) );
         } elseif ( $youtube_options['fallback_behavior'] === 'message' ) {

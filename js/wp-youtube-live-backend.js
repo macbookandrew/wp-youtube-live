@@ -12,11 +12,15 @@
         var selectedFallback = fallbackSelector.val(),
             fallbackAll = $('p.fallback'),
             fallbackMessage = $('p.fallback.message'),
+            fallbackPlaylist = $('p.fallback.playlist'),
             fallbackVideo = $('p.fallback.video');
 
         if (selectedFallback == 'message') {
             fallbackAll.slideUp();
             fallbackMessage.slideDown();
+        } else if (selectedFallback == 'playlist') {
+            fallbackAll.slideUp();
+            fallbackPlaylist.slideDown();
         } else if (selectedFallback == 'video') {
             fallbackAll.slideUp();
             fallbackVideo.slideDown();
