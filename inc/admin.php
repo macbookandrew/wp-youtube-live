@@ -214,7 +214,7 @@ function fallback_behavior_render() {
     <ul style="list-style-type: disc">
         <li>Every uncached page load costs at least 103 quota units (100 for the search + 3 for each result). API results are cached for 30 seconds (by default) on your server to help cut down on quota cost.</li>
         <li>“Show scheduled live videos” fallback behavior costs 100 quota units for the call + 3 quota units for each upcoming video you have published</li>
-        <li>“SHow last live video” fallback behavior costs 100 quota units for the call + 3 quota units for each upcoming video you have published</li>
+        <li>“Show last live video” fallback behavior costs 100 quota units for the call + 3 quota units for each upcoming video you have published</li>
         <li>“Show recent videos from your channel” fallback behavior costs 1 quota unit for the call + 2 quota units for each video listed</li>
     </ul>
     <?php
