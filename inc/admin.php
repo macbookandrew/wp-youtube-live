@@ -193,7 +193,7 @@ function fallback_behavior_render() {
             <option value="upcoming" <?php selected( $options['fallback_behavior'], 'upcoming' ); ?>>Show scheduled live videos (adds a quota unit cost of at least 103)</option>
             <option value="completed" <?php selected( $options['fallback_behavior'], 'completed' ); ?>>Show last completed live video (adds a quota unit cost of at least 103)</option>
             <option value="channel" <?php selected( $options['fallback_behavior'], 'channel' ); ?>>Show recent videos from your channel (adds a quota unit cost of at least 3)</option>
-            <option value="video" <?php selected( $options['fallback_behavior'], 'video' ); ?>>Show a specified video ID (no additional quota cost)</option>
+            <option value="playlist" <?php selected( $options['fallback_behavior'], 'playlist' ); ?>>Show a specified playlist (adds a quota unit cost of at least 3)</option>
             <option value="no_message" <?php selected( $options['fallback_behavior'], 'no_message' ); ?>>Show nothing at all (no additional quota cost)</option>
         </select>
     </p>
@@ -205,8 +205,8 @@ function fallback_behavior_render() {
     </p>
 
     <p class="fallback video">
-        <label for="youtube_live_settings[fallback_video]">Fallback Video ID:</label><br/>
-        <input type="text" name="youtube_live_settings[fallback_video]" placeholder="https://youtu.be/dQw4w9WgXcQ" value="<?php echo $options['fallback_video']; ?>" />
+        <label for="youtube_live_settings[fallback_video]">Fallback Video URL:</label><br/>
+        <input type="text" name="youtube_live_settings[fallback_video]" size="45" placeholder="https://youtu.be/dQw4w9WgXcQ" value="<?php echo $options['fallback_video']; ?>" />
     </p>
 
     <h3>Quota Usage</h3>
