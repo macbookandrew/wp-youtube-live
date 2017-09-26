@@ -103,6 +103,7 @@ function get_youtube_live_content( $youtube_settings ) {
         echo $youtube_live->embedCode();
     } else {
         $is_live = false;
+        add_filter( 'oembed_result', 'wp_ytl_set_oembed_id' );
         if ( $youtube_options['fallback_behavior'] === 'upcoming' ) {
             $youtube_live->getVideoInfo( 'live', 'upcoming' );
             echo $youtube_live->embedCode();
@@ -161,4 +162,15 @@ function get_youtube_live_content( $youtube_settings ) {
     } else {
         return ob_get_clean();
     }
+}
+
+/**
+ * Add id to oembedded iframe
+ * @param  string $html HTML oembed output
+ * @return string HTML oembed output
+ */
+function wp_ytl_set_oembed_id( $html ) {
+    $html = str_replace( '<iframe', '<iframe id="wpYouTubeLive"', $html );
+
+    return $html;
 }

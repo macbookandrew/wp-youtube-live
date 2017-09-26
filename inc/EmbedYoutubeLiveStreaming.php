@@ -265,6 +265,7 @@ class EmbedYoutubeLiveStreaming {
 
         $this->embed_code = <<<EOT
 <iframe
+    id="wpYouTubeLive"
     width="{$this->embed_width}"
     height="{$this->embed_height}"
     src="//$this->subdomain.youtube.com/embed{$embedResource}{$autoplay}{$related}"
