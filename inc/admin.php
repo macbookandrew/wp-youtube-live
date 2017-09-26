@@ -190,8 +190,8 @@ function fallback_behavior_render() {
         <label for="youtube_live_settings[fallback_behavior]">If no live videos are available, what should be displayed?</label>
         <select name="youtube_live_settings[fallback_behavior]">
             <option value="message" <?php selected( $options['fallback_behavior'], 'message' ); ?>>Show a custom HTML message (no additional quota cost)</option>
-            <option value="upcoming" <?php selected( $options['fallback_behavior'], 'upcoming' ); ?>>Show scheduled live videos (adds a quota unit cost of at least 103)</option>
-            <option value="completed" <?php selected( $options['fallback_behavior'], 'completed' ); ?>>Show last completed live video (adds a quota unit cost of at least 103)</option>
+            <option value="upcoming" <?php selected( $options['fallback_behavior'], 'upcoming' ); ?>>Show scheduled live videos (adds a quota unit cost of 100)</option>
+            <option value="completed" <?php selected( $options['fallback_behavior'], 'completed' ); ?>>Show last completed live video (adds a quota unit cost of 100)</option>
             <option value="channel" <?php selected( $options['fallback_behavior'], 'channel' ); ?>>Show recent videos from your channel (adds a quota unit cost of at least 3)</option>
             <option value="playlist" <?php selected( $options['fallback_behavior'], 'playlist' ); ?>>Show a specified playlist (adds a quota unit cost of at least 3)</option>
             <option value="video" <?php selected( $options['fallback_behavior'], 'video' ); ?>>Show a specified video (no additional quota cost)</option>
@@ -220,7 +220,7 @@ function fallback_behavior_render() {
     <h3>Quota Usage</h3>
     <p>More information about quota usage (read <a href="https://developers.google.com/youtube/v3/getting-started#quota" target="_blank">the documentation</a> for more information):</p>
     <ul style="list-style-type: disc">
-        <li>Every uncached page load costs at least 103 quota units (100 for the search + 3 for each result). API results are cached for 30 seconds (by default) on your server to help cut down on quota cost.</li>
+        <li>Every uncached page load costs 100 quota units. API results are cached for 30 seconds (by default) on your server to help cut down on quota cost.</li>
         <li>“Show scheduled live videos” fallback behavior costs 100 quota units for the call + 3 quota units for each upcoming video you have published</li>
         <li>“Show last live video” fallback behavior costs 100 quota units for the call + 3 quota units for each upcoming video you have published</li>
         <li>“Show recent videos from your channel” fallback behavior costs 1 quota unit for the call + 2 quota units for each video listed</li>
