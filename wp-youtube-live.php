@@ -20,7 +20,7 @@ include('inc/admin.php');
  * Enqueue frontend scripts
  */
 function youtube_live_scripts() {
-    wp_register_script( 'wp-youtube-live', plugin_dir_url( __FILE__ ) . 'js/wp-youtube-live.min.js', array( 'jquery' ), WP_YOUTUBE_LIVE_VERSION, true );
+    wp_register_script( 'wp-youtube-live', plugin_dir_url( __FILE__ ) . 'js/wp-youtube-live.js', array( 'jquery' ), WP_YOUTUBE_LIVE_VERSION, true );
     wp_register_style( 'wp-youtube-live', plugin_dir_url( __FILE__ ) . 'css/wp-youtube-live.css', array(), WP_YOUTUBE_LIVE_VERSION );
 }
 add_action( 'wp_enqueue_scripts', 'youtube_live_scripts' );
@@ -85,8 +85,8 @@ function get_youtube_live_content( $youtube_settings ) {
     // set up player
     $youtube_live = new EmbedYoutubeLiveStreaming( $youtube_options['youtube_live_channel_id'], $youtube_options['youtube_live_api_key'] );
     $youtube_live->subdomain = ( $youtube_options['subdomain'] ? $youtube_options['subdomain'] : 'www' );
-    $youtube_live->embed_width = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['default_width'] ) : $youtube_settings['width'] );
-    $youtube_live->embed_height = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['default_height'] ) : $youtube_settings['height'] );
+    $youtube_live->embed_width = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['width'] ) : $youtube_settings['width'] );
+    $youtube_live->embed_height = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['height'] ) : $youtube_settings['height'] );
     $youtube_live->embed_autoplay = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['autoplay'] ) : $youtube_options['autoplay'] );
     $youtube_live->show_related = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['show_related'] ) : $youtube_options['show_related'] );
 
