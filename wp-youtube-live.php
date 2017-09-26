@@ -43,7 +43,7 @@ function output_youtube_live( $atts ) {
     $shortcode_attributes = shortcode_atts( array (
         'width'             => $settings['default_width'],
         'height'            => $settings['default_height'],
-        'autoplay'          => 0,
+        'autoplay'          => $settings['autoplay'],
         'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
         'auto_refresh'      => $settings['auto_refresh'],
         'fallbackBehavior'  => $settings['fallback_behavior'],
