@@ -4,7 +4,7 @@ Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
 Tested up to:      4.8.1
-Stable tag:        1.6.4
+Stable tag:        1.7.0
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,6 +106,18 @@ In short, there’s a tradeoff between showing the live video immediately and mi
 1. Settings screen
 
 == Changelog ==
+
+= 1.7.0 =
+- This update sponsored by [International Podcast Day](https://internationalpodcastday.com/)
+- Improve fallback behavior by adding these options:
+    - Next upcoming video
+    - Most recently-completed live video
+    - All videos in a channel
+    - A specified playlist
+    - A specified video
+    - A custom message
+    - Nothing at all
+- Improve transient cache handling
 
 = 1.6.4 =
 - Fix error handling
