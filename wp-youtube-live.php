@@ -89,8 +89,6 @@ function get_youtube_live_content( $youtube_settings ) {
 
     // set default message
     if ( array_key_exists( 'no_stream_message', $youtube_settings ) ) {
-        $no_stream_message = $youtube_settings['no_stream_message'];
-    } else {
         $no_stream_message = apply_filters( 'wp_youtube_live_no_stream_available', $youtube_options['fallback_message'] );
     }
 
