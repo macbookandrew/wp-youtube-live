@@ -99,6 +99,7 @@ class EmbedYoutubeLiveStreaming {
 
         // if no or expired transient, set up query
         if ( false === $wp_youtube_live_transient || ! array_key_exists( $this->eventType, $wp_youtube_live_transient ) ) {
+            // set up query data
             $this->queryData = array(
                 "part"      => $this->part,
                 "channelId" => $this->channelId,
@@ -106,6 +107,20 @@ class EmbedYoutubeLiveStreaming {
                 "type"      => $this->type,
                 "key"       => $this->API_Key,
             );
+
+            // set up additional query data for last live video
+            if ( $this->eventType === 'completed' ) {
+                $additional_data = array(
+                    'part'          => 'id,snippet',
+                    'eventType'     => 'completed',
+                    'order'         => 'date',
+                    'maxResults'    => '1',
+                );
+
+                $this->queryData = array_merge( $this->queryData, $additional_data );
+            }
+
+            // run the query
             $this->queryAPI();
 
             // save to 30-second transient to reduce API calls

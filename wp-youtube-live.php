@@ -106,6 +106,9 @@ function get_youtube_live_content( $youtube_settings ) {
         if ( $youtube_options['fallback_behavior'] === 'upcoming' ) {
             $youtube_live->getVideoInfo( 'live', 'upcoming' );
             echo $youtube_live->embedCode();
+        } elseif ( $youtube_options['fallback_behavior'] === 'completed' ) {
+            $youtube_live->getVideoInfo( 'live', 'completed' );
+            echo $youtube_live->embedCode();
         } elseif ( $youtube_options['fallback_behavior'] === 'channel' ) {
             $youtube_live->getVideoInfo( 'channel' );
             echo $youtube_live->embedCode();
