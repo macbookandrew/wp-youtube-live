@@ -33,6 +33,7 @@ class EmbedYoutubeLiveStreaming {
     public $embed_autoplay;
     public $embed_width;
     public $embed_height;
+    public $show_related;
 
     public $live_video_id;
     public $live_video_title;
@@ -86,7 +87,7 @@ class EmbedYoutubeLiveStreaming {
      */
     public function getVideoInfo( $resource_type = 'live', $event_type = 'live' ) {
         // check transient before performing query
-        $wp_youtube_live_transient = get_transient( 'wp-youtube-live-api-response' );
+        $wp_youtube_live_transient = maybe_unserialize( get_transient( 'wp-youtube-live-api-response' ) );
 
         if ( ! $this->resource_type || $resource_type !== $this->resource_type ) {
             $this->resource_type = $resource_type;
@@ -97,7 +98,7 @@ class EmbedYoutubeLiveStreaming {
         }
 
         // if no or expired transient, set up query
-        if ( false === $wp_youtube_live_transient || $this->eventType === 'upcoming' ) {
+        if ( false === $wp_youtube_live_transient || ! array_key_exists( $this->eventType, $wp_youtube_live_transient ) ) {
             $this->queryData = array(
                 "part"      => $this->part,
                 "channelId" => $this->channelId,
@@ -108,12 +109,19 @@ class EmbedYoutubeLiveStreaming {
             $this->queryAPI();
 
             // save to 30-second transient to reduce API calls
-            set_transient( 'wp-youtube-live-api-response', $this->jsonResponse, apply_filters( 'wp_youtube_live_transient_timeout', '30' ) );
+            $API_results = array( $this->eventType => $this->jsonResponse );
+            if ( is_array( $wp_youtube_live_transient ) ) {
+                $API_results = array_merge( $API_results, $wp_youtube_live_transient );
+            }
+            set_transient( 'wp-youtube-live-api-response', maybe_serialize( $API_results ), apply_filters( 'wp_youtube_live_transient_timeout', '30' ) );
         } else {
-            $this->jsonResponse = $wp_youtube_live_transient;
+            reset( $wp_youtube_live_transient );
+            $key_name = key( $wp_youtube_live_transient );
+            $this->jsonResponse = $wp_youtube_live_transient[$key_name];
+            $this->objectResponse = json_decode( $this->jsonResponse );
         }
 
-        if ( ( $this->resource_type == 'live' && $this->isLive() ) || ( $this->resource_type == 'live' && $this->eventType == 'upcoming' ) ) {
+        if ( ( $this->resource_type == 'live' && $this->isLive() ) || ( $this->resource_type == 'live' && in_array( $this->eventType, array( 'upcoming', 'completed' ) ) ) ) {
             $this->live_video_id = $this->objectResponse->items[0]->id->videoId;
             $this->live_video_title = $this->objectResponse->items[0]->snippet->title;
             $this->live_video_description = $this->objectResponse->items[0]->snippet->description;
