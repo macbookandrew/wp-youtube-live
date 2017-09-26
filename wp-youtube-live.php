@@ -82,8 +82,8 @@ function get_youtube_live_content( $youtube_settings ) {
     // set up player
     $youtube_live = new EmbedYoutubeLiveStreaming( $youtube_options['youtube_live_channel_id'], $youtube_options['youtube_live_api_key'] );
     $youtube_live->subdomain = ( $youtube_options['subdomain'] ? $youtube_options['subdomain'] : 'www' );
-    $youtube_live->embed_width = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['width'] ) : $youtube_settings['width'] );
-    $youtube_live->embed_height = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['height'] ) : $youtube_settings['height'] );
+    $youtube_live->embed_width = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['default_width'] ) : $youtube_settings['width'] );
+    $youtube_live->embed_height = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['default_height'] ) : $youtube_settings['height'] );
     $youtube_live->embed_autoplay = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['autoplay'] ) : $youtube_options['autoplay'] );
     $youtube_live->show_related = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['show_related'] ) : $youtube_options['show_related'] );
 
@@ -104,6 +104,7 @@ function get_youtube_live_content( $youtube_settings ) {
     } else {
         $is_live = false;
         add_filter( 'oembed_result', 'wp_ytl_set_oembed_id' );
+        add_filter( 'embed_defaults', 'wp_ytl_set_embed_size' );
         if ( $youtube_options['fallback_behavior'] === 'upcoming' ) {
             $youtube_live->getVideoInfo( 'live', 'upcoming' );
             echo $youtube_live->embedCode();
@@ -173,4 +174,18 @@ function wp_ytl_set_oembed_id( $html ) {
     $html = str_replace( '<iframe', '<iframe id="wpYouTubeLive"', $html );
 
     return $html;
+}
+
+/**
+ * Set default oembed size for video/playlist fallback behavior
+ * @param  array $size default oembed sizes
+ * @return array moified oembed size
+ */
+function wp_ytl_set_embed_size( $size ) {
+    $youtube_settings = get_option( 'youtube_live_settings' );
+
+    $size['width'] = ( $_POST && $_POST['isAjax'] && array_key_exists( 'width', $_POST ) ? esc_attr( $_POST['width'] ) : $youtube_settings['default_width'] );
+    $size['height'] = ( $_POST && $_POST['isAjax'] && array_key_exists( 'height', $_POST ) ? esc_attr( $_POST['height'] ) : $youtube_settings['default_height'] );
+
+    return $size;
 }
