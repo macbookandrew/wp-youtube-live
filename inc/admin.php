@@ -190,7 +190,7 @@ function fallback_behavior_render() {
         <label for="youtube_live_settings[fallback_behavior]">If no live videos are available, what should be displayed?</label>
         <select name="youtube_live_settings[fallback_behavior]">
             <option value="message" <?php selected( $options['fallback_behavior'], 'message' ); ?>>Show a custom HTML message (no additional quota cost)</option>
-            <option value="upcoming" <?php selected( $options['fallback_behavior'], 'upcoming' ); ?>>Show upcoming videos (adds a quota unit cost of at least 100)</option>
+            <option value="upcoming" <?php selected( $options['fallback_behavior'], 'upcoming' ); ?>>Show scheduled live videos (adds a quota unit cost of at least 103)</option>
             <option value="channel" <?php selected( $options['fallback_behavior'], 'channel' ); ?>>Show recent videos from your channel (adds a quota unit cost of at least 3)</option>
             <option value="video" <?php selected( $options['fallback_behavior'], 'video' ); ?>>Show a specified video ID (no additional quota cost)</option>
             <option value="no_message" <?php selected( $options['fallback_behavior'], 'no_message' ); ?>>Show nothing at all (no additional quota cost)</option>
@@ -211,10 +211,10 @@ function fallback_behavior_render() {
     <h3>Quota Usage</h3>
     <p>More information about quota usage (read <a href="https://developers.google.com/youtube/v3/getting-started#quota" target="_blank">the documentation</a> for more information):</p>
     <ul style="list-style-type: disc">
-        <li><code>search</code> API requests cost 100 quota units.<br/>
-        A <code>search</code> request happens when a page containing the shortcode is first loaded, and approximately every 30 seconds thereafter, depending on the frequency setting below. It also happens when you have the fallback set to “Next Upcoming Video”</li>
-        <li><code>channel</code> requests cost 3 quota units (1 for the request and 2 for the <code>contentDetails</code> part)<br/>
-        A <code>channel</code> request happens when you have the fallback set to “Display Channel”</li>
+        <li>Every uncached page load costs at least 103 quota units (100 for the search + 3 for each result). API results are cached for 30 seconds (by default) on your server to help cut down on quota cost.</li>
+        <li>“Show scheduled live videos” fallback behavior costs 100 quota units for the call + 3 quota units for each upcoming video you have published</li>
+        <li>“SHow last live video” fallback behavior costs 100 quota units for the call + 3 quota units for each upcoming video you have published</li>
+        <li>“Show recent videos from your channel” fallback behavior costs 1 quota unit for the call + 2 quota units for each video listed</li>
     </ul>
     <?php
 }
