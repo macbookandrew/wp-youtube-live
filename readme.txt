@@ -107,6 +107,10 @@ In short, there’s a tradeoff between showing the live video immediately and mi
 
 == Changelog ==
 
+= 1.7.1 =
+- This update sponsored by [International Podcast Day](https://internationalpodcastday.com/)
+- Fix a few minor bugs introduced in v1.7.0
+
 = 1.7.0 =
 - This update sponsored by [International Podcast Day](https://internationalpodcastday.com/)
 - Improve fallback behavior by adding these options:
