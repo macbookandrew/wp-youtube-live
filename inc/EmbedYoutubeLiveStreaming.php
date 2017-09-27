@@ -89,7 +89,7 @@ class EmbedYoutubeLiveStreaming {
      */
     public function getVideoInfo( $resource_type = 'live', $event_type = 'live' ) {
         // check transient before performing query
-        $wp_youtube_live_transient = maybe_unserialize( get_transient( 'wp-youtube-live-api-response' ) );
+        $wp_youtube_live_api_transient = maybe_unserialize( get_transient( 'wp-youtube-live-api-response' ) );
 
         if ( ! $this->resource_type || $resource_type !== $this->resource_type ) {
             $this->resource_type = $resource_type;
@@ -99,8 +99,34 @@ class EmbedYoutubeLiveStreaming {
             $this->eventType = $event_type;
         }
 
-        // if no or expired transient, set up query
-        if ( false === $wp_youtube_live_transient || ! array_key_exists( $this->eventType, $wp_youtube_live_transient ) ) {
+        if ( $wp_youtube_live_api_transient && array_key_exists( $this->eventType, $wp_youtube_live_api_transient ) ) {
+            // 30-second transient is set
+            reset( $wp_youtube_live_api_transient );
+            $key_name = key( $wp_youtube_live_api_transient );
+            $this->jsonResponse = $wp_youtube_live_api_transient[$key_name];
+            $this->objectResponse = json_decode( $this->jsonResponse );
+        } elseif ( $this->eventType === 'upcoming' ) {
+            // get info for this video
+            $this->resource = 'videos';
+
+            $this->queryData = array(
+                "key"   => $this->API_Key,
+                "part"  => 'id,snippet',
+                "id"    => $this->getUpcomingVideoInfo(),
+            );
+
+            // run the query
+            $this->queryAPI();
+
+            // save to 30-second transient to reduce API calls
+            $API_results = array( $this->eventType => $this->jsonResponse );
+            if ( is_array( $wp_youtube_live_api_transient ) ) {
+                $API_results = array_merge( $API_results, $wp_youtube_live_api_transient );
+            }
+            set_transient( 'wp-youtube-live-api-response', maybe_serialize( $API_results ), apply_filters( 'wp_youtube_live_transient_timeout', '3' ) );
+        } else {
+            // no 30-second transient is set
+
             // set up query data
             $this->queryData = array(
                 "part"      => $this->part,
@@ -127,19 +153,18 @@ class EmbedYoutubeLiveStreaming {
 
             // save to 30-second transient to reduce API calls
             $API_results = array( $this->eventType => $this->jsonResponse );
-            if ( is_array( $wp_youtube_live_transient ) ) {
-                $API_results = array_merge( $API_results, $wp_youtube_live_transient );
+            if ( is_array( $wp_youtube_live_api_transient ) ) {
+                $API_results = array_merge( $API_results, $wp_youtube_live_api_transient );
             }
-            set_transient( 'wp-youtube-live-api-response', maybe_serialize( $API_results ), apply_filters( 'wp_youtube_live_transient_timeout', '30' ) );
-        } else {
-            reset( $wp_youtube_live_transient );
-            $key_name = key( $wp_youtube_live_transient );
-            $this->jsonResponse = $wp_youtube_live_transient[$key_name];
-            $this->objectResponse = json_decode( $this->jsonResponse );
+            set_transient( 'wp-youtube-live-api-response', maybe_serialize( $API_results ), apply_filters( 'wp_youtube_live_transient_timeout', '3' ) );
         }
 
         if ( count( $this->objectResponse->items ) > 0 && ( ( $this->resource_type == 'live' && $this->isLive() ) || ( $this->resource_type == 'live' && in_array( $this->eventType, array( 'upcoming', 'completed' ) ) ) ) ) {
-            $this->live_video_id = $this->objectResponse->items[0]->id->videoId;
+            if ( 'upcoming' === $this->eventType ) {
+                $this->live_video_id = $this->objectResponse->items[0]->id;
+            } else {
+                $this->live_video_id = $this->objectResponse->items[0]->id->videoId;
+            }
             $this->live_video_title = $this->objectResponse->items[0]->snippet->title;
             $this->live_video_description = $this->objectResponse->items[0]->snippet->description;
 
