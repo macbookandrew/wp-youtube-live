@@ -375,26 +375,25 @@ class EmbedYoutubeLiveStreaming {
             wp_enqueue_script( 'youtube-iframe-api' );
             ob_start(); ?>
                 <div id="wpYouTubeLive" width="<?php echo $this->embed_width; ?>" height="<?php echo $this->embed_height; ?>"></div>
+                <script>
+                    var player;
+                    function onYouTubeIframeAPIReady() {
+                        player = new YT.Player('wpYouTubeLive', {
+                            videoId: '$this->live_video_id',
+                            playerVars: {
+                                'autoplay': $autoplay,
+                                'rel': $related
+                            },
+                            events: {
+                                'onReady': wpYTonPlayerReady,
+                                'onStateChange': wpYTonPlayerStateChange
+                            }
+                        });
+                    }
+                </script>
             <?php
             $this->embed_code = ob_get_clean();
 
-            $api_inline_script = "
-                var player;
-                function onYouTubeIframeAPIReady() {
-                    player = new YT.Player('wpYouTubeLive', {
-                        videoId: '$this->live_video_id',
-                        playerVars: {
-                            'autoplay': $autoplay,
-                            'rel': $related
-                        },
-                        events: {
-                            'onReady': wpYTonPlayerReady,
-                            'onStateChange': wpYTonPlayerStateChange
-                        }
-                    });
-                }
-            ";
-            wp_add_inline_script( 'youtube-iframe-api', $api_inline_script );
         }
 
         return $this->embed_code;
