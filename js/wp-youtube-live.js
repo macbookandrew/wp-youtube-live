@@ -38,6 +38,7 @@ function wpYTsendRequest(wpYTdata) {
             jQuery('.wp-youtube-live').replaceWith(requestData.content).addClass('live');
             jQuery('.wp-youtube-live-error').hide();
             window.dispatchEvent(wpYTevent);
+            onYouTubeIframeAPIReady();
         }
     })
     .always(function() {
@@ -94,7 +95,6 @@ function wpYTonPlayerStateChange(event) {
     } else if (event.data == 3) {
         jQuery('.wp-youtube-live').removeClass('live').addClass('buffering');
         var videoEndTimer = setInterval(function() {
-console.log(window.wpYTdata);
             window.wpYTdata.requestType = 'refresh';
             wpYTcheckAgain(window.wpYTdata);
         }, wpYouTubeLiveSettings.refreshInterval * 1000);
