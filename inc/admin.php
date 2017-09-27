@@ -4,6 +4,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+include( 'EmbedYoutubeLiveStreaming.php' );
+
 /**
  * Enqueue backend assets
  */
@@ -206,6 +208,17 @@ function fallback_behavior_render() {
     </p>
 
     <p class="fallback upcoming"><strong>Note:</strong> if you have no upcoming scheduled videos, a blank player will show up, and a playback error will show up if people try to play it.</p>
+    <p class="fallback upcoming">
+        <?php
+        $redirect = urlencode( remove_query_arg( 'msg', $_SERVER['REQUEST_URI'] ) );
+
+        $upcoming_cache = get_transient( 'youtube-live-upcoming-videos' );
+        ?>
+
+        <div class="wp-youtube-live-upcoming-cache"><?php echo format_upcoming_videos( $upcoming_cache ); ?></div>
+
+        <button type="button" class="button-primary" id="updatewpYTUpcomingCache" data-action="updatewpYTUpcomingCache" data-nonce="<?php echo wp_create_nonce( 'wpYTcache_nonce' ); ?>">Clear Cached Upcoming Videos</button>
+    </p>
 
     <p class="fallback playlist">
         <label for="youtube_live_settings[fallback_playlist]">Fallback Playlist URL:</label><br/>
@@ -270,4 +283,41 @@ function youtube_live_options_page() { ?>
         </form>
     </div>
     <?php
+}
+
+/**
+ * Manually clear upcoming video cache
+ * @return [[Type]] [[Description]]
+ */
+function refresh_youtube_live_upcoming_cache() {
+    if ( ! wp_verify_nonce( $_POST[ 'nonce' ], 'wpYTcache_nonce' ) ) {
+        die( 'Invalid nonce.' . var_export( $_POST, true ) );
+    }
+
+    $youtube_options = get_option( 'youtube_live_settings' );
+    $youtube_live = new EmbedYoutubeLiveStreaming( $youtube_options['youtube_live_channel_id'], $youtube_options['youtube_live_api_key'] );
+
+    if ( $_POST['action'] === 'updatewpYTUpcomingCache' ) {
+        if ( $youtube_live->clearUpcomingVideoInfo() ) {
+            echo json_encode( format_upcoming_videos( get_transient( 'youtube-live-upcoming-videos' ) ) );
+            die();
+        }
+    }
+}
+add_action( 'wp_ajax_updatewpYTUpcomingCache', 'refresh_youtube_live_upcoming_cache' );
+
+/**
+ * Return list of video IDs and start times
+ * @param  array  $input possibly serialized arary of $id => $start_time values
+ * @return string HTML output
+ */
+function format_upcoming_videos( $input ) {
+    $upcoming_list = '<h3>Cache Contents</h3>
+    <ul>';
+    foreach ( maybe_unserialize( $input ) as $id => $start_time ) {
+        $upcoming_list .= '<li>Video ID <code>'. $id . '</code> starting ' . date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $start_time ) . '</li>';
+    }
+    $upcoming_list .= '</ul>';
+
+    return $upcoming_list;
 }

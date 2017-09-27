@@ -169,6 +169,82 @@ class EmbedYoutubeLiveStreaming {
     }
 
     /**
+     * Manually clear upcoming video cache
+     * @return boolean whether the transient was successfully set
+     */
+    function clearUpcomingVideoInfo() {
+        if ( get_transient( 'youtube-live-upcoming-videos' ) ) {
+            delete_transient( 'youtube-live-upcoming-videos' );
+        }
+
+        return $this->cacheUpcomingVideoInfo();
+    }
+
+    /**
+     * Cache info for all scheduled upcoming videos
+     * @return boolean whether 24-hour transient was set
+     */
+    function cacheUpcomingVideoInfo() {
+        // set up query data
+        $this->queryData = array(
+            "channelId"     => $this->channelId,
+            "key"           => $this->API_Key,
+            "part"          => 'id',
+            "eventType"     => 'upcoming',
+            "type"          => 'video',
+            "maxResults"    => 50,
+        );
+
+        // run the query
+        $all_upcoming_videos = json_decode( $this->queryAPI() );
+        $all_videos_array = array();
+
+        foreach ( $all_upcoming_videos->items as $video ) {
+            $this->resource = 'videos';
+            $this->queryData = array(
+                "channelId"     => $this->channelId,
+                "key"           => $this->API_Key,
+                "id"            => $video->id->videoId,
+                "part"          => 'liveStreamingDetails',
+            );
+
+            $this_video = json_decode( $this->queryAPI() );
+            $start_time = date( 'U', strtotime( $this_video->items[0]->liveStreamingDetails->scheduledStartTime ) );
+            $all_videos_array[$video->id->videoId] = $start_time;
+        }
+
+        // sort by date
+        asort( $all_videos_array );
+
+        return set_transient( 'youtube-live-upcoming-videos', maybe_serialize( $all_videos_array ), 86400 );
+    }
+
+    /**
+     * Get next scheduled upcoming video
+     * @return string video ID
+     */
+    function getUpcomingVideoInfo() {
+        $now = time();
+
+        $upcoming_videos = get_transient( 'youtube-live-upcoming-videos' );
+        $next_video = '';
+
+        if ( ! $upcoming_videos ) {
+            $this->cacheUpcomingVideoInfo();
+        } else {
+            foreach ( maybe_unserialize( $upcoming_videos ) as $id => $start_time ) {
+
+                if ( $start_time > time() ) {
+                    $next_video = $id;
+                    break;
+                }
+            }
+        }
+
+        return $next_video;
+    }
+
+    /**
      * Query the YouTube API
      * @return string JSON API response
      */
