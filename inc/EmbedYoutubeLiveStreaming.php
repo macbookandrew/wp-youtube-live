@@ -379,10 +379,10 @@ class EmbedYoutubeLiveStreaming {
                     var player;
                     function onYouTubeIframeAPIReady() {
                         player = new YT.Player('wpYouTubeLive', {
-                            videoId: '$this->live_video_id',
+                            videoId: '<?php echo $this->live_video_id; ?>',
                             playerVars: {
-                                'autoplay': $autoplay,
-                                'rel': $related
+                                'autoplay': <?php echo $autoplay; ?>,
+                                'rel': <?php echo $related; ?>
                             },
                             events: {
                                 'onReady': wpYTonPlayerReady,
