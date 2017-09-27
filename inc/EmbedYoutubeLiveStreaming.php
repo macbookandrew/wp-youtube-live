@@ -84,6 +84,8 @@ class EmbedYoutubeLiveStreaming {
 
     /**
      * Get video info
+     * @param string [$resource_type           = 'live'] type of video resource (live, video, channel, etc.)
+     * @param string [$event_type              = 'live'] type of event (live, upcoming, completed)
      */
     public function getVideoInfo( $resource_type = 'live', $event_type = 'live' ) {
         // check transient before performing query
