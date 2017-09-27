@@ -91,7 +91,7 @@ function wpYTonPlayerStateChange(event) {
     clearInterval(videoEndTimer);
     if (event.data == 0) {
         jQuery('.wp-youtube-live').removeClass('live').addClass('completed');
-        wpYTcheckAgain();
+        wpYTcheckAgain(window.wpYTdata);
     } else if (event.data == 3) {
         jQuery('.wp-youtube-live').removeClass('live').addClass('buffering');
         var videoEndTimer = setInterval(function() {
