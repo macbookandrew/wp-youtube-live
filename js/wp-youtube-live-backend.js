@@ -56,7 +56,7 @@ var wpYTdata = {
      * @param {object} wpYTdata data sent to server
      */
     function wpYTsendRequest(wpYTdata) {
-        $('.wp-youtube-live.progress').show();
+        $('.wp-youtube-live-upcoming-cache').html('<p>Flushing cache&hellip;</p>');
         $.ajax({
             method: "POST",
             url: ajaxurl,
@@ -65,9 +65,6 @@ var wpYTdata = {
         .done(function(response) {
             var requestData = JSON.parse(response);
             $('.wp-youtube-live-upcoming-cache').html(requestData);
-        })
-        .always(function() {
-            $('.wp-youtube-live.progress').hide();
         })
     }
 
