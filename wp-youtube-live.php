@@ -54,7 +54,7 @@ function output_youtube_live( $atts ) {
         'refreshInterval'   => apply_filters( 'wp_youtube_live_transient_timeout', '30' ),
     ), $atts );
 
-    wp_add_inline_script( 'wp-youtube-live', 'var wpYouTubeLive = ' . json_encode( $shortcode_attributes ) );
+    wp_add_inline_script( 'wp-youtube-live', 'var wpYouTubeLiveSettings = ' . json_encode( $shortcode_attributes ), 'before' );
 
     return get_youtube_live_content( $shortcode_attributes );
 }

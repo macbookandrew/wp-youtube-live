@@ -1,21 +1,21 @@
 /**
  * Set variables and event listener
  */
-var wpYTdata = [{
+var wpYTdata = Object.assign(wpYouTubeLiveSettings, {
     'action': 'load_youtube_live',
     'isAjax': true,
-}],
+}),
     wpYTevent = document.createEvent('Event');
 wpYTevent.initEvent('wpYouTubeLiveStarted', true, true);
 
 /**
  * Handle auto-refresh
  */
-if (wpYouTubeLive.auto_refresh == 'true') {
+if (wpYouTubeLiveSettings.auto_refresh == 'true') {
     var checkAgainTimer = setInterval(function() {
         wpYTdata.requestType = 'refresh';
         wpYTcheckAgain(wpYTdata);
-    }, wpYouTubeLive.refreshInterval * 1000);
+    }, wpYouTubeLiveSettings.refreshInterval * 1000);
 }
 
 /**
@@ -27,7 +27,7 @@ function wpYTsendRequest(wpYTdata) {
     jQuery('.wp-youtube-live .spinner').show();
     jQuery.ajax({
         method: "POST",
-        url: wpYouTubeLive.ajaxUrl,
+        url: wpYouTubeLiveSettings.ajaxUrl,
         data: wpYTdata
     })
     .done(function(response) {
@@ -97,6 +97,6 @@ function wpYTonPlayerStateChange(event) {
 console.log(window.wpYTdata);
             window.wpYTdata.requestType = 'refresh';
             wpYTcheckAgain(window.wpYTdata);
-        }, wpYouTubeLive.refreshInterval * 1000);
+        }, wpYouTubeLiveSettings.refreshInterval * 1000);
     }
 }
