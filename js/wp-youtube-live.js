@@ -1,69 +1,94 @@
-(function($){
-    $(document).ready(function(){
-        // set up request
-        var data = Object.assign(wpYouTubeLive, {
-            'action': 'load_youtube_live',
-            'isAjax': true,
-        }),
-            event = document.createEvent('Event');
-        event.initEvent('wpYouTubeLiveStarted', true, true);
+/**
+ * Set variables and event listener
+ */
+var wpYTdata = [{
+    'action': 'load_youtube_live',
+    'isAjax': true,
+}],
+    wpYTevent = document.createEvent('Event');
+wpYTevent.initEvent('wpYouTubeLiveStarted', true, true);
 
-        // run an initial check to clear caches
-        sendRequest(data);
+/**
+ * Handle auto-refresh
+ */
+if (wpYouTubeLive.auto_refresh == 'true') {
+    var checkAgainTimer = setInterval(function() {
+        wpYTdata.requestType = 'refresh';
+        wpYTcheckAgain(wpYTdata);
+    }, wpYouTubeLive.refreshInterval * 1000);
+}
 
-        $('body').on('click', 'button#check-again', function(event) {
-            event.preventDefault();
-            data.requestType = 'refresh';
-            checkAgain(data);
-        });
-
-        // auto-refresh
-        if (wpYouTubeLive.auto_refresh == 'true') {
-            var checkAgainTimer = setInterval(function() {
-                data.requestType = 'refresh';
-                checkAgain(data);
-            }, wpYouTubeLive.refreshInterval * 1000);
+/**
+ * Check for live-stream
+ * @param {object} data info to pass to WP
+ */
+function wpYTsendRequest(wpYTdata) {
+    jQuery('.wp-youtube-live .spinner').show();
+    jQuery.ajax({
+        method: "POST",
+        url: wpYouTubeLive.ajaxUrl,
+        data: wpYTdata
+    })
+    .done(function(response) {
+        var requestData = JSON.parse(response);
+        if (requestData.error) {
+            jQuery('.wp-youtube-live-error').append(requestData.error).show();
+        } else if (requestData.live) {
+            jQuery('.wp-youtube-live').replaceWith(requestData.content).addClass('live');
+            jQuery('.wp-youtube-live-error').hide();
+            window.dispatchEvent(wpYTevent);
         }
+    })
+    .always(function() {
+        jQuery('.wp-youtube-live .spinner').hide();
+    })
+}
 
-        /**
-         * Check for live-stream
-         * @param {object} data info to pass to WP
-         */
-        function sendRequest(data) {
-            $('.wp-youtube-live .spinner').show();
-            $.ajax({
-                method: "POST",
-                url: wpYouTubeLive.ajaxUrl,
-                data: data
-            })
-            .done(function(response) {
-                var data = JSON.parse(response);
-                if (data.error) {
-                    $('.wp-youtube-live-error').append(data.error).show();
-                } else if (data.live) {
-                    $('.wp-youtube-live').replaceWith(data.content).addClass('live');
-                    $('.wp-youtube-live-error').hide();
-                    window.dispatchEvent(event);
-                }
-            })
-            .always(function() {
-                $('.wp-youtube-live .spinner').hide();
-            })
-        }
+/**
+ * Check if a live stream has been loaded
+ * @param {object} data parameters for callback function
+ */
+function wpYTcheckAgain(wpYTdata) {
+    console.log('checking again...');
+    if (jQuery('.wp-youtube-live').hasClass('live')) {
+        console.log('aborting check since video is live');
+        clearInterval(checkAgainTimer);
+    } else {
+        console.log('sending request...');
+        wpYTsendRequest(wpYTdata);
+    }
+}
 
-        /**
-         * Check if a live stream has been loaded
-         * @param {object} data parameters for callback function
-         */
-        function checkAgain(data) {
-            console.log('checking again...');
-            if ($('.wp-youtube-live').hasClass('live')) {
-                console.log('aborting check since video is live');
-                clearInterval(checkAgainTimer);
-            } else {
-                console.log('sending request...');
-                sendRequest(data);
-            }
-        }
+/**
+ * Handle autorefresh
+ */
+jQuery(document).ready(function(){
+    // run an initial check to clear caches
+    wpYTsendRequest(wpYTdata);
+
+    jQuery('body').on('click', 'button#check-again', function(event) {
+        event.preventDefault();
+        wpYTdata.requestType = 'refresh';
+        wpYTcheckAgain(wpYTdata);
     });
-})(jQuery);
+});
+
+/**
+ * Play video when it is ready
+ * @param {object} event YouTube player event
+ */
+function wpYTonPlayerReady(event) {
+    event.target.playVideo();
+}
+
+/**
+ * Get fallback behavior from server when video ends
+ * @param {object} event YouTube player event
+ */
+function wpYTonPlayerStateChange(event) {
+    console.log(event.data);
+    if (event.data == 0) {
+        jQuery('.wp-youtube-live').removeClass('live').addClass('completed');
+        wpYTcheckAgain();
+    }
+}

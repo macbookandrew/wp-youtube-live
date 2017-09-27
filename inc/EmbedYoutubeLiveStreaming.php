@@ -255,24 +255,42 @@ class EmbedYoutubeLiveStreaming {
      * @return string HTML embed code
      */
     public function embedCode() {
-        $autoplay = $this->embed_autoplay ? "&autoplay=1" : "";
-        $related = $this->show_related ? "&rel=1" : "&rel=0";
+        $autoplay = $this->embed_autoplay ? 1 : 0;
+        $related = $this->show_related ? 1 : 0;
         if ( $this->resource_type == 'channel' ) {
-            $embedResource = '?listType=playlist&list=' . $this->uploads_id;
+            $this->embed_code = '<iframe
+                id="wpYouTubeLive"
+                width="' . $this->embed_width . '"
+                height="' . $this->embed_height . '"
+                src="https://' . $this->subdomain. '.youtube.com/?listType=playlist&list=' . $this->uploads_id . $embedResource . '?autoplay='. $autoplay . '&rel=' . $related . '"
+                frameborder="0"
+                allowfullscreen>
+            </iframe>';
         } else {
-            $embedResource = '/' . $this->live_video_id . '?';
-        }
+            wp_enqueue_script( 'youtube-iframe-api' );
+            ob_start(); ?>
+                <div id="wpYouTubeLive" width="<?php echo $this->embed_width; ?>" height="<?php echo $this->embed_height; ?>"></div>
+            <?php
+            $this->embed_code = ob_get_clean();
 
-        $this->embed_code = <<<EOT
-<iframe
-    id="wpYouTubeLive"
-    width="{$this->embed_width}"
-    height="{$this->embed_height}"
-    src="//$this->subdomain.youtube.com/embed{$embedResource}{$autoplay}{$related}"
-    frameborder="0"
-    allowfullscreen>
-</iframe>
-EOT;
+            $api_inline_script = "
+                var player;
+                function onYouTubeIframeAPIReady() {
+                    player = new YT.Player('wpYouTubeLive', {
+                        videoId: '$this->live_video_id',
+                        playerVars: {
+                            'autoplay': $autoplay,
+                            'rel': $related
+                        },
+                        events: {
+                            'onReady': wpYTonPlayerReady,
+                            'onStateChange': wpYTonPlayerStateChange
+                        }
+                    });
+                }
+            ";
+            wp_add_inline_script( 'youtube-iframe-api', $api_inline_script );
+        }
 
         return $this->embed_code;
     }
