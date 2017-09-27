@@ -123,7 +123,7 @@ class EmbedYoutubeLiveStreaming {
             if ( is_array( $wp_youtube_live_api_transient ) ) {
                 $API_results = array_merge( $API_results, $wp_youtube_live_api_transient );
             }
-            set_transient( 'wp-youtube-live-api-response', maybe_serialize( $API_results ), apply_filters( 'wp_youtube_live_transient_timeout', '3' ) );
+            set_transient( 'wp-youtube-live-api-response', maybe_serialize( $API_results ), apply_filters( 'wp_youtube_live_transient_timeout', '30' ) );
         } else {
             // no 30-second transient is set
 
@@ -156,7 +156,7 @@ class EmbedYoutubeLiveStreaming {
             if ( is_array( $wp_youtube_live_api_transient ) ) {
                 $API_results = array_merge( $API_results, $wp_youtube_live_api_transient );
             }
-            set_transient( 'wp-youtube-live-api-response', maybe_serialize( $API_results ), apply_filters( 'wp_youtube_live_transient_timeout', '3' ) );
+            set_transient( 'wp-youtube-live-api-response', maybe_serialize( $API_results ), apply_filters( 'wp_youtube_live_transient_timeout', '30' ) );
         }
 
         if ( count( $this->objectResponse->items ) > 0 && ( ( $this->resource_type == 'live' && $this->isLive() ) || ( $this->resource_type == 'live' && in_array( $this->eventType, array( 'upcoming', 'completed' ) ) ) ) ) {
