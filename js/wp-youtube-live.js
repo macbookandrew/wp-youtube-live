@@ -23,6 +23,7 @@ if (wpYouTubeLive.auto_refresh == 'true') {
  * @param {object} data info to pass to WP
  */
 function wpYTsendRequest(wpYTdata) {
+    console.log('sending request...');
     jQuery('.wp-youtube-live .spinner').show();
     jQuery.ajax({
         method: "POST",
@@ -54,7 +55,6 @@ function wpYTcheckAgain(wpYTdata) {
         console.log('aborting check since video is live');
         clearInterval(checkAgainTimer);
     } else {
-        console.log('sending request...');
         wpYTsendRequest(wpYTdata);
     }
 }
