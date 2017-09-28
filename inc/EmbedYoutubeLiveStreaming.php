@@ -432,7 +432,9 @@ class EmbedYoutubeLiveStreaming {
             $this->embed_code = ob_get_clean();
 
             // remove this video from top of upcoming cache
-            $this->checkCacheForLive( $this->live_video_id );
+            if ( $this->eventType !== 'upcoming' ) {
+                $this->checkCacheForLive( $this->live_video_id );
+            }
         }
 
         return $this->embed_code;

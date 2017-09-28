@@ -302,7 +302,6 @@ function refresh_youtube_live_upcoming_cache() {
 
     if ( $_POST['action'] === 'updatewpYTUpcomingCache' ) {
         if ( $youtube_live->clearUpcomingVideoInfo() ) {
-            $youtube_live->getVideoInfo();
             echo json_encode( format_upcoming_videos( get_transient( 'youtube-live-upcoming-videos' ) ) );
             die();
         }
