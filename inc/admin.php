@@ -290,7 +290,7 @@ function youtube_live_options_page() { ?>
 
 /**
  * Manually clear upcoming video cache
- * @return [[Type]] [[Description]]
+ * @return string formatted HTML string
  */
 function refresh_youtube_live_upcoming_cache() {
     if ( ! wp_verify_nonce( $_POST[ 'nonce' ], 'wpYTcache_nonce' ) ) {

@@ -237,7 +237,10 @@ class EmbedYoutubeLiveStreaming {
 
             $this_video = json_decode( $this->queryAPI() );
             $start_time = date( 'U', strtotime( $this_video->items[0]->liveStreamingDetails->scheduledStartTime ) );
-            $all_videos_array[$video->id->videoId] = $start_time;
+
+            if ( $start_time !== '0' ) {
+                $all_videos_array[$video->id->videoId] = $start_time;
+            }
         }
 
         // sort by date
