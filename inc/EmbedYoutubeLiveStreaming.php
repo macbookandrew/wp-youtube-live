@@ -253,6 +253,28 @@ class EmbedYoutubeLiveStreaming {
     }
 
     /**
+     * Check if current live video is in upcoming cache and remove
+     * @param string $videoID video ID to remove
+     */
+    function checkCacheForLive( $videoID ) {
+        $upcoming_videos = maybe_unserialize( get_transient( 'youtube-live-upcoming-videos' ) );
+
+        if ( count( $upcoming_videos ) > 0 ) {
+            unset( $upcoming_videos[$videoID] );
+            $cache_length = reset( $upcoming_videos );
+
+            // set to max of 24 hours
+            if ( $cache_length > time() && ( $cache_length - time() ) < 86400 ) {
+                $cache_length = $cache_length - time();
+            } else {
+                $cache_length = 86400;
+            }
+
+            set_transient( 'youtube-live-upcoming-videos', maybe_serialize( $upcoming_videos ), $cache_length );
+        }
+    }
+
+    /**
      * Get next scheduled upcoming video
      * @return string video ID
      */
@@ -406,6 +428,8 @@ class EmbedYoutubeLiveStreaming {
             <?php
             $this->embed_code = ob_get_clean();
 
+            // remove this video from top of upcoming cache
+            $this->checkCacheForLive( $this->live_video_id );
         }
 
         return $this->embed_code;
