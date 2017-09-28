@@ -91,7 +91,7 @@ function wpYTonPlayerStateChange(event) {
     if (event.data == 0) {
         jQuery('.wp-youtube-live').removeClass('live').addClass('completed');
         if (nextUpcomingVideo.length > -1 && wpYouTubeLiveSettings.fallbackBehavior === 'upcoming') {
-            player.loadVideoById({'videoId':nextUpcomingVideo})
+            wpYTPlayer.loadVideoById({'videoId':nextUpcomingVideo})
         } else {
             wpYTcheckAgain(window.wpYTdata);
         }
