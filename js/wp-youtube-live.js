@@ -90,11 +90,7 @@ function wpYTonPlayerStateChange(event) {
     console.log('YouTube player: ' + event.data);
     if (event.data == 0) {
         jQuery('.wp-youtube-live').removeClass('live').addClass('completed');
-        if (nextUpcomingVideo.length > -1 && wpYouTubeLiveSettings.fallbackBehavior === 'upcoming' && typeof wpYTPlayer.loadVideoByID == 'function') {
-            wpYTPlayer.loadVideoById({'videoId':nextUpcomingVideo});
-        } else {
-            wpYTdata.completedVideoID = wpYTPlayer.getVideoData().video_id;
-            wpYTcheckAgain(window.wpYTdata);
-        }
+        wpYTdata.completedVideoID = wpYTPlayer.getVideoData().video_id;
+        wpYTcheckAgain(window.wpYTdata);
     }
 }
