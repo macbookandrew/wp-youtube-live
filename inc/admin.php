@@ -207,7 +207,7 @@ function fallback_behavior_render() {
         <p><button type='button' class='button' id='check-again'>Check again</button><span class='spinner' style='display:none;'></span></p>."><?php echo $options['fallback_message']; ?></textarea>
     </p>
 
-    <p class="fallback upcoming"><strong>Note:</strong> if you have no upcoming scheduled videos, the last scheduled video will be shown instead.</p>
+    <p class="fallback upcoming">This option will fetch all your upcoming scheduled live videos from the YouTube API and cache them for 24 hours. If you schedule more live videos, press the button below to manually flush the server’s cache. Otherwise, it will automatically update in 24 hours. <strong>Note:</strong> if you have no upcoming scheduled videos, the last scheduled video will be shown instead.</p>
     <p class="fallback upcoming">
         <?php
         $redirect = urlencode( remove_query_arg( 'msg', $_SERVER['REQUEST_URI'] ) );

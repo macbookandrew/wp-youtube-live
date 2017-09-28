@@ -16,11 +16,25 @@ Displays the current YouTube live video from a specified channel via the shortco
 
 If no live video is available, you can display a specified video or a “channel player” showing all your recent videos.
 
-You can also enable auto-refresh to automatically check for a live video (warning: will increase server load, so use with caution).
+You can also enable auto-refresh to automatically check for a live video every 30 seconds (warning: will increase server load, so use with caution).
 
 By default, the server will check YouTube’s API and then cache that response for 30 seconds before checking the API again. If auto-refresh is enabled, clients will check against your server every 30 seconds and likely will hit that cache as well, so it can potentially take up to 60 seconds before a client will get a live video.
 
 The length of both caches can be changed using the `wp_youtube_live_transient_timeout` filter (see below for more information).
+
+If no live video is available when a page is loaded, several fallback options are available:
+
+- “Show a custom HTML message” allows you to specify a custom message to show
+- “Show scheduled live videos” will show a player and countdown until your next live video
+- “Show last completed live video” will show your most recently-completed live video
+- “Show recent videos from your channel” will show a playlist of recent videso from your channel
+- “Show a specified playlist” will show a specified playlist
+- “Show a specified video” will show a specified video
+- “Show nothing at all” will show nothing at all
+
+When a video ends, users’ browsers will check your server again to see if a live video is available. If so, it will load that; if not, it will fall back as set in your options.
+
+When a live video ends, it doesn’t throw the “stop” action but instead reports itself as “buffering.” Because of this behavior, if a video buffers for more than 30 seconds (also configurable with the `wp_youtube_live_transient_timeout` filter), users’ browsers will assume that the video has finished and will check the server to see if there is another live video or if they should fall back to your specified setting.
 
 = Shortcode Options =
 
