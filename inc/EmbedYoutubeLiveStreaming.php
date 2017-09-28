@@ -241,7 +241,15 @@ class EmbedYoutubeLiveStreaming {
         // sort by date
         asort( $all_videos_array );
 
-        return set_transient( 'youtube-live-upcoming-videos', maybe_serialize( $all_videos_array ), 86400 );
+        // cache until first video starts
+        $next_video = $all_videos_array[0];
+        if ( $next_video > time() ) {
+            $cache_length = $next_video - time();
+        } else {
+            $cache_length = 86400;
+        }
+
+        return set_transient( 'youtube-live-upcoming-videos', maybe_serialize( $all_videos_array ), $cache_length );
     }
 
     /**
