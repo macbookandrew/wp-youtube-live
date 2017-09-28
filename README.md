@@ -4,7 +4,7 @@
 **Tags:**              youtube, live, video, embed  
 **Requires at least:** 3.6  
 **Tested up to:**      4.8.1  
-**Stable tag:**        1.7.2  
+**Stable tag:**        1.7.3  
 **License:**           GPLv2 or later  
 **License URI:**       http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -33,8 +33,6 @@ If no live video is available when a page is loaded, several fallback options ar
 - “Show nothing at all” will show nothing at all
 
 When a video ends, users’ browsers will check your server again to see if a live video is available. If so, it will load that; if not, it will fall back as set in your options.
-
-When a live video ends, it doesn’t throw the “stop” action but instead reports itself as “buffering.” Because of this behavior, if a video buffers for more than 30 seconds (also configurable with the `wp_youtube_live_transient_timeout` filter), users’ browsers will assume that the video has finished and will check the server to see if there is another live video or if they should fall back to your specified setting.
 
 ### Shortcode Options ###
 
@@ -147,6 +145,10 @@ The YouTube quota limit is pretty generous: as of September 26, 2017, it allows 
 
 
 ## Changelog ##
+
+### 1.7.3 ###
+- This update sponsored by [International Podcast Day](https://internationalpodcastday.com/)
+- Fix issues with upcoming video caching
 
 ### 1.7.2 ###
 - This update sponsored by [International Podcast Day](https://internationalpodcastday.com/)

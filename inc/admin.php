@@ -208,7 +208,7 @@ function fallback_behavior_render() {
     </p>
 
     <div class="fallback upcoming">
-        <p>This option will fetch all your upcoming scheduled live videos from the YouTube API and cache them for 24 hours. If you schedule more live videos, press the button below to manually flush the server’s cache. Otherwise, it will automatically update in 24 hours. <strong>Note:</strong> if you have no upcoming scheduled videos, the last scheduled video will be shown instead.</p>
+        <p>This option will fetch all your upcoming scheduled live videos from the YouTube API and cache them for 24 hours or until the first video is scheduled to begin, whichever is soonest. If you schedule more live videos, press the button below to manually flush the server’s cache. <strong>Note:</strong> if you have no upcoming scheduled videos, the last scheduled video will be shown instead.</p>
 
         <?php
         $redirect = urlencode( remove_query_arg( 'msg', $_SERVER['REQUEST_URI'] ) );
