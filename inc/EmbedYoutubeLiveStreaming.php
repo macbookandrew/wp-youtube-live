@@ -410,7 +410,8 @@ class EmbedYoutubeLiveStreaming {
             ob_start(); ?>
                 <div id="wpYouTubeLive" width="<?php echo $this->embed_width; ?>" height="<?php echo $this->embed_height; ?>"></div>
                 <script>
-                    var player;
+                    var player,
+                        nextUpcomingVideo = '<?php echo $this->getUpcomingVideoInfo(); ?>';
                     function onYouTubeIframeAPIReady() {
                         player = new YT.Player('wpYouTubeLive', {
                             videoId: '<?php echo $this->live_video_id; ?>',
