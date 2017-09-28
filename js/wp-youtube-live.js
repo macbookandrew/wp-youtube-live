@@ -93,6 +93,7 @@ function wpYTonPlayerStateChange(event) {
         if (nextUpcomingVideo.length > -1 && wpYouTubeLiveSettings.fallbackBehavior === 'upcoming' && typeof wpYTPlayer.loadVideoByID == 'function') {
             wpYTPlayer.loadVideoById({'videoId':nextUpcomingVideo});
         } else {
+            wpYTdata.completedVideoID = wpYTPlayer.getVideoData().video_id;
             wpYTcheckAgain(window.wpYTdata);
         }
     }

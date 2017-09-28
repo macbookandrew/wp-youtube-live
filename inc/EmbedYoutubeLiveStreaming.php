@@ -51,6 +51,8 @@ class EmbedYoutubeLiveStreaming {
 
     public $channel_title;
 
+    public $completed_video_id;
+
     /**
      * Set up the query
      * @param string  $ChannelID  YouTube channel ID
@@ -99,8 +101,8 @@ class EmbedYoutubeLiveStreaming {
             $this->eventType = $event_type;
         }
 
-        if ( $wp_youtube_live_api_transient && array_key_exists( $this->eventType, $wp_youtube_live_api_transient ) ) {
-            // 30-second transient is set
+        if ( ! $this->completed_video_id && $wp_youtube_live_api_transient && array_key_exists( $this->eventType, $wp_youtube_live_api_transient ) ) {
+            // 30-second transient is set and is valid
             reset( $wp_youtube_live_api_transient );
             $key_name = key( $wp_youtube_live_api_transient );
             $this->jsonResponse = $wp_youtube_live_api_transient[$key_name];
