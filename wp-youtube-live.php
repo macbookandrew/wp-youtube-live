@@ -45,6 +45,7 @@ function output_youtube_live( $atts ) {
         'width'             => $settings['default_width'],
         'height'            => $settings['default_height'],
         'autoplay'          => $settings['autoplay'],
+        'showRelated'       => $settings['show_related'],
         'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
         'auto_refresh'      => $settings['auto_refresh'],
         'fallbackBehavior'  => $settings['fallback_behavior'],
