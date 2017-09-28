@@ -252,17 +252,21 @@ class EmbedYoutubeLiveStreaming {
         $now = time();
 
         $upcoming_videos = get_transient( 'youtube-live-upcoming-videos' );
+        $videos_array = maybe_unserialize( $upcoming_videos );
         $next_video = '';
 
         if ( ! $upcoming_videos ) {
             $this->cacheUpcomingVideoInfo();
         } else {
-            foreach ( maybe_unserialize( $upcoming_videos ) as $id => $start_time ) {
-
+            foreach ( $videos_array as $id => $start_time ) {
                 if ( $start_time > time() ) {
                     $next_video = $id;
                     break;
                 }
+            }
+            if ( ! $next_video ) {
+                end( $videos_array );
+                $next_video = key( $videos_array );
             }
         }
 

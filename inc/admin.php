@@ -207,7 +207,7 @@ function fallback_behavior_render() {
         <p><button type='button' class='button' id='check-again'>Check again</button><span class='spinner' style='display:none;'></span></p>."><?php echo $options['fallback_message']; ?></textarea>
     </p>
 
-    <p class="fallback upcoming"><strong>Note:</strong> if you have no upcoming scheduled videos, a blank player will show up, and a playback error will show up if people try to play it.</p>
+    <p class="fallback upcoming"><strong>Note:</strong> if you have no upcoming scheduled videos, the last scheduled video will be shown instead.</p>
     <p class="fallback upcoming">
         <?php
         $redirect = urlencode( remove_query_arg( 'msg', $_SERVER['REQUEST_URI'] ) );
