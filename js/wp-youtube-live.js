@@ -87,7 +87,7 @@ function wpYTonPlayerReady(event) {
  * @param {object} event YouTube player event
  */
 function wpYTonPlayerStateChange(event) {
-    console.log(event.data);
+    console.log('YouTube player: ' + event.data);
     if (event.data == 0) {
         jQuery('.wp-youtube-live').removeClass('live').addClass('completed');
         if (nextUpcomingVideo.length > -1 && wpYouTubeLiveSettings.fallbackBehavior === 'upcoming') {
