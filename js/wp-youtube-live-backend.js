@@ -28,11 +28,11 @@ var wpYTdata = {
      */
     function updateFallbackOptions(fallbackSelector) {
         var selectedFallback = fallbackSelector.val(),
-            fallbackAll = $('p.fallback'),
-            fallbackMessage = $('p.fallback.message'),
-            fallbackUpcoming = $('p.fallback.upcoming'),
-            fallbackPlaylist = $('p.fallback.playlist'),
-            fallbackVideo = $('p.fallback.video');
+            fallbackAll = $('.fallback'),
+            fallbackMessage = $('.fallback.message'),
+            fallbackUpcoming = $('.fallback.upcoming'),
+            fallbackPlaylist = $('.fallback.playlist'),
+            fallbackVideo = $('.fallback.video');
 
         if (selectedFallback == 'message') {
             fallbackAll.slideUp();
@@ -57,6 +57,7 @@ var wpYTdata = {
      */
     function wpYTsendRequest(wpYTdata) {
         $('.wp-youtube-live-upcoming-cache').html('<p>Flushing cache&hellip;</p>');
+        $('.spinner').css({'visibility': 'visible'});
         $.ajax({
             method: "POST",
             url: ajaxurl,
@@ -65,6 +66,9 @@ var wpYTdata = {
         .done(function(response) {
             var requestData = JSON.parse(response);
             $('.wp-youtube-live-upcoming-cache').html(requestData);
+        })
+        .always(function() {
+            $('.spinner').css({'visibility': 'hidden'});
         })
     }
 

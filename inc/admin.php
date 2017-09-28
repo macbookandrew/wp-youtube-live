@@ -207,8 +207,9 @@ function fallback_behavior_render() {
         <p><button type='button' class='button' id='check-again'>Check again</button><span class='spinner' style='display:none;'></span></p>."><?php echo $options['fallback_message']; ?></textarea>
     </p>
 
-    <p class="fallback upcoming">This option will fetch all your upcoming scheduled live videos from the YouTube API and cache them for 24 hours. If you schedule more live videos, press the button below to manually flush the server’s cache. Otherwise, it will automatically update in 24 hours. <strong>Note:</strong> if you have no upcoming scheduled videos, the last scheduled video will be shown instead.</p>
-    <p class="fallback upcoming">
+    <div class="fallback upcoming">
+        <p>This option will fetch all your upcoming scheduled live videos from the YouTube API and cache them for 24 hours. If you schedule more live videos, press the button below to manually flush the server’s cache. Otherwise, it will automatically update in 24 hours. <strong>Note:</strong> if you have no upcoming scheduled videos, the last scheduled video will be shown instead.</p>
+
         <?php
         $redirect = urlencode( remove_query_arg( 'msg', $_SERVER['REQUEST_URI'] ) );
 
@@ -217,8 +218,10 @@ function fallback_behavior_render() {
 
         <div class="wp-youtube-live-upcoming-cache"><?php echo format_upcoming_videos( $upcoming_cache ); ?></div>
 
-        <button type="button" class="button-primary" id="updatewpYTUpcomingCache" data-action="updatewpYTUpcomingCache" data-nonce="<?php echo wp_create_nonce( 'wpYTcache_nonce' ); ?>">Clear Cached Upcoming Videos</button>
-    </p>
+        <p>
+            <button type="button" class="button-primary" id="updatewpYTUpcomingCache" data-action="updatewpYTUpcomingCache" data-nonce="<?php echo wp_create_nonce( 'wpYTcache_nonce' ); ?>">Clear Cached Upcoming Videos</button><span class="spinner" style="visibility: hidden;float: none;"></span>
+        </p>
+    </div>
 
     <p class="fallback playlist">
         <label for="youtube_live_settings[fallback_playlist]">Fallback Playlist URL:</label><br/>
