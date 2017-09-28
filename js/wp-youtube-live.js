@@ -34,7 +34,7 @@ function wpYTsendRequest(wpYTdata) {
         var requestData = JSON.parse(response);
         if (requestData.error) {
             jQuery('.wp-youtube-live-error').append(requestData.error).show();
-        } else if (requestData.live) {
+        } else if (requestData.live && typeof requestData.content !== 'undefined') {
             jQuery('.wp-youtube-live').replaceWith(requestData.content).addClass('live');
             jQuery('.wp-youtube-live-error').hide();
             window.dispatchEvent(wpYTevent);
@@ -90,8 +90,8 @@ function wpYTonPlayerStateChange(event) {
     console.log('YouTube player: ' + event.data);
     if (event.data == 0) {
         jQuery('.wp-youtube-live').removeClass('live').addClass('completed');
-        if (nextUpcomingVideo.length > -1 && wpYouTubeLiveSettings.fallbackBehavior === 'upcoming') {
-            wpYTPlayer.loadVideoById({'videoId':nextUpcomingVideo})
+        if (nextUpcomingVideo.length > -1 && wpYouTubeLiveSettings.fallbackBehavior === 'upcoming' && typeof wpYTPlayer.loadVideoByID == 'function') {
+            wpYTPlayer.loadVideoById({'videoId':nextUpcomingVideo});
         } else {
             wpYTcheckAgain(window.wpYTdata);
         }
