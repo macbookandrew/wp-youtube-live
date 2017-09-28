@@ -259,7 +259,7 @@ class EmbedYoutubeLiveStreaming {
     function checkCacheForLive( $videoID ) {
         $upcoming_videos = maybe_unserialize( get_transient( 'youtube-live-upcoming-videos' ) );
 
-        if ( count( $upcoming_videos ) > 0 ) {
+        if ( count( $upcoming_videos ) > 1 ) {
             unset( $upcoming_videos[$videoID] );
             $cache_length = reset( $upcoming_videos );
 
