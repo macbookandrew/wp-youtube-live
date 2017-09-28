@@ -93,6 +93,10 @@ function get_youtube_live_content( $youtube_settings ) {
     $youtube_live->show_related = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['show_related'] ) : $youtube_options['show_related'] );
     $youtube_live->completed_video_id = ( $_POST && $_POST['isAjax'] && array_key_exists( 'completedVideoID', $_POST ) ? $_POST['completedVideoID'] : '' );
 
+    if ( strlen( $youtube_live->completed_video_id ) > 0 ) {
+        $youtube_live->isLive( true );
+    }
+
     // set default message
     if ( $youtube_options['fallback_message'] == 'no_message' ) {
         $fallback_behavior = 'no_message';

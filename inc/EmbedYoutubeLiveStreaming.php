@@ -101,13 +101,13 @@ class EmbedYoutubeLiveStreaming {
             $this->eventType = $event_type;
         }
 
-        if ( ! $this->completed_video_id && $wp_youtube_live_api_transient && array_key_exists( $this->eventType, $wp_youtube_live_api_transient ) ) {
+        if ( ! isset( $this->completed_video_id ) && $wp_youtube_live_api_transient && array_key_exists( $this->eventType, $wp_youtube_live_api_transient ) ) {
             // 30-second transient is set and is valid
             reset( $wp_youtube_live_api_transient );
             $key_name = key( $wp_youtube_live_api_transient );
             $this->jsonResponse = $wp_youtube_live_api_transient[$key_name];
             $this->objectResponse = json_decode( $this->jsonResponse );
-        } elseif ( $this->eventType === 'upcoming' ) {
+        } elseif ( $this->eventType === 'upcoming' || isset( $this->completed_video_id ) ) {
             // get info for this video
             $this->resource = 'videos';
 
