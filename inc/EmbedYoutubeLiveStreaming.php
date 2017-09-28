@@ -101,6 +101,11 @@ class EmbedYoutubeLiveStreaming {
             $this->eventType = $event_type;
         }
 
+        // remove this video from top of upcoming cache
+        if ( isset( $this->completed_video_id ) ) {
+            $this->removeFromUpcomingCache( $this->completed_video_id );
+        }
+
         if ( ! isset( $this->completed_video_id ) && $wp_youtube_live_api_transient && array_key_exists( $this->eventType, $wp_youtube_live_api_transient ) ) {
             // 30-second transient is set and is valid
             reset( $wp_youtube_live_api_transient );
@@ -261,7 +266,7 @@ class EmbedYoutubeLiveStreaming {
      * Check if current live video is in upcoming cache and remove
      * @param string $videoID video ID to remove
      */
-    function checkCacheForLive( $videoID ) {
+    function removeFromUpcomingCache( $videoID ) {
         $upcoming_videos = maybe_unserialize( get_transient( 'youtube-live-upcoming-videos' ) );
 
         if ( count( $upcoming_videos ) > 1 ) {
@@ -433,11 +438,6 @@ class EmbedYoutubeLiveStreaming {
                 </script>
             <?php
             $this->embed_code = ob_get_clean();
-
-            // remove this video from top of upcoming cache
-            if ( $this->eventType !== 'upcoming' ) {
-                $this->checkCacheForLive( $this->live_video_id );
-            }
         }
 
         return $this->embed_code;
