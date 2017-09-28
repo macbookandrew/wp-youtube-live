@@ -101,7 +101,7 @@ function get_youtube_live_content( $youtube_settings ) {
 
     // start output
     ob_start();
-    if ( $youtube_live->isLive && $youtube_options['fallback_behavior'] != 'no_message' ) {
+    if ( $youtube_options['fallback_behavior'] != 'no_message' ) {
         echo '<span class="wp-youtube-live ' . ( $youtube_live->isLive ? 'live' : 'dead' ) . '">';
     }
 
@@ -152,7 +152,7 @@ function get_youtube_live_content( $youtube_settings ) {
     }
 
 
-    if ( $youtube_live->isLive && $youtube_options['fallback_behavior'] != 'no_message' ) {
+    if ( $youtube_options['fallback_behavior'] != 'no_message' ) {
         echo '<span class="wp-youtube-live-error" style="display: none;"></span>
         </span>';
     }
