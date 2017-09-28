@@ -315,10 +315,16 @@ add_action( 'wp_ajax_updatewpYTUpcomingCache', 'refresh_youtube_live_upcoming_ca
  * @return string HTML output
  */
 function format_upcoming_videos( $input ) {
+    if ( $input ) {
+        $video_array = maybe_unserialize( $input );
+    }
+
     $upcoming_list = '<h3>Cache Contents</h3>
     <ul>';
-    foreach ( maybe_unserialize( $input ) as $id => $start_time ) {
-        $upcoming_list .= '<li>Video ID <code>'. $id . '</code> starting ' . date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $start_time ) . '</li>';
+    if ( is_array( $video_array ) ) {
+        foreach ( $video_array as $id => $start_time ) {
+            $upcoming_list .= '<li>Video ID <code>'. $id . '</code> starting ' . date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $start_time ) . '</li>';
+        }
     }
     $upcoming_list .= '</ul>';
 
