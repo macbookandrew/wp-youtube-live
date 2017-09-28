@@ -330,7 +330,7 @@ class EmbedYoutubeLiveStreaming {
         $this->jsonResponse = curl_exec( $curl );
         curl_close( $curl );
 
-        #TODO: add If-None-Match etag header to improve performance
+        #FUTURE: add If-None-Match etag header to improve performance
 
         $this->objectResponse = json_decode( $this->jsonResponse ); // decode as object
         $this->arrayResponse = json_decode( $this->jsonResponse, TRUE ); // decode as array

@@ -112,6 +112,7 @@ function get_youtube_live_content( $youtube_settings ) {
 
     if ( $youtube_live->isLive ) {
         $is_live = true;
+        #TODO: load a placeholder or nothing on initial page load?
         echo $youtube_live->embedCode();
     } else {
         $is_live = false;

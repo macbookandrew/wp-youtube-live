@@ -221,6 +221,7 @@ function fallback_behavior_render() {
         <p>
             <button type="button" class="button-primary" id="updatewpYTUpcomingCache" data-action="updatewpYTUpcomingCache" data-nonce="<?php echo wp_create_nonce( 'wpYTcache_nonce' ); ?>">Clear Cached Upcoming Videos</button><span class="spinner" style="visibility: hidden;float: none;"></span>
         </p>
+        <!-- TODO: add secondary fallback if no upcoming videos are scheduled -->
     </div>
 
     <p class="fallback playlist">
