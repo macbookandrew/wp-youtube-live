@@ -88,15 +88,8 @@ function wpYTonPlayerReady(event) {
  */
 function wpYTonPlayerStateChange(event) {
     console.log(event.data);
-    clearInterval(videoEndTimer);
     if (event.data == 0) {
         jQuery('.wp-youtube-live').removeClass('live').addClass('completed');
         wpYTcheckAgain(window.wpYTdata);
-    } else if (event.data == 3) {
-        jQuery('.wp-youtube-live').removeClass('live').addClass('buffering');
-        var videoEndTimer = setInterval(function() {
-            window.wpYTdata.requestType = 'refresh';
-            wpYTcheckAgain(window.wpYTdata);
-        }, wpYouTubeLiveSettings.refreshInterval * 1000);
     }
 }
