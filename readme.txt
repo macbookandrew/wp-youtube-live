@@ -4,7 +4,7 @@ Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
 Tested up to:      4.8.1
-Stable tag:        1.7.0
+Stable tag:        1.7.2
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -145,6 +145,12 @@ The YouTube quota limit is pretty generous: as of September 26, 2017, it allows 
 1. Settings screen
 
 == Changelog ==
+
+= 1.7.2 =
+- This update sponsored by [International Podcast Day](https://internationalpodcastday.com/)
+- Automatically load fallback behavior when a video ends
+- If fallback behavior is “Show upcoming videos,” cache a list of upcoming videos for 24 hours to save API quota unit cost
+- Use YouTube’s API instead of a `<iframe` embed
 
 = 1.7.1 =
 - This update sponsored by [International Podcast Day](https://internationalpodcastday.com/)
