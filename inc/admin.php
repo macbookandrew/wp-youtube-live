@@ -322,10 +322,12 @@ function format_upcoming_videos( $input ) {
 
     $upcoming_list = '<h3>Cache Contents</h3>
     <ul>';
-    if ( is_array( $video_array ) ) {
+    if ( is_array( $video_array ) && count( $video_array ) > 0 ) {
         foreach ( $video_array as $id => $start_time ) {
             $upcoming_list .= '<li>Video ID <code>'. $id . '</code> starting ' . date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $start_time ) . '</li>';
         }
+    } else {
+        $upcoming_list .= '<li>Cache is currently empty. Make sure you have some videos scheduled, then press the button below to manually update the cache.</li>';
     }
     $upcoming_list .= '</ul>';
 
