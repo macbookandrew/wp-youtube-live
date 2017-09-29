@@ -219,7 +219,7 @@ function fallback_behavior_render() {
         <div class="wp-youtube-live-upcoming-cache"><?php echo format_upcoming_videos( $upcoming_cache ); ?></div>
 
         <p>
-            <button type="button" class="button-primary" id="updatewpYTUpcomingCache" data-action="updatewpYTUpcomingCache" data-nonce="<?php echo wp_create_nonce( 'wpYTcache_nonce' ); ?>">Clear Cached Upcoming Videos</button><span class="spinner" style="visibility: hidden;float: none;"></span>
+            <button type="button" class="button-primary" id="updatewpYTUpcomingCache" data-action="updatewpYTUpcomingCache" data-nonce="<?php echo wp_create_nonce( 'wpYTcache_nonce' ); ?>">Clear Cached Upcoming Videos</button> (costs 100 quota units each time)<span class="spinner" style="visibility: hidden;float: none;"></span>
         </p>
         <!-- TODO: add secondary fallback if no upcoming videos are scheduled -->
     </div>
@@ -234,8 +234,7 @@ function fallback_behavior_render() {
         <input type="text" name="youtube_live_settings[fallback_video]" size="45" placeholder="https://youtu.be/dQw4w9WgXcQ" value="<?php echo $options['fallback_video']; ?>" />
     </p>
 
-    <h3>Quota Usage</h3>
-    <p>For more information on quota usage, read the <a href="https://github.com/macbookandrew/wp-youtube-live#quota-units">plugin documentation</a> as well as the <a href="https://developers.google.com/youtube/v3/getting-started#quota" target="_blank">YouTube API documentation</a></p>
+    <p>For more information on quota usage, read the <a href="https://github.com/macbookandrew/wp-youtube-live#quota-units">plugin documentation</a> as well as the <a href="https://developers.google.com/youtube/v3/getting-started#quota" target="_blank">YouTube API documentation</a>.</p>
     <?php
 }
 
