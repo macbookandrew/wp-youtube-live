@@ -26,7 +26,6 @@ function youtube_live_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'youtube_live_scripts' );
 
-
 /**
  * Create shortcode
  * @param  array  $atts shortcode parameters
@@ -162,9 +161,9 @@ function get_youtube_live_content( $youtube_settings ) {
         </span>';
     }
 
-    // handle ajax
+    // return the content
     if ( $_POST && $_POST['isAjax'] ) {
-        if ( $_POST['requestType'] != 'refresh' || $is_live ) {
+        if ( $_POST['requestType'] !== 'refresh' || $is_live ) {
             $json_data['content'] = ob_get_clean();
         } else {
             ob_clean();
@@ -243,3 +242,5 @@ function wp_ytl_plugin_activation() {
     update_option( 'youtube_live_version', WP_YOUTUBE_LIVE_VERSION );
 }
 register_activation_hook( __FILE__, 'wp_ytl_plugin_activation' );
+
+#TODO: add a notice about resaving settings on plugin activation
