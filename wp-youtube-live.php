@@ -137,12 +137,6 @@ function get_youtube_live_content( $youtube_settings ) {
         }
     }
 
-    // debugging
-    if ( get_option( 'youtube_live_settings', 'debugging' ) && is_user_logged_in() ) {
-        $debugging_code = var_export( $youtube_live, true );
-        echo '<!-- YouTube Live debugging: ' . "\n" . $debugging_code . "\n" . ' -->';
-    }
-
     // errors
     if ( $youtube_live->getErrorMessage() ) {
         $error_message = '<p><strong>WP YouTube Live error:</strong></p>
@@ -154,13 +148,17 @@ function get_youtube_live_content( $youtube_settings ) {
             <li><strong>Extended help:</strong> ' . $error['extendedHelp'] . '</li>';
         }
         $error_message .= '</ul>';
-        echo $error_message;
         $json_data['error'] = $error_message;
     }
 
+    // debugging
+    if ( get_option( 'youtube_live_settings', 'debugging' ) && is_user_logged_in() ) {
+        $debugging_code = var_export( $youtube_live, true );
+        echo '<!-- YouTube Live debugging: ' . "\n" . $debugging_code . "\n" . ' -->';
+    }
 
     if ( $youtube_options['fallback_behavior'] != 'no_message' ) {
-        echo '<span class="wp-youtube-live-error" style="display: none;"></span>
+        echo '<span class="wp-youtube-live-error" style="display: none;">' . $error_message . '</span>
         </span>';
     }
 
