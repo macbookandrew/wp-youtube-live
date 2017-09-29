@@ -137,6 +137,7 @@ function get_youtube_live_content( $youtube_settings ) {
     }
 
     // errors
+    $error_message = '';
     if ( $youtube_live->getErrorMessage() ) {
         $error_message = '<p><strong>WP YouTube Live error:</strong></p>
         <ul>';
