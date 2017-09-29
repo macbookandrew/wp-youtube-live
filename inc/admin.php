@@ -311,7 +311,7 @@ add_action( 'wp_ajax_updatewpYTUpcomingCache', 'refresh_youtube_live_upcoming_ca
 
 /**
  * Return list of video IDs and start times
- * @param  array  $input possibly serialized arary of $id => $start_time values
+ * @param  array  $input possibly serialized array of $id => $start_time values
  * @return string HTML output
  */
 function format_upcoming_videos( $input ) {
