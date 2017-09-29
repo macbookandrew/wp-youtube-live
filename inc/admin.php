@@ -319,7 +319,15 @@ function format_upcoming_videos( $input ) {
         $video_array = maybe_unserialize( $input );
     }
 
+    global $wpdb;
+    $transient_expire_time = $wpdb->get_col( $wpdb->prepare(
+        'SELECT option_value FROM %1$soptions WHERE option_name = "%2$s";',
+        $wpdb->prefix,
+        '_transient_timeout_youtube-live-upcoming-videos'
+    ), 0);
+
     $upcoming_list = '<h3>Cache Contents</h3>
+    <p>Cache valid until ' . date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $transient_expire_time[0] ) . '.</p>
     <ul>';
     if ( is_array( $video_array ) && count( $video_array ) > 0 ) {
         foreach ( $video_array as $id => $start_time ) {
