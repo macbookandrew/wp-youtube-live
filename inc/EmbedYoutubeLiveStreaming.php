@@ -416,7 +416,6 @@ class EmbedYoutubeLiveStreaming {
                 allowfullscreen>
             </iframe>';
         } else {
-            wp_enqueue_script( 'youtube-iframe-api' );
             ob_start(); ?>
                 <div id="wpYouTubeLive" width="<?php echo $this->embed_width; ?>" height="<?php echo $this->embed_height; ?>"></div>
                 <script>

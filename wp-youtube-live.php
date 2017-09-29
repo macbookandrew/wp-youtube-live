@@ -36,6 +36,7 @@ function output_youtube_live( $atts ) {
     // enqueue assets
     wp_enqueue_script( 'wp-youtube-live' );
     wp_enqueue_style( 'wp-youtube-live' );
+    wp_enqueue_script( 'youtube-iframe-api' );
 
     // get plugin settings
     $settings = get_option( 'youtube_live_settings' );
