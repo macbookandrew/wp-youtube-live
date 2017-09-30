@@ -244,7 +244,7 @@ class EmbedYoutubeLiveStreaming {
             $start_time = date( 'U', strtotime( $this_video->items[0]->liveStreamingDetails->scheduledStartTime ) );
 
             if ( $start_time !== '0' ) {
-                $all_videos_array[$video->id->videoId] = $start_time;
+                $all_videos_array[$video->id->videoId] = ( $start_time + 600 ); // add 10-minute “grace period” in case breadcast starts late
             }
         }
 
