@@ -119,7 +119,7 @@ In short, there’s a tradeoff between showing the live video immediately and mi
 - End users’ browsers will request an update from the server every 30 seconds; when the API results cache is stale, your server will make another API request, which costs an additional 100 quota units.
 - Fallback behavior:
     - “Show a custom HTML message” costs no additional quota units
-    - “Show scheduled live videos” fallback behavior costs an additional 100 quota units per API call plus 3 quota units for each scheduled video you have (this is cached for 24 hours or until the next-scheduled video starts, whichever is soonest)
+    - “Show scheduled live videos” fallback behavior costs an additional 100 quota units per API call plus 3 quota units for each scheduled video you have (until the next-scheduled video starts [plus a 15-minute “grace period” to give some leeway for your actual start time], or for 5 minutes if there are no videos scheduled)
     - “Show last completed live video” fallback behavior costs an additional 100 quota units per API call
     - “Show recent videos from your channel” fallback behavior costs 1 quota unit for the call + 2 quota units for each video listed
     - “Show a specified playlist” fallback behavior costs 1 quota unit for the call + 2 quota units for each video in the playlist
@@ -129,7 +129,7 @@ In short, there’s a tradeoff between showing the live video immediately and mi
 Estimated quota usage:
 
 - If the page containing the shortcode is open in a browser 24/7, it should cost 288,000 quota units per day, regardless of how many visitors (due to the plugin’s caching mechanism).
-- If fallback behavior is set to “scheduled live videos” or “last completed live video,” it should cost an additional 100 quota units per 24 hours (or less if you have a video scheduled within the next 24 hours).
+- If fallback behavior is set to “scheduled live videos” or “last completed live video,” it should cost an additional 100 quota units when the next-scheduled video begins (or every 5 minutes if no videos are scheduled).
 - If fallback behavior is set to “specified playlist,” it should cost an additional 1 quota unit per page load plus 2 quota units per video in the playlist.
 - If fallback behavior is set to “specified playlist” or “specified video,” it should cost an additional 3 quota unit per page load.
 
