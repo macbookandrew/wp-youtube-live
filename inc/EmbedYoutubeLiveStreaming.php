@@ -261,7 +261,7 @@ class EmbedYoutubeLiveStreaming {
         if ( $next_video > time() ) {
             $cache_length = $next_video - time();
         } else {
-            $cache_length = 86400;
+            $cache_length = 600;
         }
 
         return set_transient( 'youtube-live-upcoming-videos', maybe_serialize( $all_videos_array ), $cache_length );
