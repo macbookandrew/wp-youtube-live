@@ -252,7 +252,8 @@ class EmbedYoutubeLiveStreaming {
         asort( $all_videos_array );
 
         // cache until first video starts
-        $next_video = $all_videos_array[0];
+        $key = key( $all_videos_array );
+        $next_video = $all_videos_array[$key];
         if ( $next_video > time() ) {
             $cache_length = $next_video - time();
         } else {
