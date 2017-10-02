@@ -247,8 +247,8 @@ class EmbedYoutubeLiveStreaming {
             $this_video = json_decode( $this->queryAPI() );
             $start_time = date( 'U', strtotime( $this_video->items[0]->liveStreamingDetails->scheduledStartTime ) );
 
-            if ( $start_time !== '0' ) {
-                $all_videos_array[$video->id->videoId] = ( $start_time + 600 ); // add 10-minute “grace period” in case breadcast starts late
+            if ( $start_time !== '0' && $start_time > ( time() - 900 ) ) { // only include videos scheduled in the future, minus a 15-minute grace period
+                $all_videos_array[$video->id->videoId] = $start_time;
             }
         }
 
@@ -259,7 +259,7 @@ class EmbedYoutubeLiveStreaming {
         $key = key( $all_videos_array );
         $next_video = $all_videos_array[$key];
         if ( $next_video > time() ) {
-            $cache_length = $next_video - time();
+            $cache_length = $next_video - time() + 900;  // add 15-minute “grace period” in case breadcast starts late
         } else {
             $cache_length = 600;
         }
