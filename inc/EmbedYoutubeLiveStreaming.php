@@ -91,7 +91,11 @@ class EmbedYoutubeLiveStreaming {
      */
     public function getVideoInfo( $resource_type = 'live', $event_type = 'live' ) {
         // check transient before performing query
-        $wp_youtube_live_api_transient = maybe_unserialize( get_transient( 'wp-youtube-live-api-response' ) );
+        if ( false === ( $upcoming_cache = get_transient( 'wp-youtube-live-api-response' ) ) ) {
+            $this->cacheUpcomingVideoInfo();
+            $upcoming_cache = get_transient( 'wp-youtube-live-api-response' );
+        }
+        $wp_youtube_live_api_transient = maybe_unserialize( $upcoming_cache );
 
         if ( ! $this->resource_type || $resource_type !== $this->resource_type ) {
             $this->resource_type = $resource_type;
