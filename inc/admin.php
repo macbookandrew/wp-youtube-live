@@ -184,7 +184,7 @@ function fallback_behavior_render() {
         $options['fallback_behavior'] = 'message';
     }
     if ( ! array_key_exists( 'fallback_message', $options ) ) {
-        $options['fallback_message'] = '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">all our videos</a>.</p>
+        $options['fallback_message'] = '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">all of our videos</a>.</p>
 <p><button type="button" class="button" id="check-again">Check again</button><span class="spinner" style="display:none;"></span></p>';
     }
     ?>
@@ -203,7 +203,7 @@ function fallback_behavior_render() {
 
     <p class="fallback message">
         <label for="youtube_live_settings[fallback_message]">Custom HTML message:</label><br/>
-        <textarea cols="50" rows="8" name="youtube_live_settings[fallback_message]" placeholder="<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target='_blank' href='https://youtube.com/channel/<?php echo $options['youtube_live_channel_id']; ?>'>all our videos</a>.</p>
+        <textarea cols="50" rows="8" name="youtube_live_settings[fallback_message]" placeholder="<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target='_blank' href='https://youtube.com/channel/<?php echo $options['youtube_live_channel_id']; ?>'>all of our videos</a>.</p>
         <p><button type='button' class='button' id='check-again'>Check again</button><span class='spinner' style='display:none;'></span></p>."><?php echo $options['fallback_message']; ?></textarea>
     </p>
 
