@@ -69,13 +69,13 @@ add_action( 'wp_ajax_nopriv_load_youtube_live', 'get_youtube_live_content' );
 
 /**
  * Output YouTube Live content
- * @param  array  $youtube_settings array of settings
+ * @param  array  $request_options array of settings
  * @return string JSON or HTML content
  */
-function get_youtube_live_content( $youtube_settings ) {
+function get_youtube_live_content( $request_options ) {
     // fix undefined errors in ajax context
-    if ( ! is_array( $youtube_settings ) ) {
-        $youtube_settings = array();
+    if ( ! is_array( $request_options ) ) {
+        $request_options = array();
     }
 
     // load embed class
@@ -87,8 +87,8 @@ function get_youtube_live_content( $youtube_settings ) {
     // set up player
     $youtube_live = new EmbedYoutubeLiveStreaming( $youtube_options['youtube_live_channel_id'], $youtube_options['youtube_live_api_key'] );
     $youtube_live->subdomain = ( $youtube_options['subdomain'] ? $youtube_options['subdomain'] : 'www' );
-    $youtube_live->embed_width = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['width'] ) : $youtube_settings['width'] );
-    $youtube_live->embed_height = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['height'] ) : $youtube_settings['height'] );
+    $youtube_live->embed_width = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['width'] ) : $request_options['width'] );
+    $youtube_live->embed_height = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['height'] ) : $request_options['height'] );
     $youtube_live->embed_autoplay = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['autoplay'] ) : $youtube_options['autoplay'] );
     $youtube_live->show_related = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['show_related'] ) : $youtube_options['show_related'] );
     $youtube_live->completed_video_id = ( $_POST && $_POST['isAjax'] && array_key_exists( 'completedVideoID', $_POST ) ? $_POST['completedVideoID'] : '' );
@@ -194,10 +194,10 @@ function wp_ytl_set_oembed_id( $html ) {
  * @return array moified oembed size
  */
 function wp_ytl_set_embed_size( $size ) {
-    $youtube_settings = get_option( 'youtube_live_settings' );
+    $request_options = get_option( 'youtube_live_settings' );
 
-    $size['width'] = ( $_POST && $_POST['isAjax'] && array_key_exists( 'width', $_POST ) ? esc_attr( $_POST['width'] ) : $youtube_settings['default_width'] );
-    $size['height'] = ( $_POST && $_POST['isAjax'] && array_key_exists( 'height', $_POST ) ? esc_attr( $_POST['height'] ) : $youtube_settings['default_height'] );
+    $size['width'] = ( $_POST && $_POST['isAjax'] && array_key_exists( 'width', $_POST ) ? esc_attr( $_POST['width'] ) : $request_options['default_width'] );
+    $size['height'] = ( $_POST && $_POST['isAjax'] && array_key_exists( 'height', $_POST ) ? esc_attr( $_POST['height'] ) : $request_options['default_height'] );
 
     return $size;
 }
@@ -216,30 +216,30 @@ add_action( 'plugins_loaded', 'wp_ytl_check_version' );
  * Handle database upgrades on activation/upgrade
  */
 function wp_ytl_plugin_activation() {
-    $youtube_settings = get_option( 'youtube_live_settings' );
+    $request_options = get_option( 'youtube_live_settings' );
 
     // removed in v1.7.0
-    if ( array_key_exists( 'show_channel_if_dead', $youtube_settings ) && $youtube_settings['show_channel_if_dead'] == 'true' ) {
-        $youtube_settings['fallback_behavior'] = 'channel';
+    if ( array_key_exists( 'show_channel_if_dead', $request_options ) && $request_options['show_channel_if_dead'] == 'true' ) {
+        $request_options['fallback_behavior'] = 'channel';
     }
-    unset( $youtube_settings['show_channel_if_dead'] );
+    unset( $request_options['show_channel_if_dead'] );
 
     // updated in v1.7.0
-    if ( array_key_exists( 'fallback_video', $youtube_settings ) && isset( $youtube_settings['fallback_video'] ) ) {
-        $youtube_settings['fallback_behavior'] = 'video';
+    if ( array_key_exists( 'fallback_video', $request_options ) && isset( $request_options['fallback_video'] ) ) {
+        $request_options['fallback_behavior'] = 'video';
     }
 
     // added in v1.7.0
-    if ( ! array_key_exists( 'autoplay', $youtube_settings ) ) {
-        $youtube_settings['autoplay'] = true;
+    if ( ! array_key_exists( 'autoplay', $request_options ) ) {
+        $request_options['autoplay'] = true;
     }
 
     // added in v1.7.0
-    if ( ! array_key_exists( 'show_relatetd', $youtube_settings ) ) {
-        $youtube_settings['show_relatetd'] = false;
+    if ( ! array_key_exists( 'show_relatetd', $request_options ) ) {
+        $request_options['show_relatetd'] = false;
     }
 
-    update_option( 'youtube_live_settings', $youtube_settings );
+    update_option( 'youtube_live_settings', $request_options );
     update_option( 'youtube_live_version', WP_YOUTUBE_LIVE_VERSION );
 }
 register_activation_hook( __FILE__, 'wp_ytl_plugin_activation' );
