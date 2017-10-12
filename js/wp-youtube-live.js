@@ -79,7 +79,9 @@ jQuery(document).ready(function(){
  * @param {object} event YouTube player event
  */
 function wpYTonPlayerReady(event) {
-    event.target.playVideo();
+    if (wpYTdata.autoplay == 'true') {
+        event.target.playVideo();
+    }
 }
 
 /**

@@ -409,7 +409,7 @@ class EmbedYoutubeLiveStreaming {
      * @return string HTML embed code
      */
     public function embedCode() {
-        $autoplay = $this->embed_autoplay ? 1 : 0;
+        $autoplay = $this->embed_autoplay === 'true' ? 1 : 0;
         $related = $this->show_related ? 1 : 0;
         if ( $this->resource_type == 'channel' ) {
             $this->embed_code = '<iframe

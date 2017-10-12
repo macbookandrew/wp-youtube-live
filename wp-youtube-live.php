@@ -89,8 +89,8 @@ function get_youtube_live_content( $request_options ) {
     $youtube_live->subdomain = ( $youtube_options['subdomain'] ? $youtube_options['subdomain'] : 'www' );
     $youtube_live->embed_width = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['width'] ) : $request_options['width'] );
     $youtube_live->embed_height = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['height'] ) : $request_options['height'] );
-    $youtube_live->embed_autoplay = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['autoplay'] ) : $youtube_options['autoplay'] );
-    $youtube_live->show_related = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['show_related'] ) : $youtube_options['show_related'] );
+    $youtube_live->embed_autoplay = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['autoplay'] ) : $request_options['autoplay'] );
+    $youtube_live->show_related = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['show_related'] ) : $request_options['show_related'] );
     $youtube_live->completed_video_id = ( $_POST && $_POST['isAjax'] && array_key_exists( 'completedVideoID', $_POST ) ? $_POST['completedVideoID'] : '' );
 
     if ( strlen( $youtube_live->completed_video_id ) > 0 ) {
