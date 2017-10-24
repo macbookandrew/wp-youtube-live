@@ -116,7 +116,7 @@ class EmbedYoutubeLiveStreaming {
             $key_name = key( $wp_youtube_live_api_transient );
             $this->jsonResponse = $wp_youtube_live_api_transient[$key_name];
             $this->objectResponse = json_decode( $this->jsonResponse );
-        } elseif ( $this->eventType === 'upcoming' || isset( $this->completed_video_id ) ) {
+        } elseif ( $this->eventType === 'upcoming' || ( isset( $this->completed_video_id ) && $this->completed_video_id !== '' ) ) {
             // get info for this video
             $this->resource = 'videos';
 
@@ -170,7 +170,7 @@ class EmbedYoutubeLiveStreaming {
             set_transient( 'wp-youtube-live-api-response', maybe_serialize( $API_results ), apply_filters( 'wp_youtube_live_transient_timeout', '30' ) );
         }
 
-        if ( count( $this->objectResponse->items ) > 0 && ( ( $this->resource_type == 'live' && $this->isLive() ) || ( $this->resource_type == 'live' && in_array( $this->eventType, array( 'upcoming', 'completed' ) ) ) ) ) {
+        if ( count( $this->objectResponse->items ) > 0 && ( ( $this->resource_type === 'live' && $this->isLive() ) || ( $this->resource_type === 'live' && in_array( $this->eventType, array( 'upcoming', 'completed' ) ) ) ) ) {
             if ( is_object( $this->objectResponse->items[0]->id ) ) {
                 $this->live_video_id = $this->objectResponse->items[0]->id->videoId;
             } else {
