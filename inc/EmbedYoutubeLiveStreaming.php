@@ -413,7 +413,7 @@ class EmbedYoutubeLiveStreaming {
     public function embedCode() {
         $autoplay = $this->embed_autoplay === 'true' ? 1 : 0;
         $related = $this->show_related ? 1 : 0;
-        if ( $this->resource_type == 'channel' ) {
+        if ( $this->resource_type === 'channel' ) {
             $this->embed_code = '<iframe
                 id="wpYouTubeLive"
                 width="' . $this->embed_width . '"
