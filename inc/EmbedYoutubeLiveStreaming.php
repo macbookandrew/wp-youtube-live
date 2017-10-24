@@ -6,7 +6,7 @@ class EmbedYoutubeLiveStreaming {
 
     public $jsonResponse; // pure server response
     public $objectResponse; // response decoded as object
-    public $arrayRespone; // response decoded as array
+    public $arrayResponse; // response decoded as array
 
     public $errorMessage; // error message
     public $errorArray; // all error codes
