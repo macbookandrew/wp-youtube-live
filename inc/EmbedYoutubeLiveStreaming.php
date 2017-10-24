@@ -341,9 +341,11 @@ class EmbedYoutubeLiveStreaming {
         $this->arrayResponse = json_decode( $this->jsonResponse, TRUE ); // decode as array
 
         if ( property_exists( $this->objectResponse, 'error' ) ) {
-
             $this->errorMessage = $this->objectResponse->error->message;
             $this->errorArray = $this->arrayResponse['error']['errors'];
+        } else {
+            $this->errorMessage = NULL;
+            $this->errorArray = array();
         }
 
         return $this->jsonResponse;
