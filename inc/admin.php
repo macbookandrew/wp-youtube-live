@@ -228,7 +228,7 @@ function fallback_behavior_render() {
 
     <p class="fallback playlist">
         <label for="youtube_live_settings[fallback_playlist]">Fallback Playlist URL:</label><br/>
-        <input type="text" name="youtube_live_settings[fallback_playlist]" size="45" placeholder="PLBCF2DAC6FFB574DE" value="<?php echo $options['fallback_playlist']; ?>" />
+        <input type="text" name="youtube_live_settings[fallback_playlist]" size="45" placeholder="https://www.youtube.com/watch?v=abc123…&list=PLABC123…" value="<?php echo $options['fallback_playlist']; ?>" />
     </p>
 
     <p class="fallback video">
