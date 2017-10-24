@@ -105,7 +105,7 @@ class EmbedYoutubeLiveStreaming {
             $this->eventType = $event_type;
         }
 
-        // remove this video from top of upcoming cache
+        // remove completed live video from top of upcoming cache
         if ( isset( $this->completed_video_id ) ) {
             $this->removeFromUpcomingCache( $this->completed_video_id );
         }
