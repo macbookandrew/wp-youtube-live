@@ -194,7 +194,7 @@ function fallback_behavior_render() {
             <option value="message" <?php selected( $options['fallback_behavior'], 'message' ); ?>>Show a custom HTML message (no additional quota cost)</option>
             <option value="upcoming" <?php selected( $options['fallback_behavior'], 'upcoming' ); ?>>Show scheduled live videos (adds a quota unit cost of 100)</option>
             <option value="completed" <?php selected( $options['fallback_behavior'], 'completed' ); ?>>Show last completed live video (adds a quota unit cost of 100)</option>
-            <option value="channel" <?php selected( $options['fallback_behavior'], 'channel' ); ?>>Show recent videos from your channel (adds a quota unit cost of at least 3)</option>
+            <option value="channel" <?php selected( $options['fallback_behavior'], 'channel' ); ?>>Show recent videos from my channel (adds a quota unit cost of at least 3)</option>
             <option value="playlist" <?php selected( $options['fallback_behavior'], 'playlist' ); ?>>Show a specified playlist (adds a quota unit cost of at least 3)</option>
             <option value="video" <?php selected( $options['fallback_behavior'], 'video' ); ?>>Show a specified video (no additional quota cost)</option>
             <option value="no_message" <?php selected( $options['fallback_behavior'], 'no_message' ); ?>>Show nothing at all (no additional quota cost)</option>

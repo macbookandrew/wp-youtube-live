@@ -4,7 +4,7 @@ Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
 Tested up to:      4.8.1
-Stable tag:        1.7.3
+Stable tag:        1.7.4
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,7 +27,7 @@ If no live video is available when a page is loaded, several fallback options ar
 - “Show a custom HTML message” allows you to specify a custom message to show
 - “Show scheduled live videos” will show a player and countdown until your next live video
 - “Show last completed live video” will show your most recently-completed live video
-- “Show recent videos from your channel” will show a playlist of recent videso from your channel
+- “Show recent videos from my channel” will show a playlist of recent videos from your channel
 - “Show a specified playlist” will show a specified playlist
 - “Show a specified video” will show a specified video
 - “Show nothing at all” will show nothing at all
@@ -121,7 +121,7 @@ In short, there’s a tradeoff between showing the live video immediately and mi
     - “Show a custom HTML message” costs no additional quota units
     - “Show scheduled live videos” fallback behavior costs an additional 100 quota units per API call plus 3 quota units for each scheduled video you have (until the next-scheduled video starts [plus a 15-minute “grace period” to give some leeway for your actual start time], or for 5 minutes if there are no videos scheduled)
     - “Show last completed live video” fallback behavior costs an additional 100 quota units per API call
-    - “Show recent videos from your channel” fallback behavior costs 1 quota unit for the call + 2 quota units for each video listed
+    - “Show recent videos from my channel” fallback behavior costs 1 quota unit for the call + 2 quota units for each video listed
     - “Show a specified playlist” fallback behavior costs 1 quota unit for the call + 2 quota units for each video in the playlist
     - “Show a specified video” costs no additional quota units
     - “Show nothing at all” costs no additional quota units
@@ -143,6 +143,12 @@ The YouTube quota limit is pretty generous: as of September 26, 2017, it allows 
 1. Settings screen
 
 == Changelog ==
+
+= 1.7.4 =
+- Fix issues with shortcode parameters being ignored
+- Fix issues with errors being displayed when in fact there were none
+- Fix issues with “Show recent videos from my channel” fallback behavior
+- Fix typos and clarify some fallback behavior
 
 = 1.7.3 =
 - This update sponsored by [International Podcast Day](https://internationalpodcastday.com/)
