@@ -418,7 +418,7 @@ class EmbedYoutubeLiveStreaming {
                 id="wpYouTubeLive"
                 width="' . $this->embed_width . '"
                 height="' . $this->embed_height . '"
-                src="https://' . $this->subdomain. '.youtube.com/?listType=playlist&list=' . $this->uploads_id . $embedResource . '?autoplay='. $autoplay . '&rel=' . $related . '"
+                src="https://' . $this->subdomain. '.youtube.com/embed?listType=playlist&list=' . $this->uploads_id . $embedResource . '&autoplay='. $autoplay . '&rel=' . $related . '"
                 frameborder="0"
                 allowfullscreen>
             </iframe>';
