@@ -4,7 +4,7 @@ Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
 Tested up to:      4.9.1
-Stable tag:        1.7.5
+Stable tag:        1.7.6
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,10 @@ The YouTube quota limit is pretty generous: as of September 26, 2017, it allows 
 1. Settings screen
 
 == Changelog ==
+
+= 1.7.6 =
+- Fix a typo in the admin
+- Update the screenshot of the admin showing all the currently-available settings
 
 = 1.7.5 =
 - Fix a typo related to “show related videos”

@@ -168,7 +168,7 @@ function youtube_live_player_settings_render() {
     </p>
     <p>
         Should the player auto-play when a live video is available? <label><input type="radio" name="youtube_live_settings[autoplay]" value="true" <?php checked( $options['autoplay'], 'true' ); ?>> Yes</label> <label><input type="radio" name="youtube_live_settings[autoplay]" value="false" <?php checked( $options['autoplay'], 'false' ); ?>> No</label><br/>
-        <span style="font-size: 85%;">Note: if this is not working correctly for you, please read <a href="https://developers.google.com/web/updates/2017/09/autoplay-policy-changes" target="_blank">this note</a> Google Chrome&rsquo;s autoplay policies.</span>
+        <span style="font-size: 85%;">Note: if this is not working correctly for you, please read <a href="https://developers.google.com/web/updates/2017/09/autoplay-policy-changes" target="_blank">this note</a> about Google Chrome&rsquo;s autoplay policies.</span>
     </p>
     <p>
         Should the player show related videos when a video finishes? <label><input type="radio" name="youtube_live_settings[show_related]" value="true" <?php checked( $options['show_related'], 'true' ); ?>> Yes</label> <label><input type="radio" name="youtube_live_settings[show_related]" value="false" <?php checked( $options['show_related'], 'false' ); ?>> No</label>
