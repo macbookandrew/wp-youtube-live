@@ -3,8 +3,8 @@
 **Donate link:**       https://cash.me/$AndrewRMinionDesign  
 **Tags:**              youtube, live, video, embed  
 **Requires at least:** 3.6  
-**Tested up to:**      4.8.1  
-**Stable tag:**        1.7.4  
+**Tested up to:**      4.9.1  
+**Stable tag:**        1.7.5  
 **License:**           GPLv2 or later  
 **License URI:**       http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -145,6 +145,11 @@ The YouTube quota limit is pretty generous: as of September 26, 2017, it allows 
 
 
 ## Changelog ##
+
+### 1.7.5 ###
+- Fix a typo related to “show related videos”
+- Add missing support for autoplay and “show related videos” to playlist and video fallback options
+- Add note in admin about Google Chrome’s autoplay policy change
 
 ### 1.7.4 ###
 - Fix issues with shortcode parameters being ignored

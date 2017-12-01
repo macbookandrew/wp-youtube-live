@@ -3,7 +3,7 @@
 Plugin Name: YouTube Live
 Plugin URI: https://github.com/macbookandrew/wp-youtube-live
 Description: Displays the current YouTube live video from a specified channel
-Version: 1.7.4
+Version: 1.7.5
 Author: Andrew Minion
 Author URI: https://andrewrminion.com/
 */
@@ -90,7 +90,7 @@ function get_youtube_live_content( $request_options ) {
     $youtube_live->embed_width = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['width'] ) : $request_options['width'] );
     $youtube_live->embed_height = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['height'] ) : $request_options['height'] );
     $youtube_live->embed_autoplay = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['autoplay'] ) : $request_options['autoplay'] );
-    $youtube_live->show_related = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['show_related'] ) : $request_options['show_related'] );
+    $youtube_live->show_related = ( $_POST && $_POST['isAjax'] ? esc_attr( $_POST['show_related'] ) : $request_options['showRelated'] );
     $youtube_live->completed_video_id = ( $_POST && $_POST['isAjax'] && array_key_exists( 'completedVideoID', $_POST ) ? $_POST['completedVideoID'] : '' );
 
     if ( strlen( $youtube_live->completed_video_id ) > 0 ) {
@@ -118,6 +118,13 @@ function get_youtube_live_content( $request_options ) {
         $is_live = false;
         add_filter( 'oembed_result', 'wp_ytl_set_oembed_id' );
         add_filter( 'embed_defaults', 'wp_ytl_set_embed_size' );
+
+        // set player parameters for playlist and video fallbacks
+        $player_args = array(
+            'autoplay'  => ( $youtube_live->embed_autoplay === 'true' ? '1' : '0' ),
+            'rel'       => ( $youtube_live->show_related === 'true' ? '1' : '0' ),
+        );
+
         if ( $youtube_options['fallback_behavior'] === 'upcoming' ) {
             $youtube_live->getVideoInfo( 'live', 'upcoming' );
             echo $youtube_live->embedCode();
@@ -128,9 +135,11 @@ function get_youtube_live_content( $request_options ) {
             $youtube_live->getVideoInfo( 'channel' );
             echo $youtube_live->embedCode();
         } elseif ( $youtube_options['fallback_behavior'] === 'playlist' ) {
-            echo wp_oembed_get( esc_attr( $youtube_options['fallback_playlist'] ) );
+            add_filter( 'oembed_result', 'wp_ytl_add_player_attributes_result', 10, 3 );
+            echo wp_oembed_get( esc_attr( $youtube_options['fallback_playlist'] ), $player_args );
         } elseif ( $youtube_options['fallback_behavior'] === 'video' && isset( $youtube_options['fallback_video'] ) ) {
-            echo wp_oembed_get( esc_attr( $youtube_options['fallback_video'] ) );
+            add_filter( 'oembed_result', 'wp_ytl_add_player_attributes_result', 10, 3 );
+            echo wp_oembed_get( esc_attr( $youtube_options['fallback_video'] ), $player_args );
         } elseif ( $youtube_options['fallback_behavior'] === 'message' ) {
             echo $fallback_message;
         }
@@ -244,4 +253,26 @@ function wp_ytl_plugin_activation() {
 }
 register_activation_hook( __FILE__, 'wp_ytl_plugin_activation' );
 
+/**
+ * Add autoplay and related parameters to oembedded videos
+ * @param  string $data2html HTML embed code
+ * @param  string $url       URL to be embedded
+ * @param  array  $args      extra arguments passed to wp_oembed_get function
+ * @return string HTML embed code
+ */
+function wp_ytl_add_player_attributes_result( $data2html, $url, $args ) {
+    $player_settings = '';
+    foreach ( $args as $key => $value ) {
+        if ( is_null( $value ) ) {
+            $value = 1;
+        }
+        $player_settings .= '&' . $key . '=' . $value;
+    }
+
+    $data2html = str_replace( '?feature=oembed', '?feature=oembed' . $player_settings, $data2html );
+
+    return $data2html;
+}
+
 #TODO: add a notice about resaving settings on plugin activation
+#FUTURE: add support for modestbranding URL paramater (hides YouTube logo)
