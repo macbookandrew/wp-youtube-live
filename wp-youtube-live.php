@@ -3,7 +3,7 @@
 Plugin Name: YouTube Live
 Plugin URI: https://github.com/macbookandrew/wp-youtube-live
 Description: Displays the current YouTube live video from a specified channel
-Version: 1.7.6
+Version: 1.7.7
 Author: Andrew Minion
 Author URI: https://andrewrminion.com/
 */
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-CONST WP_YOUTUBE_LIVE_VERSION = '1.7.4';
+CONST WP_YOUTUBE_LIVE_VERSION = '1.7.7';
 
 include('inc/admin.php');
 
@@ -46,6 +46,7 @@ function output_youtube_live( $atts ) {
         'height'            => $settings['default_height'],
         'autoplay'          => $settings['autoplay'],
         'showRelated'       => $settings['show_related'],
+        'js_only'            => false,
         'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
         'auto_refresh'      => $settings['auto_refresh'],
         'fallbackBehavior'  => $settings['fallback_behavior'],
@@ -111,9 +112,11 @@ function get_youtube_live_content( $request_options ) {
     }
 
     if ( $youtube_live->isLive ) {
-        $is_live = true;
-        #TODO: load a placeholder or nothing on initial page load?
-        echo $youtube_live->embedCode();
+        if ( $request_options['js_only'] !== 'true' || ( $request_options['js_only'] === 'true' && $_POST['isAjax'] ) ) {
+            $is_live = true;
+            #TODO: load a placeholder or nothing on initial page load?
+            echo $youtube_live->embedCode();
+        }
     } else {
         $is_live = false;
         add_filter( 'oembed_result', 'wp_ytl_set_oembed_id' );

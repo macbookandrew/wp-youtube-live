@@ -4,7 +4,7 @@
 **Tags:**              youtube, live, video, embed  
 **Requires at least:** 3.6  
 **Tested up to:**      4.9.1  
-**Stable tag:**        1.7.6  
+**Stable tag:**        1.7.7  
 **License:**           GPLv2 or later  
 **License URI:**       http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -39,8 +39,9 @@ When a video ends, users’ browsers will check your server again to see if a li
 - width: player width in pixels; defaults to what you set on the settings page
 - height: player height in pixels; defaults to whaty you set on the settings page
 - autoplay: whether or not to start playing immediately on load; defaults to false
-- no_stream_message: simple text message to show when no stream is available; use `no_stream_message="no_message"` to show nothing at all.
+- no_stream_message: simple plaintext message to show when no stream is available; use `no_stream_message="no_message"` to show nothing at all.
 - auto_refresh: (either `true` or `false`) overrides the auto-refresh setting on the settings page
+- js_only: (either `true` or `false`) workaround for some caching issues; if a caching plugin (W3 Total Cache, WP Super Cache, etc.) or proxy (CloudFlare, etc.) caches the HTML while a video is live, visitors may continue to see an old live video even if it has ended. If set `js_only` is set to `true`, the server never displays the player code in the initial request and instead sends it in response to uncached ajax requests. This may also result in the video player being slightly delayed on page load due to the extra request, depending on the clients’ bandwidth and latency.
 
 Example shortcode: `[youtube_live width="720" height="360" autoplay="true"]`
 
@@ -145,6 +146,9 @@ The YouTube quota limit is pretty generous: as of September 26, 2017, it allows 
 
 
 ## Changelog ##
+
+### 1.7.7 ###
+- Add `js_only` shortcode parameter to work around some caching issues
 
 ### 1.7.6 ###
 - Fix a typo in the admin
