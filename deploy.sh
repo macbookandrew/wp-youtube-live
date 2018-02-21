@@ -174,6 +174,7 @@ echo "Setting SVN MIME types"
 svn propset svn:mime-type image/png assets/banner-772x250.png
 svn propset svn:mime-type image/png assets/banner-1544x500.png
 svn propset svn:mime-type image/png assets/icon-256x256.png
+svn propset svn:mime-type image/png assets/screenshot-1.png
 svn propset svn:mime-type image/svg+xml assets/icon.svg
 
 echo "Changing directory to SVN and committing to trunk"
