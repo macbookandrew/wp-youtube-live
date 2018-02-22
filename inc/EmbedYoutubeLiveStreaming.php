@@ -235,6 +235,7 @@ class EmbedYoutubeLiveStreaming {
         $all_upcoming_videos = json_decode( $this->queryAPI() );
         $all_videos_array = array();
 
+        $previous_resource_type = $this->resource;
         foreach ( $all_upcoming_videos->items as $video ) {
             $this->resource = 'videos';
             $this->queryData = array(
@@ -251,6 +252,7 @@ class EmbedYoutubeLiveStreaming {
                 $all_videos_array[$video->id->videoId] = $start_time;
             }
         }
+        $this->resource = $previous_resource_type;
 
         // sort by date
         asort( $all_videos_array );
