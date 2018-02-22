@@ -171,6 +171,7 @@ function get_youtube_live_content( $request_options ) {
     if ( get_option( 'youtube_live_settings', 'debugging' ) && is_user_logged_in() ) {
         $debugging_code = var_export( $youtube_live, true );
         echo '<!-- YouTube Live debugging: ' . "\n" . $debugging_code . "\n" . ' -->';
+        $json_data['error'] . $debugging_code;
     }
 
     if ( $youtube_options['fallback_behavior'] != 'no_message' ) {
