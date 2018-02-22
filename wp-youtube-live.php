@@ -159,6 +159,9 @@ function get_youtube_live_content( $request_options ) {
             <li><strong>Message:</strong> ' . $error['message'] . '</li>
             <li><strong>Extended help:</strong> ' . $error['extendedHelp'] . '</li>';
         }
+        if ( $youtube_options['fallback_behavior'] === 'video' && empty( $youtube_options['fallback_video'] ) ) {
+            $error_message .= '<li>Please double-check that you have set a fallback video.</li>';
+        }
         $error_message .= '</ul>';
         $json_data['error'] = $error_message;
     }
