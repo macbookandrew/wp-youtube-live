@@ -106,6 +106,7 @@ function get_youtube_live_content( $request_options ) {
     }
 
     // start output
+    $json_data = array();
     ob_start();
     if ( $youtube_options['fallback_behavior'] != 'no_message' ) {
         echo '<span class="wp-youtube-live ' . ( $youtube_live->isLive ? 'live' : 'dead' ) . '">';
