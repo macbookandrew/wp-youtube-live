@@ -3,7 +3,7 @@
 Plugin Name: YouTube Live
 Plugin URI: https://github.com/macbookandrew/wp-youtube-live
 Description: Displays the current YouTube live video from a specified channel
-Version: 1.7.7
+Version: 1.7.8
 Author: Andrew Minion
 Author URI: https://andrewrminion.com/
 */
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-CONST WP_YOUTUBE_LIVE_VERSION = '1.7.7';
+CONST WP_YOUTUBE_LIVE_VERSION = '1.7.8';
 
 include('inc/admin.php');
 
@@ -49,12 +49,19 @@ function output_youtube_live( $atts ) {
         'js_only'            => false,
         'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
         'auto_refresh'      => $settings['auto_refresh'],
-        'fallbackBehavior'  => $settings['fallback_behavior'],
-        'fallbackMessage'   => ( array_key_exists( 'no_stream_message', $settings ) ? $settings['no_stream_message'] : $settings['fallback_message'] ),
-        'fallbackPlaylist'  => $settings['fallback_playlist'],
-        'fallbackVideo'     => $settings['fallback_video'],
+        'fallback_behavior' => $settings['fallback_behavior'],
+        'fallback_message'  => ( array_key_exists( 'no_stream_message', $settings ) ? $settings['no_stream_message'] : $settings['fallback_message'] ),
+        'no_stream_message' => NULL,
+        'fallback_playlist' => $settings['fallback_playlist'],
+        'fallback_video'    => $settings['fallback_video'],
         'refreshInterval'   => apply_filters( 'wp_youtube_live_transient_timeout', '30' ),
     ), $atts );
+
+    // handle legacy parameter
+    if ( isset( $shortcode_attributes['no_stream_message'] ) ) {
+        $shortcode_attributes['fallback_message'] = $shortcode_attributes['no_stream_message'];
+        unset( $shortcode_attributes['no_stream_message'] );
+    }
 
     wp_add_inline_script( 'wp-youtube-live', 'var wpYouTubeLiveSettings = ' . json_encode( $shortcode_attributes ), 'before' );
 
@@ -98,17 +105,10 @@ function get_youtube_live_content( $request_options ) {
         $youtube_live->isLive( true );
     }
 
-    // set default message
-    if ( $youtube_options['fallback_message'] == 'no_message' ) {
-        $fallback_behavior = 'no_message';
-    } else {
-        $fallback_message = apply_filters( 'wp_youtube_live_no_stream_available', $youtube_options['fallback_message'] );
-    }
-
     // start output
     $json_data = array();
     ob_start();
-    if ( $youtube_options['fallback_behavior'] != 'no_message' ) {
+    if ( $youtube_options['fallback_behavior'] !== 'no_message' ) {
         echo '<span class="wp-youtube-live ' . ( $youtube_live->isLive ? 'live' : 'dead' ) . '">';
     }
 
@@ -129,23 +129,23 @@ function get_youtube_live_content( $request_options ) {
             'rel'       => ( $youtube_live->show_related === 'true' ? '1' : '0' ),
         );
 
-        if ( $youtube_options['fallback_behavior'] === 'upcoming' ) {
+        if ( $request_options['fallback_behavior'] === 'upcoming' ) {
             $youtube_live->getVideoInfo( 'live', 'upcoming' );
             echo $youtube_live->embedCode();
-        } elseif ( $youtube_options['fallback_behavior'] === 'completed' ) {
+        } elseif ( $request_options['fallback_behavior'] === 'completed' ) {
             $youtube_live->getVideoInfo( 'live', 'completed' );
             echo $youtube_live->embedCode();
-        } elseif ( $youtube_options['fallback_behavior'] === 'channel' ) {
+        } elseif ( $request_options['fallback_behavior'] === 'channel' ) {
             $youtube_live->getVideoInfo( 'channel' );
             echo $youtube_live->embedCode();
-        } elseif ( $youtube_options['fallback_behavior'] === 'playlist' ) {
+        } elseif ( $request_options['fallback_behavior'] === 'playlist' ) {
             add_filter( 'oembed_result', 'wp_ytl_add_player_attributes_result', 10, 3 );
             echo wp_oembed_get( esc_attr( $youtube_options['fallback_playlist'] ), $player_args );
-        } elseif ( $youtube_options['fallback_behavior'] === 'video' && isset( $youtube_options['fallback_video'] ) ) {
+        } elseif ( $request_options['fallback_behavior'] === 'video' && isset( $youtube_options['fallback_video'] ) ) {
             add_filter( 'oembed_result', 'wp_ytl_add_player_attributes_result', 10, 3 );
             echo wp_oembed_get( esc_attr( $youtube_options['fallback_video'] ), $player_args );
-        } elseif ( $youtube_options['fallback_behavior'] === 'message' ) {
-            echo $fallback_message;
+        } elseif ( $request_options['fallback_behavior'] === 'message' && $request_options['fallback_message'] !== 'no_message' ) {
+            echo apply_filters( 'wp_youtube_live_no_stream_available', $request_options['fallback_message'] );
         }
     }
 

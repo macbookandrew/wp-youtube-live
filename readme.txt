@@ -3,8 +3,8 @@ Contributors:      macbookandrew
 Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
-Tested up to:      4.9.1
-Stable tag:        1.7.7
+Tested up to:      4.9.4
+Stable tag:        1.7.8
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,18 +36,26 @@ When a video ends, users’ browsers will check your server again to see if a li
 
 = Shortcode Options =
 
-- width: player width in pixels; defaults to what you set on the settings page
-- height: player height in pixels; defaults to whaty you set on the settings page
-- autoplay: whether or not to start playing immediately on load; defaults to false
-- no_stream_message: simple plaintext message to show when no stream is available; use `no_stream_message="no_message"` to show nothing at all.
-- auto_refresh: (either `true` or `false`) overrides the auto-refresh setting on the settings page
-- js_only: (either `true` or `false`) workaround for some caching issues; if a caching plugin (W3 Total Cache, WP Super Cache, etc.) or proxy (CloudFlare, etc.) caches the HTML while a video is live, visitors may continue to see an old live video even if it has ended. If set `js_only` is set to `true`, the server never displays the player code in the initial request and instead sends it in response to uncached ajax requests. This may also result in the video player being slightly delayed on page load due to the extra request, depending on the clients’ bandwidth and latency.
+- `width`: player width in pixels; defaults to what you set on the settings page
+- `height`: player height in pixels; defaults to what you set on the settings page
+- `autoplay`: whether or not to start playing immediately on load; defaults to false
+- `auto_refresh`: (either `true` or `false`) overrides the auto-refresh setting on the settings page
+- `fallback_behavior`: choose from the following: `upcoming`, `completed`, `channel`, `playlist`, `video`, `message`, `no_message`
+    - `upcoming`: the next upcoming scheduled video on the specified channel
+    - `playlist`: a specified playlist (shortcode must also include the `fallback_playlist` attribute)
+    - `video`: a specified video (shortcode must also include the `fallback_video` attribute)
+    - `message`: a specified message
+    - `no_message`: nothing at all
+- `fallback_playlist`: a playlist URL to show when there are no live videos
+- `fallback_video`: a video URL to show when there are no live videos
+- `fallback_message`: a message to show when there are no live videos
+- `js_only`: (either `true` or `false`) workaround for some caching issues; if a caching plugin (W3 Total Cache, WP Super Cache, etc.) or proxy (CloudFlare, etc.) caches the HTML while a video is live, visitors may continue to see an old live video even if it has ended. If set `js_only` is set to `true`, the server never displays the player code in the initial request and instead sends it in response to uncached ajax requests. This may also result in the video player being slightly delayed on page load due to the extra request, depending on the clients’ bandwidth and latency.
 
 Example shortcode: `[youtube_live width="720" height="360" autoplay="true"]`
 
 = Filters =
 
-The filter `wp_youtube_live_no_stream_available` will customize the message viewers see if there is no live stream currently playing, and takes effect **after** the `no_stream_message` shortcode attribute is parsed (if `no_stream_message="no_message"` is set in a shortcode, it will override the filter). For example, add this to your theme’s `functions.php` file:
+The filter `wp_youtube_live_no_stream_available` will customize the message viewers see if there is no live stream currently playing, and takes effect **after** the `fallback_message` shortcode attribute is parsed (if `fallback_message="no_message"` is set in a shortcode, it will override the filter). For example, add this to your theme’s `functions.php` file:
 
 `
 add_filter( 'wp_youtube_live_no_stream_available', 'my_ytl_custom_message' );
@@ -144,6 +152,12 @@ The YouTube quota limit is pretty generous: as of September 26, 2017, it allows 
 1. Settings screen
 
 == Changelog ==
+
+= 1.7.8 =
+- Fix some bugs with shortcode parameters
+- Fix a bug where scheduled videos would cause an API error when checking for current live videos
+- Add more documentation about available shortcode parameters
+- Add a note about empty fallback video field
 
 = 1.7.7 =
 - Add `js_only` shortcode parameter to work around some caching issues
