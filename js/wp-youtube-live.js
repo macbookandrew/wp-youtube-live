@@ -34,7 +34,7 @@ function wpYTsendRequest(wpYTdata) {
         var requestData = JSON.parse(response);
         if (requestData.error) {
             jQuery('.wp-youtube-live-error').append(requestData.error).show();
-        } else if (requestData.live && typeof requestData.content !== 'undefined') {
+        } else if (requestData.live === true && typeof requestData.content !== 'undefined') {
             jQuery('.wp-youtube-live').replaceWith(requestData.content).addClass('live');
             jQuery('.wp-youtube-live-error').hide();
             window.dispatchEvent(wpYTevent);
