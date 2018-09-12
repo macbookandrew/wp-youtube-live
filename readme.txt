@@ -14,6 +14,14 @@ Displays the current YouTube live video from a specified channel.
 
 Displays the current YouTube live video from a specified channel via the shortcode `[youtube_live]`.
 
+= Setup Notes =
+
+Your YouTube livestream must be set to “Public” or it will not work. This is a security feature of YouTube’s API and unfortunately there’s no way to work around it.
+
+In addition, your live stream must be set to allow embedding on third-party sites. If that feature is unavailable, you may need to [enable monetization](https://www.youtube.com/account_monetization) for your account. See YouTube documentation for more information or help with allowing embedding.
+
+= How It Works =
+
 If no live video is available, you can display a specified video or a “channel player” showing all your recent videos.
 
 You can also enable auto-refresh to automatically check for a live video every 30 seconds (warning: will increase server load, so use with caution).
