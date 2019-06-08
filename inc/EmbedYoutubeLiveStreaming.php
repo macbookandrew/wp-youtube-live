@@ -416,11 +416,18 @@ class EmbedYoutubeLiveStreaming {
         $autoplay = $this->embed_autoplay === 'true' ? 1 : 0;
         $related = $this->show_related ? 1 : 0;
         if ( $this->resource_type === 'channel' ) {
+            $query_args       = array(
+                'listType' => 'playlist',
+                'list'     => $this->uploads_id,
+                'autoplay' => $autoplay,
+                'rel'      => $related,
+                'origin'   => get_home_url(),
+            );
             $this->embed_code = '<iframe
                 id="wpYouTubeLive"
                 width="' . $this->embed_width . '"
                 height="' . $this->embed_height . '"
-                src="https://' . $this->subdomain. '.youtube.com/embed?listType=playlist&list=' . $this->uploads_id . '&autoplay='. $autoplay . '&rel=' . $related . '"
+                src="https://' . $this->subdomain. '.youtube.com/embed?' . http_build_query( $query_args ) . '"
                 frameborder="0"
                 allowfullscreen>
             </iframe>';
