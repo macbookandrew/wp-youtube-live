@@ -14,7 +14,7 @@ var wpYTdata = {
             updateFallbackOptions($(this));
         });
 
-        $('body').on('click', 'button#updatewpYTUpcomingCache', function(event) {
+        $('body').on('click', 'button#update_youtube_upcoming_cache', function(event) {
             event.preventDefault();
             wpYTdata.action = $(this).data('action');
             wpYTdata.nonce = $(this).data('nonce');
