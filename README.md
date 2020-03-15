@@ -99,6 +99,8 @@ Development of this plugin is done on [GitHub](https://github.com/macbookandrew/
 
 ## Installation ##
 
+YouTube setup instructions: see [this article](https://andrewrminion.com/2020/03/setting-up-youtube-live/).
+
 1. Upload this folder to the `/wp-content/plugins/` directory or install from the Plugins menu in WordPress
 1. Activate the plugin through the Plugins menu in WordPress
 1. Add your Google API key and YouTube Channel ID in the settings page (Settings > YouTube Live)
