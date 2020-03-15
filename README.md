@@ -4,7 +4,7 @@
 **Tags:**              youtube, live, video, embed  
 **Requires at least:** 3.6  
 **Tested up to:**      5.3.2  
-**Stable tag:**        1.7.10  
+**Stable tag:**        1.7.11  
 **License:**           GPLv2 or later  
 **License URI:**       http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -164,6 +164,9 @@ The YouTube quota limit is pretty generous: as of September 26, 2017, it allows 
 
 
 ## Changelog ##
+
+### 1.7.11 ###
+- Add link to setup instructions.
 
 ### 1.7.10 ###
 - Fix a bug that could casue a player to show up even if no video is live
