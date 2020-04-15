@@ -4,7 +4,7 @@ Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
 Tested up to:      5.3.2
-Stable tag:        1.7.11
+Stable tag:        1.7.12
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -134,8 +134,10 @@ In short, there’s a tradeoff between showing the live video immediately and mi
 
 = Quota Units =
 
-- Every uncached page load costs 100 quota units. API results are cached for 30 seconds (by default) on your server to help cut down on quota cost.
-- End users’ browsers will request an update from the server every 30 seconds; when the API results cache is stale, your server will make another API request, which costs an additional 100 quota units.
+- The YouTube Data API used by this plugin enforces a daily quota limit. Each request to find live videos costs 100 quota units, and the current daily cap (as of April 14, 2020) is 10,000 daily quota units.
+- Every time this plugin checks for live videos, it costs 100 quota units. The API responses are cached for 15 minutes (by default) on your server to help stay within the daily quota limit.
+- End users’ browsers will request an update from your site every 30 seconds.
+- The admin settings panel has a field to configure how often to check the YouTube Data API for live videos. A value of 900 seconds (15 minutes) should stay pretty close to the default daily quota. If you have low traffic during “off hours” (when you’re not likely to be broadcasting a live event), you may be able to experiment and set this lower, since the quota won’t be consumed as much during the off hours.
 - Fallback behavior:
     - “Show a custom HTML message” costs no additional quota units
     - “Show scheduled live videos” fallback behavior costs an additional 100 quota units per API call plus 3 quota units for each scheduled video you have (until the next-scheduled video starts [plus a 15-minute “grace period” to give some leeway for your actual start time], or for 5 minutes if there are no videos scheduled)
@@ -147,14 +149,14 @@ In short, there’s a tradeoff between showing the live video immediately and mi
 
 Estimated quota usage:
 
-- If the page containing the shortcode is open in a browser 24/7, it should cost 288,000 quota units per day, regardless of how many visitors (due to the plugin’s caching mechanism).
+- If the transient timeout is set to 900 seconds and the page containing the shortcode is open in a browser 24/7, it should cost 9,600 quota units per day, regardless of how many visitors (due to the plugin’s caching mechanism).
 - If fallback behavior is set to “scheduled live videos” or “last completed live video,” it should cost an additional 100 quota units when the next-scheduled video begins (or every 5 minutes if no videos are scheduled).
 - If fallback behavior is set to “specified playlist,” it should cost an additional 1 quota unit per page load plus 2 quota units per video in the playlist.
 - If fallback behavior is set to “specified playlist” or “specified video,” it should cost an additional 3 quota unit per page load.
 
-These are estimates; your usage may vary.
+These are estimates; your usage may vary. To see your actual quota usage in real time, visit the [API Usage page](https://console.developers.google.com/apis/api/youtube/usage).
 
-The YouTube quota limit is pretty generous: as of September 26, 2017, it allows 1 million API requests per day, 300,000 API requests per 100 seconds per user, and 3 million API requests per 100 seconds.
+The YouTube quota limit has been tightened down in recent years: as of April 14, 2020, it allows a max of 10 thousand quota units per day. However, you can [request a quota increase here](https://support.google.com/youtube/contact/yt_api_form).
 
 
 == Screenshots ==
@@ -163,11 +165,15 @@ The YouTube quota limit is pretty generous: as of September 26, 2017, it allows 
 
 == Changelog ==
 
+= 1.7.12 =
+- Add transient timeout field.
+- Update quota usage documentation due to recent changes.
+
 = 1.7.11 =
 - Add link to setup instructions.
 
 = 1.7.10 =
-- Fix a bug that could casue a player to show up even if no video is live
+- Fix a bug that could casue a player to show up even if no video is live.
 
 = 1.7.9 =
 - Fix a bug causing duplicate players when the shortcode is inside a `<p>` element.

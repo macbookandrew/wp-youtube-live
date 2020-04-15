@@ -273,7 +273,7 @@ function youtube_live_transient_timeout_render() {
     }
     ?>
     <p><label><input type="number" name="youtube_live_settings[transient_timeout]" placeholder="900" value="<?php echo $options['transient_timeout']; ?>"> seconds</label></p>
-    <p>A value of 900 (15 minutes) should stay pretty close to the default daily quota. If you have low traffic during “off hours” (when you’re not likely to be broadcasting a live event), you may be able to set this lower, since the quota won’t be consumed as much during the off hours.</p>
+    <p>A value of 900 (15 minutes) should stay pretty close to the default daily quota. If you have low traffic during “off hours” (when you’re not likely to be broadcasting a live event), you may be able experiment and set this lower, since the quota won’t be consumed as much during the off hours.</p>
     <p>To see your actual quota usage in real time, visit the <a href="https://console.developers.google.com/apis/api/youtube/usage">API Usage page</a>.</p>
     <p>For more information on quota usage, read the <a href="https://github.com/macbookandrew/wp-youtube-live#quota-units">plugin documentation</a> as well as the <a href="https://developers.google.com/youtube/v3/getting-started#quota" target="_blank">YouTube API documentation</a>.</p>
     <?php
