@@ -4,7 +4,7 @@ Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
 Tested up to:      5.3.2
-Stable tag:        1.7.12
+Stable tag:        1.7.13
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -124,10 +124,10 @@ For more information on setting up an API key, see the [YouTube Data API referen
 
 = Why doesn’t my live stream show up immediately? =
 
-Generally, it can take up to a minute or two for the streaming page with the shortcode to recognize that you have a live stream, for several reasons:
+Generally, it can take up to 15 minutes for the streaming page with the shortcode to recognize that you have a live stream, for several reasons:
 
-1. YouTube’s API caches information about your videos for a short time (seems to be 2 minutes max)
-2. To help you from exceeding the free API quota, this plugin caches YouTube’s API response for 30 seconds (configurable using the `wp_youtube_live_transient_timeout` filter) instead of checking the API every time an update is requested by a client
+1. YouTube’s API caches information about your videos for a short time (seems to be 2 minutes max).
+2. To help you from exceeding the free API quota, this plugin caches YouTube’s API response for 15 minutes (configurable using the transient timeout setting), instead of checking the API every time an update is requested by a client. See Quota Units below for more information.
 3. If you are using a caching plugin (WP Super Cache, W3 Total Cache, etc.), the generated page content is cached on your server, including whatever shortcode content is available when the cache is created. However, this plugin provides a workaround by sending an Ajax request from the user’s browser when the page is loaded, and then every 30 seconds thereafter until a live video is available (also configurable using the `wp_youtube_live_transient_timeout` filter).
 
 In short, there’s a tradeoff between showing the live video immediately and minimizing API quota and server resource usage, and I’ve tried to strike a reasonable balance, while allowing you the ability to tweak the cache timeouts yourself to fit your needs.
@@ -164,6 +164,9 @@ The YouTube quota limit has been tightened down in recent years: as of April 14,
 1. Settings screen
 
 == Changelog ==
+
+= 1.7.13 =
+- Update FAQs.
 
 = 1.7.12 =
 - Add transient timeout field.
