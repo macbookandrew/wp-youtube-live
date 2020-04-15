@@ -92,6 +92,9 @@ function get_youtube_live_content( $request_options ) {
     // get saved options
     $youtube_options = get_option( 'youtube_live_settings' );
 
+    // merge request and saved options
+    $request_options = wp_parse_args( $request_options, $youtube_options );
+
     // set up player
     $youtube_live = new EmbedYoutubeLiveStreaming( $youtube_options['youtube_live_channel_id'], $youtube_options['youtube_live_api_key'] );
     $youtube_live->subdomain = ( $youtube_options['subdomain'] ? $youtube_options['subdomain'] : 'www' );
