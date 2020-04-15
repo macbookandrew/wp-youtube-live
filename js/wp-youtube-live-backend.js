@@ -20,6 +20,19 @@ var wpYTdata = {
             wpYTdata.nonce = $(this).data('nonce');
             wpYTsendRequest(wpYTdata);
         });
+
+		/** Handle dismissable notices */
+		$(document).on('click', '.wp-youtube-live-notice .notice-dismiss', function(e) {
+			var version = $(this).parents('.wp-youtube-live-notice').data('version');
+
+			$.ajax({
+				url: ajaxurl,
+				data: {
+					action: 'wp_youtube_live_dismiss_notice_' + version
+				}
+			});
+
+		});
     });
 
     /**

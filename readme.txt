@@ -4,7 +4,7 @@ Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
 Tested up to:      5.3.2
-Stable tag:        1.7.13
+Stable tag:        1.7.14
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,12 +158,19 @@ These are estimates; your usage may vary. To see your actual quota usage in real
 
 The YouTube quota limit has been tightened down in recent years: as of April 14, 2020, it allows a max of 10 thousand quota units per day. However, you can [request a quota increase here](https://support.google.com/youtube/contact/yt_api_form).
 
+If your API project has been active for more than 2 years or so, you may have a drastically higher quota limit and can set the transient lower.
+
+I am looking at other ways to accomplish the necessary behavior closer to realtime while remaining within the quota limits.
+
 
 == Screenshots ==
 
 1. Settings screen
 
 == Changelog ==
+
+= 1.7.14 =
+- Update FAQs and add admin notices.
 
 = 1.7.13 =
 - Update FAQs.

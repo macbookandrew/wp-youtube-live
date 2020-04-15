@@ -10,7 +10,7 @@ include( 'EmbedYoutubeLiveStreaming.php' );
  * Enqueue backend assets
  */
 function youtube_live_backend_assets() {
-    wp_register_script( 'wp-youtube-live-backend', plugin_dir_url( __FILE__ ) . '../js/wp-youtube-live-backend.min.js', array( 'jquery' ), NULL, true );
+    wp_register_script( 'wp-youtube-live-backend', plugin_dir_url( __FILE__ ) . '../js/wp-youtube-live-backend.min.js', array( 'jquery' ), WP_YOUTUBE_LIVE_VERSION, true );
 }
 add_action( 'admin_enqueue_scripts', 'youtube_live_backend_assets' );
 
@@ -91,7 +91,7 @@ function youtube_live_settings_init() {
 
     add_settings_field(
         'transient_timeout',
-        __( 'Transient Timeout', 'youtube_live' ),
+        __( 'Transient Timeout and Check Frequency', 'youtube_live' ),
         'youtube_live_transient_timeout_render',
         'youtube_live_options',
         'youtube_live_options_keys_section'
@@ -272,8 +272,9 @@ function youtube_live_transient_timeout_render() {
         $options['transient_timeout'] = 900;
     }
     ?>
-    <p><label><input type="number" name="youtube_live_settings[transient_timeout]" placeholder="900" value="<?php echo $options['transient_timeout']; ?>"> seconds</label></p>
-    <p>A value of 900 (15 minutes) should stay pretty close to the default daily quota. If you have low traffic during “off hours” (when you’re not likely to be broadcasting a live event), you may be able experiment and set this lower, since the quota won’t be consumed as much during the off hours.</p>
+    <p id="transient-timeout"><label><input type="number" name="youtube_live_settings[transient_timeout]" placeholder="900" value="<?php echo $options['transient_timeout']; ?>"> seconds</label></p>
+    <p>YouTube enforces a daily limit on API usage. To stay within this limit, the plugin caches the YouTube response for this many seconds.</p>
+    <p>A value of 900 (15 minutes) should stay pretty close to the default daily quota. If you have low or no traffic during “off hours” (when you’re not likely to be broadcasting a live event), you may want to experiment and set this lower, since the quota won’t be consumed as much during the off hours.</p>
     <p>To see your actual quota usage in real time, visit the <a href="https://console.developers.google.com/apis/api/youtube/usage">API Usage page</a>.</p>
     <p>For more information on quota usage, read the <a href="https://github.com/macbookandrew/wp-youtube-live#quota-units">plugin documentation</a> as well as the <a href="https://developers.google.com/youtube/v3/getting-started#quota" target="_blank">YouTube API documentation</a>.</p>
     <?php
@@ -379,3 +380,37 @@ function format_upcoming_videos( $input ) {
 
     return $upcoming_list;
 }
+
+/**
+ * Admin notices.
+ */
+if ( is_admin() && get_option( 'wp-youtube-live-1714-notice-dismissed' ) === false ) {
+    add_action( 'admin_notices', 'wp_youtube_live_admin_notices_1714' );
+    add_action( 'wp_ajax_wp_youtube_live_dismiss_notice_1714', 'wp_youtube_live_dismiss_notice_1714' );
+}
+
+
+/**
+ * Add admin notice about quota and checking frequency changes.
+ *
+ * @since 1.7.14
+ */
+function wp_youtube_live_admin_notices_1714() {
+    ?>
+    <div class="notice notice-error wp-youtube-live-notice is-dismissible" data-version="1714">
+        <h2>YouTube Live Notice</h2>
+        <p>Due to YouTube Data API changes, this plugin now checks for new live videos every <strong>15 minutes</strong> rather than every 30 seconds.</p>
+        <p>You can change this setting on the <a href="<?php echo esc_url( admin_url( 'options-general.php?page=youtube-live#transient-timeout' ) ); ?>">plugin settings page</a>.</p>
+    </div>
+    <?php
+}
+
+/**
+ * Update option for WP YouTube Live 1.7.14 notes.
+ *
+ * @since 1.8.0
+ */
+function wp_youtube_live_dismiss_notice_1714() {
+    update_option( 'wp-youtube-live-1714-notice-dismissed', 1, false );
+}
+
