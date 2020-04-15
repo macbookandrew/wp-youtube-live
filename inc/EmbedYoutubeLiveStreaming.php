@@ -116,6 +116,7 @@ class EmbedYoutubeLiveStreaming {
             $key_name = key( $wp_youtube_live_api_transient );
             $this->jsonResponse = $wp_youtube_live_api_transient[$key_name];
             $this->objectResponse = json_decode( $this->jsonResponse );
+            $this->objectResponse->fromTransientCache = true;
         } elseif ( $this->eventType === 'upcoming' || ( isset( $this->completed_video_id ) && $this->completed_video_id !== '' ) ) {
             // get info for this video
             $this->resource = 'videos';
@@ -134,7 +135,7 @@ class EmbedYoutubeLiveStreaming {
             if ( is_array( $wp_youtube_live_api_transient ) ) {
                 $API_results = array_merge( $API_results, $wp_youtube_live_api_transient );
             }
-            set_transient( 'wp-youtube-live-api-response', maybe_serialize( $API_results ), apply_filters( 'wp_youtube_live_transient_timeout', '30' ) );
+            set_transient( 'wp-youtube-live-api-response', maybe_serialize( $API_results ), $this->getTransientTimeout() );
         } else {
             // no 30-second transient is set
 
@@ -167,7 +168,7 @@ class EmbedYoutubeLiveStreaming {
             if ( is_array( $wp_youtube_live_api_transient ) ) {
                 $API_results = array_merge( $API_results, $wp_youtube_live_api_transient );
             }
-            set_transient( 'wp-youtube-live-api-response', maybe_serialize( $API_results ), apply_filters( 'wp_youtube_live_transient_timeout', '30' ) );
+            set_transient( 'wp-youtube-live-api-response', maybe_serialize( $API_results ), $this->getTransientTimeout() );
         }
 
         if ( isset( $this->objectResponse->items ) && count( $this->objectResponse->items ) > 0 && ( ( $this->resource_type === 'live' && $this->isLive() ) || ( $this->resource_type === 'live' && in_array( $this->eventType, array( 'upcoming', 'completed' ) ) ) ) ) {
@@ -464,5 +465,19 @@ class EmbedYoutubeLiveStreaming {
      */
     public function getAllErrors() {
         return $this->errorArray;
+    }
+
+    /**
+     * Get transient timeout length.
+     *
+     * @return int Number of seconds to retain transient.
+     */
+    public function getTransientTimeout() {
+        $settings = get_option( 'youtube_live_settings' );
+        if ( ! array_key_exists( 'transient_timeout', $settings ) || empty( $settings['transient_timeout'] ) ) {
+            $settings['transient_timeout'] = 900;
+        }
+
+        return apply_filters( 'wp_youtube_live_transient_timeout', $settings['transient_timeout'] );
     }
 }

@@ -90,6 +90,14 @@ function youtube_live_settings_init() {
     );
 
     add_settings_field(
+        'transient_timeout',
+        __( 'Transient Timeout', 'youtube_live' ),
+        'youtube_live_transient_timeout_render',
+        'youtube_live_options',
+        'youtube_live_options_keys_section'
+    );
+
+    add_settings_field(
         'youtube_live_debugging',
         __( 'Debugging', 'youtube_live' ),
         'youtube_live_debugging_render',
@@ -252,6 +260,22 @@ function youtube_live_auto_refresh_render() {
     ?>
     Should the player page automatically check every 30 seconds until a live video is available? <label><input type="radio" name="youtube_live_settings[auto_refresh]" value="true" <?php checked( $options['auto_refresh'], 'true' ); ?>> Yes</label> <label><input type="radio" name="youtube_live_settings[auto_refresh]" value="false" <?php checked( $options['auto_refresh'], 'false' ); ?>> No</label>
     <p><strong>Warning:</strong> depending on how many users are on the page, this may overload your server with requests.</p>
+    <?php
+}
+
+/**
+ * Print transient timeout field
+ */
+function youtube_live_transient_timeout_render() {
+    $options = get_option( 'youtube_live_settings' );
+    if ( ! array_key_exists( 'transient_timeout', $options ) ) {
+        $options['transient_timeout'] = 900;
+    }
+    ?>
+    <p><label><input type="number" name="youtube_live_settings[transient_timeout]" placeholder="900" value="<?php echo $options['transient_timeout']; ?>"> seconds</label></p>
+    <p>A value of 900 (15 minutes) should stay pretty close to the default daily quota. If you have low traffic during “off hours” (when you’re not likely to be broadcasting a live event), you may be able to set this lower, since the quota won’t be consumed as much during the off hours.</p>
+    <p>To see your actual quota usage in real time, visit the <a href="https://console.developers.google.com/apis/api/youtube/usage">API Usage page</a>.</p>
+    <p>For more information on quota usage, read the <a href="https://github.com/macbookandrew/wp-youtube-live#quota-units">plugin documentation</a> as well as the <a href="https://developers.google.com/youtube/v3/getting-started#quota" target="_blank">YouTube API documentation</a>.</p>
     <?php
 }
 

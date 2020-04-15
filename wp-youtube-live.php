@@ -187,6 +187,9 @@ function get_youtube_live_content( $request_options ) {
             ob_clean();
         }
         $json_data['live'] = ( $youtube_live->isLive ? true : false );
+        if ( property_exists( $youtube_live->objectResponse, 'fromTransientCache' ) ) {
+            $json_data['fromTransientCache'] = $youtube_live->objectResponse->fromTransientCache;
+        }
         echo json_encode( $json_data, JSON_FORCE_OBJECT );
         wp_die();
     } else {
