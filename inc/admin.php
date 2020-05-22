@@ -104,6 +104,14 @@ function youtube_live_settings_init() {
         'youtube_live_options',
         'youtube_live_options_keys_section'
     );
+
+    add_settings_field(
+        'youtube_live_terms',
+        __( 'Terms of Service and Privacy Policy', 'youtube_live' ),
+        'youtube_live_terms_render',
+        'youtube_live_options',
+        'youtube_live_options_keys_section'
+    );
 }
 
 /**
@@ -379,6 +387,20 @@ function format_upcoming_videos( $input ) {
     $upcoming_list .= '</ul>';
 
     return $upcoming_list;
+}
+
+function youtube_live_terms_render() {
+    ?>
+    <p>This plugin stores your channel ID and API token in your WordPress options table, but does not store or collect any other information.</p>
+
+    <p>Because this plugin helps you use the YouTube service, you should refer to these documents as well:</p>
+
+    <ul>
+        <li><a href="https://www.youtube.com/t/terms" target="_blank">YouTube Terms of Service</a></li>
+        <li><a href="https://policies.google.com/privacy" target="_blank">Google Privacy Policy</a></li>
+    </ul>
+
+    <?php
 }
 
 /**
