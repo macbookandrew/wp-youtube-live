@@ -147,6 +147,14 @@ class WP_YouTube_Live_Admin {
 			'youtube_live_options',
 			'youtube_live_options_keys_section'
 		);
+
+		add_settings_field(
+			'youtube_live_terms_of_service',
+			__( 'Debugging', 'wp-youtube-live' ),
+			array( $this, 'render_terms_of_service' ),
+			'youtube_live_options',
+			'youtube_live_options_keys_section'
+		);
 	}
 
 	/**
@@ -314,6 +322,22 @@ class WP_YouTube_Live_Admin {
 		}
 		?>
 		Show debugging information in an HTML comment for logged-in users? <label><input type="radio" name="youtube_live_settings[debugging]" value="true" <?php checked( $this->settings['debugging'], 'true' ); ?>> Yes</label> <label><input type="radio" name="youtube_live_settings[debugging]" value="false" <?php checked( $this->settings['debugging'], 'false' ); ?>> No</label>
+		<?php
+	}
+
+	/**
+	 * Print terms of service field.
+	 */
+	public function render_terms_of_service() {
+		?>
+		<p>This plugin stores your channel ID and API token in your WordPress options table, but does not store or collect any other information.</p>
+
+		<p>Because this plugin helps you use the YouTube service, you should refer to these documents as well:</p>
+
+		<ul>
+			<li><a href="https://www.youtube.com/t/terms" target="_blank">YouTube Terms of Service</a></li>
+			<li><a href="https://policies.google.com/privacy" target="_blank">Google Privacy Policy</a></li>
+		</ul>
 		<?php
 	}
 

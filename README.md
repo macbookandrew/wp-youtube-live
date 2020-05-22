@@ -155,6 +155,16 @@ These are estimates; your usage may vary.
 The YouTube quota limit is pretty generous: as of September 26, 2017, it allows 1 million API requests per day, 300,000 API requests per 100 seconds per user, and 3 million API requests per 100 seconds.
 
 
+### Terms of Service and Privacy Policy ###
+
+This plugin stores your channel ID and API token in your WordPress options table, but does not store or collect any other information.
+
+Because this plugin helps you use the YouTube service, you should refer to these documents as well:
+
+- [YouTube Terms of Service](https://www.youtube.com/t/terms)
+- [Google Privacy Policy](https://policies.google.com/privacy)
+
+
 ## Screenshots ##
 
 ### 1. Settings screen ###
