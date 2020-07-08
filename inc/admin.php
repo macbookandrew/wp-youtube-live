@@ -106,6 +106,14 @@ function youtube_live_settings_init() {
     );
 
     add_settings_field(
+        'youtube_live_tools',
+        __( 'Tools', 'youtube_live' ),
+        'youtube_live_tools_render',
+        'youtube_live_options',
+        'youtube_live_options_keys_section'
+    );
+
+    add_settings_field(
         'youtube_live_terms',
         __( 'Terms of Service and Privacy Policy', 'youtube_live' ),
         'youtube_live_terms_render',
@@ -387,6 +395,12 @@ function format_upcoming_videos( $input ) {
     $upcoming_list .= '</ul>';
 
     return $upcoming_list;
+}
+
+function youtube_live_tools_render() {
+    ?>
+    <p><a class="btn primary" href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=youtube_live_flush_cache' ) ); ?>">Flush Cache</a></p>
+    <?php
 }
 
 function youtube_live_terms_render() {

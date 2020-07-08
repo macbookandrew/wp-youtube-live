@@ -228,6 +228,25 @@ function wp_ytl_set_embed_size( $size ) {
     return $size;
 }
 
+add_action( 'wp_ajax_youtube_live_flush_cache', 'wp_ytl_flush_cache' );
+/**
+ * Flush transient cache.
+ */
+function wp_ytl_flush_cache() {
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( array( 'error' => 'Access denied.' ), 403 );
+        wp_die();
+    }
+
+    if ( delete_transient( 'wp-youtube-live-api-response' ) ) {
+        wp_send_json_success( array( 'message' => 'Cleared cache.' ), 200 );
+        wp_die();
+    }
+
+    wp_send_json_error( array( 'error' => 'Couldn’t clear cache.' ), 500 );
+    wp_die();
+}
+
 /**
  * Check plugin and database version numbers
  */
