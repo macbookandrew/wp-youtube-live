@@ -74,12 +74,12 @@ function my_ytl_custom_message( $message ) {
 }
 `
 
-The filter `wp_youtube_live_transient_timeout` is available to customize the cache timeout length in seconds. For example, add this to your theme’s `functions.php` file to set the cache length to 15 seconds instead of the default 30:
+The filter `wp_youtube_live_transient_timeout` is available to customize the cache timeout length in seconds. For example, add this to your theme’s `functions.php` file to set the cache length to 15 seconds instead of the default 900:
 
 `
 add_filter( 'wp_youtube_live_transient_timeout', 'my_ytl_custom_timeout' );
-function my_ytl_custom_timeout( $message ) {
-    return '15';
+function my_ytl_custom_timeout( $timeout ) {
+    return 15;
 }
 `
 
