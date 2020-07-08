@@ -4,7 +4,7 @@
 **Tags:**              youtube, live, video, embed  
 **Requires at least:** 3.6  
 **Tested up to:**      5.3.2  
-**Stable tag:**        1.7.15  
+**Stable tag:**        1.7.16  
 **License:**           GPLv2 or later  
 **License URI:**       http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -179,6 +179,9 @@ Because this plugin helps you use the YouTube service, you should refer to these
 
 
 ## Changelog ##
+
+### 1.7.16 ###
+- Add utility to flush cache.
 
 ### 1.7.15 ###
 - Add Terms of Service and Privacy Policy.
