@@ -1,12 +1,12 @@
 # WP YouTube Live #
-**Contributors:** [macbookandrew](https://profiles.wordpress.org/macbookandrew)  
-**Donate link:**       https://cash.me/$AndrewRMinionDesign  
-**Tags:**              youtube, live, video, embed  
-**Requires at least:** 3.6  
-**Tested up to:**      5.3.2  
-**Stable tag:**        1.7.16  
-**License:**           GPLv2 or later  
-**License URI:**       http://www.gnu.org/licenses/gpl-2.0.html  
+**Contributors:** [macbookandrew](https://profiles.wordpress.org/macbookandrew)
+**Donate link:**       https://cash.me/$AndrewRMinionDesign
+**Tags:**              youtube, live, video, embed
+**Requires at least:** 3.6
+**Tested up to:**      5.3.2
+**Stable tag:**        1.7.16
+**License:**           GPLv2 or later
+**License URI:**       http://www.gnu.org/licenses/gpl-2.0.html
 
 Displays the current YouTube live video from a specified channel.
 
@@ -175,7 +175,7 @@ Because this plugin helps you use the YouTube service, you should refer to these
 ## Screenshots ##
 
 ### 1. Settings screen ###
-![Settings screen](http://ps.w.org/wp-youtube-live/assets/screenshot-1.png)
+![Settings screen](.wordpress-org/assets/screenshot-1.png)
 
 
 ## Changelog ##

@@ -1,0 +1,7 @@
+README.md
+Thumbs.db
+.git
+.gitignore
+deploy.sh
+gruntfile.js
+package.json
