@@ -237,20 +237,22 @@ class EmbedYoutubeLiveStreaming {
         $all_videos_array = array();
 
         $previous_resource_type = $this->resource;
-        foreach ( $all_upcoming_videos->items as $video ) {
-            $this->resource = 'videos';
-            $this->queryData = array(
-                "channelId"     => $this->channelId,
-                "key"           => $this->API_Key,
-                "id"            => $video->id->videoId,
-                "part"          => 'liveStreamingDetails',
-            );
+        if ( property_exists( $all_upcoming_videos, 'items' ) && is_array( $all_upcoming_videos->items ) ) {
+            foreach ( $all_upcoming_videos->items as $video ) {
+                $this->resource = 'videos';
+                $this->queryData = array(
+                    "channelId"     => $this->channelId,
+                    "key"           => $this->API_Key,
+                    "id"            => $video->id->videoId,
+                    "part"          => 'liveStreamingDetails',
+                );
 
-            $this_video = json_decode( $this->queryAPI() );
-            $start_time = date( 'U', strtotime( $this_video->items[0]->liveStreamingDetails->scheduledStartTime ) );
+                $this_video = json_decode( $this->queryAPI() );
+                $start_time = date( 'U', strtotime( $this_video->items[0]->liveStreamingDetails->scheduledStartTime ) );
 
-            if ( $start_time !== '0' && $start_time > ( time() - 900 ) ) { // only include videos scheduled in the future, minus a 15-minute grace period
-                $all_videos_array[$video->id->videoId] = $start_time;
+                if ( $start_time !== '0' && $start_time > ( time() - 900 ) ) { // only include videos scheduled in the future, minus a 15-minute grace period
+                    $all_videos_array[$video->id->videoId] = $start_time;
+                }
             }
         }
         $this->resource = $previous_resource_type;
