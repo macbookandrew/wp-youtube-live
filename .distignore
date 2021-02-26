@@ -1,7 +1,11 @@
-README.md
-Thumbs.db
-.git
+/.wordpress-org
+/.git
+/.github
+/node_modules
+
+.distignore
 .gitignore
-deploy.sh
 gruntfile.js
 package.json
+README.md
+Thumbs.db
