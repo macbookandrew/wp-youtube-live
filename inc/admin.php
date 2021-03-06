@@ -399,7 +399,7 @@ function format_upcoming_videos( $input ) {
 
 function youtube_live_tools_render() {
     ?>
-    <p><a class="btn primary" href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=youtube_live_flush_cache' ) ); ?>">Flush Cache</a></p>
+    <p><a class="btn primary" target="_blank" href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=youtube_live_flush_cache' ) ); ?>">Flush Cache</a></p>
     <?php
 }
 
