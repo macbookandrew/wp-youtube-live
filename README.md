@@ -180,6 +180,14 @@ Because this plugin helps you use the YouTube service, you should refer to these
 
 ## Changelog ##
 
+### 1.7.18 ###
+- Test with WordPress 5.7
+- Improve cache flush tool
+- Improve deployment process
+
+### 1.7.17 ###
+- Add logic check for valid upcoming videos.
+
 ### 1.7.16 ###
 - Add utility to flush cache.
 
