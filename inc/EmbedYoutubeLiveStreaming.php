@@ -337,6 +337,7 @@ class EmbedYoutubeLiveStreaming {
         curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
         curl_setopt( $curl, CURLOPT_CAINFO, plugin_dir_path( __FILE__ ) . 'cacert.pem' );
         curl_setopt( $curl, CURLOPT_CAPATH, plugin_dir_path( __FILE__ ) );
+        curl_setopt( $curl, CURLOPT_REFERER, home_url() );
         $this->jsonResponse = curl_exec( $curl );
         curl_close( $curl );
 
