@@ -4,7 +4,7 @@ Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
 Tested up to:      5.7
-Stable tag:        1.7.19
+Stable tag:        1.7.20
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -177,6 +177,9 @@ Because this plugin helps you use the YouTube service, you should refer to these
 1. Settings screen
 
 == Changelog ==
+
+= 1.7.20 =
+- Fix error when no upcoming videos are cached
 
 = 1.7.19 =
 - Add referer to API requests.

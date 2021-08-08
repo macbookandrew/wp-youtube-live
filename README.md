@@ -180,6 +180,10 @@ Because this plugin helps you use the YouTube service, you should refer to these
 
 ## Changelog ##
 
+### 1.7.20 ###
+
+- Fix error when no upcoming videos are cached
+
 ### 1.7.19 ###
 - Add referer to API requests.
 
