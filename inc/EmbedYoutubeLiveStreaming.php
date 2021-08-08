@@ -279,7 +279,7 @@ class EmbedYoutubeLiveStreaming {
     function removeFromUpcomingCache( $videoID ) {
         $upcoming_videos = maybe_unserialize( get_transient( 'youtube-live-upcoming-videos' ) );
 
-        if ( count( $upcoming_videos ) > 1 ) {
+        if ( is_countable( $upcoming_videos ) && count( $upcoming_videos ) > 1 ) {
             unset( $upcoming_videos[$videoID] );
             $cache_length = reset( $upcoming_videos );
 
