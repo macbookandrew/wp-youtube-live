@@ -261,7 +261,7 @@ add_action( 'plugins_loaded', 'wp_ytl_check_version' );
  * Handle database upgrades on activation/upgrade
  */
 function wp_ytl_plugin_activation() {
-    $request_options = get_option( 'youtube_live_settings' );
+    $request_options = get_option( 'youtube_live_settings', array() );
 
     // removed in v1.7.0
     if ( array_key_exists( 'show_channel_if_dead', $request_options ) && $request_options['show_channel_if_dead'] == 'true' ) {
