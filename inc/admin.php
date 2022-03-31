@@ -345,7 +345,7 @@ function refresh_youtube_live_upcoming_cache( $action = NULL, $nonce = NULL ) {
     }
 
     if ( ! wp_verify_nonce( $nonce, 'wpYTcache_nonce' ) ) {
-        die( 'Invalid nonce.' . var_export( $_POST, true ) );
+        die( 'Invalid nonce.');
     }
 
     $youtube_options = get_option( 'youtube_live_settings' );
