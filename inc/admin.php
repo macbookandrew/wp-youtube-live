@@ -338,12 +338,14 @@ function youtube_live_options_page() { ?>
  * @return string JSON string of upcoming videos
  */
 function refresh_youtube_live_upcoming_cache( $action = NULL, $nonce = NULL ) {
-    if ( ! isset( $_POST['nonce'] ) || ! isset( $_POST['action'] ) ) {
-        die( 'Invalid nonce.' );
+
+    if ( ! $action && isset( $_POST['action'] ) ) {
+        $action = sanitize_key( wp_unslash( $_POST['action'] ) );
     }
 
-    $nonce  = sanitize_key( wp_unslash( $_POST['nonce'] ) );
-    $action = sanitize_key( wp_unslash( $_POST['action'] ) );
+    if ( ! $nonce && isset( $_POST['nonce'] ) ) {
+        $nonce  = sanitize_key( wp_unslash( $_POST['nonce'] ) );
+    }
 
     if ( ! wp_verify_nonce( $nonce, 'wpYTcache_nonce' ) ) {
         die( 'Invalid nonce.' );
