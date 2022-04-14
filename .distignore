@@ -7,5 +7,6 @@
 .gitignore
 gruntfile.js
 package.json
+phpcs.xml
 README.md
 Thumbs.db
