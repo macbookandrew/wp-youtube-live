@@ -129,7 +129,7 @@ function youtube_live_api_key_render() {
     wp_enqueue_script( 'wp-youtube-live-backend' );
 
     $options = get_option( 'youtube_live_settings' ); ?>
-    <input type="text" name="youtube_live_settings[youtube_live_api_key]" placeholder="AIzaSyD4iE2xVSpkLLOXoyqT-RuPwURN3ddScAI" size="45" value="<?php echo $options['youtube_live_api_key']; ?>">
+    <input type="text" name="youtube_live_settings[youtube_live_api_key]" placeholder="AIzaSyD4iE2xVSpkLLOXoyqT-RuPwURN3ddScAI" size="45" value="<?php echo esc_attr( $options['youtube_live_api_key'] ); ?>">
 
     <p>Don&rsquo;t have an API key?</p>
     <ol>
@@ -150,7 +150,7 @@ function youtube_live_api_key_render() {
  */
 function youtube_live_channel_id_render() {
     $options = get_option( 'youtube_live_settings' ); ?>
-    <input type="text" name="youtube_live_settings[youtube_live_channel_id]" placeholder="UcZliPwLMjeJbhOAnr1Md4gA" size="45" value="<?php echo $options['youtube_live_channel_id']; ?>">
+    <input type="text" name="youtube_live_settings[youtube_live_channel_id]" placeholder="UcZliPwLMjeJbhOAnr1Md4gA" size="45" value="<?php echo esc_attr( $options['youtube_live_channel_id'] ); ?>">
 
     <p>Go to <a href="https://youtube.com/account_advanced/" target="_blank">YouTube Advanced Settings</a> to find your YouTube Channel ID.</p>
     <?php
@@ -160,7 +160,7 @@ function youtube_live_channel_id_render() {
  * Print subdomain field
  */
 function youtube_live_subdomain_render() {
-    $options = get_option( 'youtube_live_settings' ); ?>
+    $options = get_option( 'youtube_live_settings', array( 'subdomain' => 'www' ) ); ?>
     <label><select name="youtube_live_settings[subdomain]">
         <option value="www" <?php selected( $options['subdomain'], 'www' ); ?>>Default (www.youtube.com)</option>
         <option value="gaming" <?php selected( $options['subdomain'], 'gaming' ); ?>>Gaming (gaming.youtube.com)</option>
@@ -187,8 +187,8 @@ function youtube_live_player_settings_render() {
     }
     ?>
     <p>
-        <label>Width: <input type="number" name="youtube_live_settings[default_width]" placeholder="720" value="<?php echo $options['default_width']; ?>">px</label><br/>
-        <label>Height: <input type="number" name="youtube_live_settings[default_height]" placeholder="480" value="<?php echo $options['default_height']; ?>">px</label>
+        <label>Width: <input type="number" name="youtube_live_settings[default_width]" placeholder="720" value="<?php echo esc_attr( $options['default_width'] ); ?>">px</label><br/>
+        <label>Height: <input type="number" name="youtube_live_settings[default_height]" placeholder="480" value="<?php echo esc_attr( $options['default_height'] ); ?>">px</label>
     </p>
     <p>
         Should the player auto-play when a live video is available? <label><input type="radio" name="youtube_live_settings[autoplay]" value="true" <?php checked( $options['autoplay'], 'true' ); ?>> Yes</label> <label><input type="radio" name="youtube_live_settings[autoplay]" value="false" <?php checked( $options['autoplay'], 'false' ); ?>> No</label><br/>
@@ -209,56 +209,55 @@ function fallback_behavior_render() {
         $options['fallback_behavior'] = 'message';
     }
     if ( ! array_key_exists( 'fallback_message', $options ) ) {
-        $options['fallback_message'] = '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="https://youtube.com/channel/' . $youtube_options['youtube_live_channel_id'] . '">all of our videos</a>.</p>
+        $options['fallback_message'] = '<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target="_blank" href="' . esc_url( 'https://youtube.com/channel/' . $options['youtube_live_channel_id'] ) . '">all of our videos</a>.</p>
 <p><button type="button" class="button" id="check-again">Check again</button><span class="spinner" style="display:none;"></span></p>';
     }
     ?>
     <p>
         <label for="youtube_live_settings[fallback_behavior]">If no live videos are available, what should be displayed?</label>
         <select name="youtube_live_settings[fallback_behavior]">
-            <option value="message" <?php selected( $options['fallback_behavior'], 'message' ); ?>>Show a custom HTML message (no additional quota cost)</option>
-            <option value="upcoming" <?php selected( $options['fallback_behavior'], 'upcoming' ); ?>>Show scheduled live videos (adds a quota unit cost of 100)</option>
-            <option value="completed" <?php selected( $options['fallback_behavior'], 'completed' ); ?>>Show last completed live video (adds a quota unit cost of 100)</option>
-            <option value="channel" <?php selected( $options['fallback_behavior'], 'channel' ); ?>>Show recent videos from my channel (adds a quota unit cost of at least 3)</option>
-            <option value="playlist" <?php selected( $options['fallback_behavior'], 'playlist' ); ?>>Show a specified playlist (adds a quota unit cost of at least 3)</option>
-            <option value="video" <?php selected( $options['fallback_behavior'], 'video' ); ?>>Show a specified video (no additional quota cost)</option>
-            <option value="no_message" <?php selected( $options['fallback_behavior'], 'no_message' ); ?>>Show nothing at all (no additional quota cost)</option>
+            <option value="message" <?php selected( esc_attr( $options['fallback_behavior'] ), 'message' ); ?>>Show a custom HTML message (no additional quota cost)</option>
+            <option value="upcoming" <?php selected( esc_attr( $options['fallback_behavior'] ), 'upcoming' ); ?>>Show scheduled live videos (adds a quota unit cost of 100)</option>
+            <option value="completed" <?php selected( esc_attr( $options['fallback_behavior'] ), 'completed' ); ?>>Show last completed live video (adds a quota unit cost of 100)</option>
+            <option value="channel" <?php selected( esc_attr( $options['fallback_behavior'] ), 'channel' ); ?>>Show recent videos from my channel (adds a quota unit cost of at least 3)</option>
+            <option value="playlist" <?php selected( esc_attr( $options['fallback_behavior'] ), 'playlist' ); ?>>Show a specified playlist (adds a quota unit cost of at least 3)</option>
+            <option value="video" <?php selected( esc_attr( $options['fallback_behavior'] ), 'video' ); ?>>Show a specified video (no additional quota cost)</option>
+            <option value="no_message" <?php selected( esc_attr( $options['fallback_behavior'] ), 'no_message' ); ?>>Show nothing at all (no additional quota cost)</option>
         </select>
     </p>
 
     <p class="fallback message">
         <label for="youtube_live_settings[fallback_message]">Custom HTML message:</label><br/>
-        <textarea cols="50" rows="8" name="youtube_live_settings[fallback_message]" placeholder="<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target='_blank' href='https://youtube.com/channel/<?php echo $options['youtube_live_channel_id']; ?>'>all of our videos</a>.</p>
-        <p><button type='button' class='button' id='check-again'>Check again</button><span class='spinner' style='display:none;'></span></p>."><?php echo $options['fallback_message']; ?></textarea>
+        <textarea cols="50" rows="8" name="youtube_live_settings[fallback_message]" placeholder="<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target='_blank' href='<?php echo esc_url( 'https://youtube.com/channel/' . $options['youtube_live_channel_id'] ); ?>'>all of our videos</a>.</p>
+        <p><button type='button' class='button' id='check-again'>Check again</button><span class='spinner' style='display:none;'></span></p>."><?php echo wp_kses_post( $options['fallback_message'] ); ?></textarea>
     </p>
 
     <div class="fallback upcoming">
         <p>This option will fetch all your upcoming scheduled live videos from the YouTube API and cache them for 24 hours or until the first video is scheduled to begin, whichever is soonest. If you schedule more live videos, press the button below to manually flush the server’s cache. <strong>Note:</strong> if you have no upcoming scheduled videos, the last scheduled video will be shown instead.</p>
 
         <?php
-        $redirect = urlencode( remove_query_arg( 'msg', $_SERVER['REQUEST_URI'] ) );
-
-        if ( false === ( $upcoming_cache = get_transient( 'youtube-live-upcoming-videos' ) ) ) {
+        $upcoming_cache = get_transient( 'youtube-live-upcoming-videos' );
+        if ( false === $upcoming_cache ) {
             $upcoming_cache = json_decode( refresh_youtube_live_upcoming_cache( 'updatewpYTUpcomingCache', wp_create_nonce( 'wpYTcache_nonce' ) ) );
         }
         ?>
 
-        <div class="wp-youtube-live-upcoming-cache"><?php echo format_upcoming_videos( $upcoming_cache ); ?></div>
+        <div class="wp-youtube-live-upcoming-cache"><?php echo wp_kses_post( format_upcoming_videos( $upcoming_cache ) ); ?></div>
 
         <p>
-            <button type="button" class="button-primary" id="updatewpYTUpcomingCache" data-action="updatewpYTUpcomingCache" data-nonce="<?php echo wp_create_nonce( 'wpYTcache_nonce' ); ?>">Clear Cached Upcoming Videos</button> (costs 100 quota units each time)<span class="spinner" style="visibility: hidden;float: none;"></span>
+            <button type="button" class="button-primary" id="updatewpYTUpcomingCache" data-action="updatewpYTUpcomingCache" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpYTcache_nonce' ) ); ?>">Clear Cached Upcoming Videos</button> (costs 100 quota units each time)<span class="spinner" style="visibility: hidden;float: none;"></span>
         </p>
         <!-- TODO: add secondary fallback if no upcoming videos are scheduled -->
     </div>
 
     <p class="fallback playlist">
         <label for="youtube_live_settings[fallback_playlist]">Fallback Playlist URL:</label><br/>
-        <input type="text" name="youtube_live_settings[fallback_playlist]" size="45" placeholder="https://www.youtube.com/watch?v=abc123…&list=PLABC123…" value="<?php echo $options['fallback_playlist']; ?>" />
+        <input type="text" name="youtube_live_settings[fallback_playlist]" size="45" placeholder="https://www.youtube.com/watch?v=abc123…&list=PLABC123…" value="<?php echo esc_attr( $options['fallback_playlist'] ); ?>" />
     </p>
 
     <p class="fallback video">
         <label for="youtube_live_settings[fallback_video]">Fallback Video URL:</label><br/>
-        <input type="text" name="youtube_live_settings[fallback_video]" size="45" placeholder="https://youtu.be/dQw4w9WgXcQ" value="<?php echo $options['fallback_video']; ?>" />
+        <input type="text" name="youtube_live_settings[fallback_video]" size="45" placeholder="https://youtu.be/dQw4w9WgXcQ" value="<?php echo esc_attr( $options['fallback_video'] ); ?>" />
     </p>
 
     <p>For more information on quota usage, read the <a href="https://github.com/macbookandrew/wp-youtube-live#quota-units">plugin documentation</a> as well as the <a href="https://developers.google.com/youtube/v3/getting-started#quota" target="_blank">YouTube API documentation</a>.</p>
@@ -288,7 +287,7 @@ function youtube_live_transient_timeout_render() {
         $options['transient_timeout'] = 900;
     }
     ?>
-    <p id="transient-timeout"><label><input type="number" name="youtube_live_settings[transient_timeout]" placeholder="900" value="<?php echo $options['transient_timeout']; ?>"> seconds</label></p>
+    <p id="transient-timeout"><label><input type="number" name="youtube_live_settings[transient_timeout]" placeholder="900" value="<?php echo esc_attr( $options['transient_timeout'] ); ?>"> seconds</label></p>
     <p>YouTube enforces a daily limit on API usage. To stay within this limit, the plugin caches the YouTube response for this many seconds.</p>
     <p>A value of 900 (15 minutes) should stay pretty close to the default daily quota. If you have low or no traffic during “off hours” (when you’re not likely to be broadcasting a live event), you may want to experiment and set this lower, since the quota won’t be consumed as much during the off hours.</p>
     <p>To see your actual quota usage in real time, visit the <a href="https://console.developers.google.com/apis/api/youtube/usage">API Usage page</a>.</p>
@@ -313,7 +312,7 @@ function youtube_live_debugging_render() {
  * Print API settings field
  */
 function youtube_live_api_settings_section_callback() {
-    echo __( 'Enter your YouTube details below. Once you&rsquo;ve entered the required details below, add the shortcode <code>[youtube_live]</code> to any post/page to display the live player.', 'youtube_live' );
+    echo wp_kses_post( __( 'Enter your YouTube details below. Once you&rsquo;ve entered the required details below, add the shortcode <code>[youtube_live]</code> to any post/page to display the live player.', 'youtube_live' ) );
 }
 
 /**
@@ -339,10 +338,12 @@ function youtube_live_options_page() { ?>
  * @return string JSON string of upcoming videos
  */
 function refresh_youtube_live_upcoming_cache( $action = NULL, $nonce = NULL ) {
-    if ( $_POST ) {
-        $nonce = $_POST['nonce'];
-        $action = $_POST['action'];
+    if ( ! isset( $_POST['nonce'] ) || ! isset( $_POST['action'] ) ) {
+        die( 'Invalid nonce.' );
     }
+
+    $nonce  = sanitize_key( wp_unslash( $_POST['nonce'] ) );
+    $action = sanitize_key( wp_unslash( $_POST['action'] ) );
 
     if ( ! wp_verify_nonce( $nonce, 'wpYTcache_nonce' ) ) {
         die( 'Invalid nonce.' );
@@ -353,9 +354,9 @@ function refresh_youtube_live_upcoming_cache( $action = NULL, $nonce = NULL ) {
 
     if ( $action === 'updatewpYTUpcomingCache' ) {
         if ( $youtube_live->clearUpcomingVideoInfo() ) {
-            $output = json_encode( format_upcoming_videos( get_transient( 'youtube-live-upcoming-videos' ) ) );
+            $output = wp_json_encode( format_upcoming_videos( get_transient( 'youtube-live-upcoming-videos' ) ) );
             if ( $_POST ) {
-                echo $output;
+                echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                 die();
             } else {
                 return $output;
@@ -387,7 +388,7 @@ function format_upcoming_videos( $input ) {
     <ul>';
     if ( is_array( $video_array ) && count( $video_array ) > 0 ) {
         foreach ( $video_array as $id => $start_time ) {
-            $upcoming_list .= '<li>Video ID <code>'. $id . '</code> starting ' . date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $start_time ) . '</li>';
+            $upcoming_list .= '<li>Video ID <code>' . esc_attr( $id ) . '</code> starting ' . date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), esc_attr( $start_time ) ) . '</li>';
         }
     } else {
         $upcoming_list .= '<li>Cache is currently empty. Make sure you have some videos scheduled, then press the button below to manually update the cache.</li>';

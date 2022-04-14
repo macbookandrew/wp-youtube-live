@@ -422,23 +422,23 @@ class EmbedYoutubeLiveStreaming {
         if ( $this->resource_type === 'channel' ) {
             $this->embed_code = '<iframe
                 id="wpYouTubeLive"
-                width="' . $this->embed_width . '"
-                height="' . $this->embed_height . '"
-                src="https://' . $this->subdomain. '.youtube.com/embed?listType=playlist&list=' . $this->uploads_id . '&autoplay='. $autoplay . '&rel=' . $related . '"
+                width="' . esc_attr( $this->embed_width ) . '"
+                height="' . esc_attr( $this->embed_height ) . '"
+                src="https://' . esc_attr( $this->subdomain ) . '.youtube.com/embed?listType=playlist&list=' . esc_attr( $this->uploads_id ) . '&autoplay=' . esc_attr( $autoplay ) . '&rel=' . esc_attr( $related ) . '"
                 frameborder="0"
                 allowfullscreen>
             </iframe>';
         } else {
             ob_start(); ?>
-                <div id="wpYouTubeLive" width="<?php echo $this->embed_width; ?>" height="<?php echo $this->embed_height; ?>"></div>
+                <div id="wpYouTubeLive" width="<?php echo esc_attr( $this->embed_width ); ?>" height="<?php echo esc_attr( $this->embed_height ); ?>"></div>
                 <script>
                     var wpYTPlayer;
                     function onYouTubeIframeAPIReady() {
                         wpYTPlayer = new YT.Player('wpYouTubeLive', {
-                            videoId: '<?php echo $this->live_video_id; ?>',
+                            videoId: '<?php echo esc_attr( $this->live_video_id ); ?>',
                             playerVars: {
-                                'autoplay': <?php echo $autoplay; ?>,
-                                'rel': <?php echo $related; ?>
+                                'autoplay': <?php echo esc_attr( $autoplay ); ?>,
+                                'rel': <?php echo esc_attr( $related ); ?>
                             },
                             events: {
                                 'onReady': wpYTonPlayerReady,
