@@ -354,7 +354,7 @@ function refresh_youtube_live_upcoming_cache( $action = NULL, $nonce = NULL ) {
     $youtube_options = get_option( 'youtube_live_settings' );
     $youtube_live = new EmbedYoutubeLiveStreaming( $youtube_options['youtube_live_channel_id'], $youtube_options['youtube_live_api_key'] );
 
-    if ( $action === 'updatewpYTUpcomingCache' ) {
+    if ( $action === 'updatewpytupcomingcache' ) { // sanitize_key converts to lower-case.
         if ( $youtube_live->clearUpcomingVideoInfo() ) {
             $output = wp_json_encode( format_upcoming_videos( get_transient( 'youtube-live-upcoming-videos' ) ) );
             if ( $_POST ) {
