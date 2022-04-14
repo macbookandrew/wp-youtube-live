@@ -45,18 +45,18 @@ function output_youtube_live( $atts ) {
 
     // get shortcode attributes
     $shortcode_attributes = shortcode_atts( array (
-        'width'             => esc_attr( $settings['default_width'] ),
-        'height'            => esc_attr( $settings['default_height'] ),
-        'autoplay'          => esc_attr( $settings['autoplay'] ),
-        'showRelated'       => esc_attr( $settings['show_related'] ),
+        'width'             => $settings['default_width'],
+        'height'            => $settings['default_height'],
+        'autoplay'          => $settings['autoplay'],
+        'showRelated'       => $settings['show_related'],
         'js_only'           => false,
         'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
-        'auto_refresh'      => esc_attr( $settings['auto_refresh'] ),
-        'fallback_behavior' => esc_attr( $settings['fallback_behavior'] ),
-        'fallback_message'  => ( array_key_exists( 'no_stream_message', $settings ) ? esc_attr( $settings['no_stream_message'] ) : esc_attr( $settings['fallback_message'] ) ),
+        'auto_refresh'      => $settings['auto_refresh'],
+        'fallback_behavior' => $settings['fallback_behavior'],
+        'fallback_message'  => ( array_key_exists( 'no_stream_message', $settings ) ? $settings['no_stream_message'] : $settings['fallback_message'] ),
         'no_stream_message' => NULL,
-        'fallback_playlist' => esc_attr( $settings['fallback_playlist'] ),
-        'fallback_video'    => esc_attr( $settings['fallback_video'] ),
+        'fallback_playlist' => $settings['fallback_playlist'],
+        'fallback_video'    => $settings['fallback_video'],
         'refreshInterval'   => apply_filters( 'wp_youtube_live_transient_timeout', '30' ),
     ), $atts );
 
