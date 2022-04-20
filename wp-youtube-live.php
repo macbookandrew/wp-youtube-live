@@ -165,10 +165,10 @@ function get_youtube_live_content( $request_options ) {
 			echo $youtube_live->embedCode(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the method.
 		} elseif ( 'playlist' === $request_options['fallback_behavior'] ) {
 			add_filter( 'oembed_result', 'wp_ytl_add_player_attributes_result', 10, 3 );
-			echo wp_oembed_get( esc_attr( $youtube_options['fallback_playlist'] ), $player_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo wp_kses_post( wp_oembed_get( esc_attr( $youtube_options['fallback_playlist'] ), $player_args ) );
 		} elseif ( 'video' === $request_options['fallback_behavior'] && isset( $youtube_options['fallback_video'] ) ) {
 			add_filter( 'oembed_result', 'wp_ytl_add_player_attributes_result', 10, 3 );
-			echo wp_oembed_get( esc_attr( $youtube_options['fallback_video'] ), $player_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo wp_kses_post( wp_oembed_get( esc_attr( $youtube_options['fallback_video'] ), $player_args ) );
 		} elseif ( 'message' === $request_options['fallback_behavior'] && 'no_message' !== $request_options['fallback_message'] ) {
 			echo wp_kses_post( apply_filters( 'wp_youtube_live_no_stream_available', $request_options['fallback_message'] ) );
 		}
@@ -206,7 +206,7 @@ function get_youtube_live_content( $request_options ) {
 
 	// return the content.
 	if ( wp_youtube_live_is_ajax() ) {
-		if ( isset( $_POST['requestType'] ) && sanitize_key( wp_unslash( $_POST['requestType'] ) ) !== 'refresh' || $is_live ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( isset( $_POST['requestType'] ) && sanitize_key( wp_unslash( $_POST['requestType'] ) ) !== 'refresh' || $is_live ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- because we have to allow unauthenticated users the ability to check for live videos, as well as handle statically-cached markup that might contain a stale nonce.
 			$json_data['content'] = ob_get_clean();
 		} else {
 			ob_clean();
