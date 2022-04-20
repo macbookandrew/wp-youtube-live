@@ -109,20 +109,20 @@ function get_youtube_live_content( $request_options ) {
 	$youtube_live->subdomain          = $youtube_options['subdomain']
 		? esc_attr( $youtube_options['subdomain'] )
 		: 'www';
-	$youtube_live->embed_width        = wp_youtube_live_is_ajax()
-		? sanitize_key( wp_unslash( $_POST['width'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+	$youtube_live->embed_width        = wp_youtube_live_is_ajax() && array_key_exists( 'width', $_POST )
+		? sanitize_key( wp_unslash( $_POST['width'] ) )
 		: sanitize_key( $request_options['width'] );
-	$youtube_live->embed_height       = wp_youtube_live_is_ajax()
-		? sanitize_key( wp_unslash( $_POST['height'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+	$youtube_live->embed_height       = wp_youtube_live_is_ajax() && array_key_exists( 'height', $_POST )
+		? sanitize_key( wp_unslash( $_POST['height'] ) )
 		: sanitize_key( $request_options['height'] );
-	$youtube_live->embed_autoplay     = wp_youtube_live_is_ajax()
-		? sanitize_key( wp_unslash( $_POST['autoplay'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+	$youtube_live->embed_autoplay     = wp_youtube_live_is_ajax() && array_key_exists( 'autoplay', $_POST )
+		? sanitize_key( wp_unslash( $_POST['autoplay'] ) )
 		: sanitize_key( $request_options['autoplay'] );
-	$youtube_live->show_related       = wp_youtube_live_is_ajax()
-		? sanitize_key( wp_unslash( $_POST['show_related'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+	$youtube_live->show_related       = wp_youtube_live_is_ajax() && array_key_exists( 'show_related', $_POST )
+		? sanitize_key( wp_unslash( $_POST['show_related'] ) )
 		: sanitize_key( $request_options['showRelated'] );
-	$youtube_live->completed_video_id = wp_youtube_live_is_ajax() && array_key_exists( 'completedVideoID', $_POST ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		? sanitize_key( wp_unslash( $_POST['completedVideoID'] ) )  // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+	$youtube_live->completed_video_id = wp_youtube_live_is_ajax() && array_key_exists( 'completedVideoID', $_POST )
+		? sanitize_key( wp_unslash( $_POST['completedVideoID'] ) )
 		: '';
 	// phpcs:enable WordPress.Security.NonceVerification.Missing
 
@@ -185,7 +185,7 @@ function get_youtube_live_content( $request_options ) {
             <li><strong>Message:</strong> ' . esc_attr( $error['message'] ) . '</li>
             <li><strong>Extended help:</strong> ' . wp_kses_post( $error['extendedHelp'] ) . '</li>';
 		}
-		if ( $youtube_options['fallback_behavior'] === 'video' && empty( $youtube_options['fallback_video'] ) ) {
+		if ( 'video' === $youtube_options['fallback_behavior'] && empty( $youtube_options['fallback_video'] ) ) {
 			$error_message .= '<li>Please double-check that you have set a fallback video.</li>';
 		}
 		$error_message     .= '</ul>';
@@ -292,7 +292,7 @@ function wp_ytl_plugin_activation() {
 	$request_options = get_option( 'youtube_live_settings', array() );
 
 	// removed in v1.7.0.
-	if ( array_key_exists( 'show_channel_if_dead', $request_options ) && 'true' == $request_options['show_channel_if_dead'] ) {
+	if ( array_key_exists( 'show_channel_if_dead', $request_options ) && 'true' === $request_options['show_channel_if_dead'] ) {
 		$request_options['fallback_behavior'] = 'channel';
 	}
 	unset( $request_options['show_channel_if_dead'] );
