@@ -195,7 +195,7 @@ function get_youtube_live_content( $request_options ) {
 	// debugging.
 	if ( get_option( 'youtube_live_settings', 'debugging' ) && is_user_logged_in() ) {
 		$debugging_code = var_export( $youtube_live, true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export -- because this is only available for admins if they enable the debug option.
-		echo '<!-- YouTube Live debugging: ' . "\n" . $debugging_code . "\n" . ' -->'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- because this is only available for admins if they enable the debug option.
+		echo '<!-- YouTube Live debugging: ' . PHP_EOL . wp_kses_post( $debugging_code ) . PHP_EOL . ' -->';
 		$json_data['error'] . $debugging_code;
 	}
 
