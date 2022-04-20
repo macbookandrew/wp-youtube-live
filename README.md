@@ -180,6 +180,11 @@ Because this plugin helps you use the YouTube service, you should refer to these
 
 ## Changelog ##
 
+### 1.8.1 ###
+
+- Update code documentation
+- Update plugin branding images
+
 ### 1.8.0 ###
 
 - Fix reported security issues
