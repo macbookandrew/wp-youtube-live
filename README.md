@@ -4,7 +4,7 @@
 **Tags:**              youtube, live, video, embed
 **Requires at least:** 3.6
 **Tested up to:**      5.9.3
-**Stable tag:**        1.8.2
+**Stable tag:**        1.8.3
 **License:**           GPLv2 or later
 **License URI:**       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -179,6 +179,10 @@ Because this plugin helps you use the YouTube service, you should refer to these
 
 
 ## Changelog ##
+
+### 1.8.3 ###
+
+- Escape admin-visible debug output
 
 ### 1.8.2 ###
 
