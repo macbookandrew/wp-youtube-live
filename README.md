@@ -180,6 +180,10 @@ Because this plugin helps you use the YouTube service, you should refer to these
 
 ## Changelog ##
 
+### 1.8.2 ###
+
+- Escape oembed output
+
 ### 1.8.1 ###
 
 - Update code documentation
