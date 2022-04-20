@@ -25,7 +25,7 @@ require 'inc/admin.php';
 function youtube_live_scripts() {
 	wp_register_script( 'wp-youtube-live', plugin_dir_url( __FILE__ ) . 'js/wp-youtube-live.min.js', array( 'jquery' ), WP_YOUTUBE_LIVE_VERSION, true );
 	wp_register_style( 'wp-youtube-live', plugin_dir_url( __FILE__ ) . 'css/wp-youtube-live.css', array(), WP_YOUTUBE_LIVE_VERSION );
-	wp_register_script( 'youtube-iframe-api', 'https://www.youtube.com/iframe_api', array(), null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+	wp_register_script( 'youtube-iframe-api', 'https://www.youtube.com/iframe_api', array(), null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- because it’s a third-party script that we can’t version.
 }
 add_action( 'wp_enqueue_scripts', 'youtube_live_scripts' );
 
@@ -104,6 +104,7 @@ function get_youtube_live_content( $request_options ) {
 	$request_options = wp_parse_args( $request_options, $youtube_options );
 
 	// set up player.
+	// phpcs:disable WordPress.Security.NonceVerification.Missing -- because we have to allow unauthenticated users the ability to check for live videos, as well as handle statically-cached markup that might contain a stale nonce.
 	$youtube_live                     = new EmbedYoutubeLiveStreaming( esc_attr( $youtube_options['youtube_live_channel_id'] ), esc_attr( $youtube_options['youtube_live_api_key'] ) );
 	$youtube_live->subdomain          = $youtube_options['subdomain']
 		? esc_attr( $youtube_options['subdomain'] )
@@ -123,6 +124,7 @@ function get_youtube_live_content( $request_options ) {
 	$youtube_live->completed_video_id = wp_youtube_live_is_ajax() && array_key_exists( 'completedVideoID', $_POST ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		? sanitize_key( wp_unslash( $_POST['completedVideoID'] ) )  // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		: '';
+	// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 	if ( strlen( $youtube_live->completed_video_id ) > 0 ) {
 		$youtube_live->isLive( true );
@@ -192,8 +194,8 @@ function get_youtube_live_content( $request_options ) {
 
 	// debugging.
 	if ( get_option( 'youtube_live_settings', 'debugging' ) && is_user_logged_in() ) {
-		$debugging_code = var_export( $youtube_live, true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
-		echo '<!-- YouTube Live debugging: ' . "\n" . $debugging_code . "\n" . ' -->'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		$debugging_code = var_export( $youtube_live, true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export -- because this is only available for admins if they enable the debug option.
+		echo '<!-- YouTube Live debugging: ' . "\n" . $debugging_code . "\n" . ' -->'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- because this is only available for admins if they enable the debug option.
 		$json_data['error'] . $debugging_code;
 	}
 
@@ -235,18 +237,21 @@ function wp_ytl_set_oembed_id( $html ) {
 /**
  * Set default oembed size for video/playlist fallback behavior
  *
- * @param  array $size default oembed sizes
- * @return array moified oembed size
+ * @param  array $size Default oembed sizes.
+ *
+ * @return array Modified oembed size
  */
 function wp_ytl_set_embed_size( $size ) {
 	$request_options = get_option( 'youtube_live_settings' );
 
-	$size['width']  = ( wp_youtube_live_is_ajax() && array_key_exists( 'width', $_POST ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		? sanitize_key( wp_unslash( $_POST['width'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
+	// phpcs:disable WordPress.Security.NonceVerification.Missing -- because we have to allow unauthenticated users the ability to check for live videos, as well as handle statically-cached markup that might contain a stale nonce.
+	$size['width']  = ( wp_youtube_live_is_ajax() && array_key_exists( 'width', $_POST )
+		? sanitize_key( wp_unslash( $_POST['width'] ) )
 		: $request_options['default_width'] );
-	$size['height'] = ( wp_youtube_live_is_ajax() && array_key_exists( 'height', $_POST ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		? sanitize_key( wp_unslash( $_POST['height'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$size['height'] = ( wp_youtube_live_is_ajax() && array_key_exists( 'height', $_POST )
+		? sanitize_key( wp_unslash( $_POST['height'] ) )
 		: $request_options['default_height'] );
+	// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 	return $size;
 }
@@ -342,7 +347,7 @@ function wp_ytl_add_player_attributes_result( $data2html, $url, $args ) {
  * @return bool
  */
 function wp_youtube_live_is_ajax() {
-	return isset( $_POST['isAjax'] ) && (bool) sanitize_key( wp_unslash( $_POST['isAjax'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+	return isset( $_POST['isAjax'] ) && (bool) sanitize_key( wp_unslash( $_POST['isAjax'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- because we have to allow unauthenticated users the ability to check for live videos, as well as handle statically-cached markup that might contain a stale nonce.
 }
 
 // TODO: add a notice about resaving settings on plugin activation

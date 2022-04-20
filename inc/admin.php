@@ -339,7 +339,7 @@ function youtube_live_options_page() {
  *
  * @param string $action action to perform.
  * @param string $nonce  security nonce.
- * @return string JSON string of upcoming videos
+ * @return string|void JSON string of upcoming videos
  */
 function refresh_youtube_live_upcoming_cache( $action = null, $nonce = null ) {
 
@@ -384,7 +384,7 @@ function format_upcoming_videos( $input ) {
 	}
 
 	global $wpdb;
-	$transient_expire_time = $wpdb->get_col(
+	$transient_expire_time = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- no functions exist to get the transient expiration time, and caching would defeat the purpose of determining the expiration time.
 		$wpdb->prepare(
 			'SELECT option_value FROM %1$soptions WHERE option_name = "%2$s";',
 			$wpdb->prefix,
