@@ -10,7 +10,7 @@ require 'EmbedYoutubeLiveStreaming.php';
  * Enqueue backend assets
  */
 function youtube_live_backend_assets() {
-	wp_register_script( 'wp-youtube-live-backend', plugin_dir_url( __FILE__ ) . '../js/wp-youtube-live-backend.min.js', array( 'jquery' ), WP_YOUTUBE_LIVE_VERSION, true );
+	wp_enqueue_script( 'wp-youtube-live-backend', plugin_dir_url( __FILE__ ) . '../js/wp-youtube-live-backend.min.js', array( 'jquery' ), WP_YOUTUBE_LIVE_VERSION, true );
 }
 add_action( 'admin_enqueue_scripts', 'youtube_live_backend_assets' );
 
@@ -126,8 +126,6 @@ function youtube_live_settings_init() {
  * Print API Key field
  */
 function youtube_live_api_key_render() {
-	wp_enqueue_script( 'wp-youtube-live-backend' );
-
 	$options = get_option( 'youtube_live_settings' ); ?>
 	<input type="text" name="youtube_live_settings[youtube_live_api_key]" placeholder="AIzaSyD4iE2xVSpkLLOXoyqT-RuPwURN3ddScAI" size="45" value="<?php echo esc_attr( $options['youtube_live_api_key'] ); ?>">
 
@@ -467,6 +465,6 @@ function wp_youtube_live_admin_notices_1714() {
  * @since 1.8.0
  */
 function wp_youtube_live_dismiss_notice_1714() {
-	update_option( 'wp-youtube-live-1714-notice-dismissed', 1, false );
+	update_option( 'wp-youtube-live-1714-notice-dismissed', true, false );
 }
 
