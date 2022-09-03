@@ -3,7 +3,7 @@
  * Plugin Name: YouTube Live
  * Plugin URI: https://github.com/macbookandrew/wp-youtube-live
  * Description: Displays the current YouTube live video from a specified channel
- * Version: 1.8.3
+ * Version: 1.8.4
  * Author: Andrew Minion
  * Author URI: https://andrewrminion.com/
  */
@@ -50,7 +50,7 @@ function output_youtube_live( $atts ) {
 			'width'             => $settings['default_width'],
 			'height'            => $settings['default_height'],
 			'autoplay'          => $settings['autoplay'],
-			'showRelated'       => $settings['show_related'],
+			'show_related'      => $settings['show_related'],
 			'js_only'           => false,
 			'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
 			'auto_refresh'      => $settings['auto_refresh'],
@@ -120,7 +120,7 @@ function get_youtube_live_content( $request_options ) {
 		: sanitize_key( $request_options['autoplay'] );
 	$youtube_live->show_related       = wp_youtube_live_is_ajax() && array_key_exists( 'show_related', $_POST )
 		? sanitize_key( wp_unslash( $_POST['show_related'] ) )
-		: sanitize_key( $request_options['showRelated'] );
+		: sanitize_key( $request_options['show_related'] );
 	$youtube_live->completed_video_id = wp_youtube_live_is_ajax() && array_key_exists( 'completedVideoID', $_POST )
 		? sanitize_key( wp_unslash( $_POST['completedVideoID'] ) )
 		: '';
@@ -138,7 +138,7 @@ function get_youtube_live_content( $request_options ) {
 	}
 
 	if ( $youtube_live->isLive ) {
-		if ( 'true' !== $request_options['js_only'] || ( 'true' === $request_options['js_only'] && wp_youtube_live_is_ajax() ) ) {
+		if ( ( array_key_exists( 'js_only', $request_options ) && 'true' !== $request_options['js_only'] ) || ( array_key_exists( 'js_only', $request_options ) && 'true' === $request_options['js_only'] && wp_youtube_live_is_ajax() ) ) {
 			$is_live = true;
 			// TODO: load a placeholder or nothing on initial page load?
 			echo $youtube_live->embedCode(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the method.
@@ -196,7 +196,7 @@ function get_youtube_live_content( $request_options ) {
 	if ( get_option( 'youtube_live_settings', 'debugging' ) && is_user_logged_in() ) {
 		$debugging_code = var_export( $youtube_live, true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export -- because this is only available for admins if they enable the debug option.
 		echo '<!-- YouTube Live debugging: ' . PHP_EOL . wp_kses_post( $debugging_code ) . PHP_EOL . ' -->';
-		$json_data['error'] . $debugging_code;
+		$json_data['error'] = $debugging_code;
 	}
 
 	if ( 'no_message' !== $youtube_options['fallback_behavior'] ) {
