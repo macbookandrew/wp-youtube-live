@@ -183,7 +183,7 @@ function get_youtube_live_content( $request_options ) {
 			$error_message .= '<li><strong>Domain:</strong> ' . esc_url( $error['domain'] ) . '</li>
             <li><strong>Reason:</strong> ' . esc_attr( $error['reason'] ) . '</li>
             <li><strong>Message:</strong> ' . esc_attr( $error['message'] ) . '</li>
-            <li><strong>Extended help:</strong> ' . wp_kses_post( $error['extendedHelp'] ) . '</li>';
+            <li><strong>Extended help:</strong> ' . wp_kses_post( isset( $error['extendedHelp'] ) ? $error['extendedHelp'] : '' ) . '</li>';
 		}
 		if ( 'video' === $youtube_options['fallback_behavior'] && empty( $youtube_options['fallback_video'] ) ) {
 			$error_message .= '<li>Please double-check that you have set a fallback video.</li>';
