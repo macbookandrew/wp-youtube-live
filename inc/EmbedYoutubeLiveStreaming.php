@@ -275,7 +275,7 @@ class EmbedYoutubeLiveStreaming {
 
 		// cache until first video starts.
 		$key        = key( $all_videos_array );
-		$next_video = $all_videos_array[ $key ];
+		$next_video = isset( $all_videos_array[ $key ] ) ? $all_videos_array[ $key ] : 0;
 		if ( $next_video > time() ) {
 			$cache_length = $next_video - time() + 900;  // add 15-minute “grace period” in case breadcast starts late.
 		} else {
