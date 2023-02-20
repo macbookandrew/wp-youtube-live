@@ -174,29 +174,27 @@ function get_youtube_live_content( $request_options ) {
 		}
 	}
 
-	// errors.
-	$error_message = '';
-	if ( $youtube_live->getErrorMessage() ) {
-		$error_message = '<p><strong>WP YouTube Live error:</strong></p>
-        <ul>';
-		foreach ( $youtube_live->getAllErrors() as $error ) {
-			$error_message .= '<li><strong>Domain:</strong> ' . esc_url( $error['domain'] ) . '</li>
-            <li><strong>Reason:</strong> ' . esc_attr( $error['reason'] ) . '</li>
-            <li><strong>Message:</strong> ' . esc_attr( $error['message'] ) . '</li>
-            <li><strong>Extended help:</strong> ' . wp_kses_post( $error['extendedHelp'] ) . '</li>';
-		}
-		if ( 'video' === $youtube_options['fallback_behavior'] && empty( $youtube_options['fallback_video'] ) ) {
-			$error_message .= '<li>Please double-check that you have set a fallback video.</li>';
-		}
-		$error_message     .= '</ul>';
-		$json_data['error'] = $error_message;
-	}
-
 	// debugging.
 	if ( get_option( 'youtube_live_settings', 'debugging' ) && is_user_logged_in() ) {
+		if ( $youtube_live->getErrorMessage() ) {
+			$error_message = '<p><strong>WP YouTube Live error:</strong></p>
+			<ul>';
+			foreach ( $youtube_live->getAllErrors() as $error ) {
+				$error_message .= '<li><strong>Domain:</strong> ' . esc_url( $error['domain'] ) . '</li>
+				<li><strong>Reason:</strong> ' . esc_attr( $error['reason'] ) . '</li>
+				<li><strong>Message:</strong> ' . esc_attr( $error['message'] ) . '</li>
+				<li><strong>Extended help:</strong> ' . wp_kses_post( $error['extendedHelp'] ) . '</li>';
+			}
+			if ( 'video' === $youtube_options['fallback_behavior'] && empty( $youtube_options['fallback_video'] ) ) {
+				$error_message .= '<li>Please double-check that you have set a fallback video.</li>';
+			}
+			$error_message     .= '</ul>';
+			$json_data['error'] = $error_message;
+		}
+
 		$debugging_code = var_export( $youtube_live, true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export -- because this is only available for admins if they enable the debug option.
 		echo '<!-- YouTube Live debugging: ' . PHP_EOL . wp_kses_post( $debugging_code ) . PHP_EOL . ' -->';
-		$json_data['error'] = $debugging_code;
+		$json_data['error'] .= $debugging_code;
 	}
 
 	if ( 'no_message' !== $youtube_options['fallback_behavior'] ) {
