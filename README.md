@@ -1,12 +1,12 @@
 # WP YouTube Live #
-**Contributors:** [macbookandrew](https://profiles.wordpress.org/macbookandrew)
-**Donate link:**       https://cash.me/$AndrewRMinionDesign
-**Tags:**              youtube, live, video, embed
-**Requires at least:** 3.6
-**Tested up to:**      5.9.3
-**Stable tag:**        1.8.4
-**License:**           GPLv2 or later
-**License URI:**       http://www.gnu.org/licenses/gpl-2.0.html
+**Contributors:** [macbookandrew](https://profiles.wordpress.org/macbookandrew)  
+**Donate link:**       https://cash.me/$AndrewRMinionDesign  
+**Tags:**              youtube, live, video, embed  
+**Requires at least:** 3.6  
+**Tested up to:**      5.9.3  
+**Stable tag:**        1.8.5  
+**License:**           GPLv2 or later  
+**License URI:**       http://www.gnu.org/licenses/gpl-2.0.html  
 
 Displays the current YouTube live video from a specified channel.
 
@@ -175,44 +175,39 @@ Because this plugin helps you use the YouTube service, you should refer to these
 ## Screenshots ##
 
 ### 1. Settings screen ###
-![Settings screen](.wordpress-org/assets/screenshot-1.png)
+![Settings screen](http://ps.w.org/wp-youtube-live/assets/screenshot-1.png)
 
 
 ## Changelog ##
 
-### 1.8.4 ###
+### 1.8.5 ###
+- Prevent any errors from showing up when debug mode is disabled
 
+### 1.8.4 ###
 - Fix “undefined index” issue in debug logs
 - Fix persistent update notice
 
 ### 1.8.3 ###
-
 - Escape admin-visible debug output
 
 ### 1.8.2 ###
-
 - Escape oembed output
 
 ### 1.8.1 ###
-
 - Update code documentation
 - Update plugin branding images
 
 ### 1.8.0 ###
-
 - Fix reported security issues
 - Update plugin branding images
 
 ### 1.7.22 ###
-
 - Fix reflected cross-site scripting vulnerability
 
 ### 1.7.21 ###
-
 - Fix error on activation
 
 ### 1.7.20 ###
-
 - Fix error when no upcoming videos are cached
 
 ### 1.7.19 ###
@@ -224,7 +219,7 @@ Because this plugin helps you use the YouTube service, you should refer to these
 - Improve deployment process
 
 ### 1.7.17 ###
-- Add logic check for valid upcoming videos.
+- Fix issue with invalid videos response.
 
 ### 1.7.16 ###
 - Add utility to flush cache.
