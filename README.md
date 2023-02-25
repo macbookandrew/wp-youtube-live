@@ -1,12 +1,12 @@
 # WP YouTube Live #
-**Contributors:** [macbookandrew](https://profiles.wordpress.org/macbookandrew)  
-**Donate link:**       https://cash.me/$AndrewRMinionDesign  
-**Tags:**              youtube, live, video, embed  
-**Requires at least:** 3.6  
-**Tested up to:**      5.9.3  
-**Stable tag:**        1.8.5  
-**License:**           GPLv2 or later  
-**License URI:**       http://www.gnu.org/licenses/gpl-2.0.html  
+**Contributors:** [macbookandrew](https://profiles.wordpress.org/macbookandrew)
+**Donate link:**       https://cash.me/$AndrewRMinionDesign
+**Tags:**              youtube, live, video, embed
+**Requires at least:** 3.6
+**Tested up to:**      5.9.3
+**Stable tag:**        1.8.6
+**License:**           GPLv2 or later
+**License URI:**       http://www.gnu.org/licenses/gpl-2.0.html
 
 Displays the current YouTube live video from a specified channel.
 
@@ -179,6 +179,9 @@ Because this plugin helps you use the YouTube service, you should refer to these
 
 
 ## Changelog ##
+
+### 1.8.6 ###
+- Fix undefined index error when no upcoming videos are available
 
 ### 1.8.5 ###
 - Prevent any errors from showing up when debug mode is disabled
