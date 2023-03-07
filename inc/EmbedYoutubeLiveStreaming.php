@@ -274,12 +274,13 @@ class EmbedYoutubeLiveStreaming {
 		asort( $all_videos_array );
 
 		// cache until first video starts.
-		$key        = key( $all_videos_array );
-		$next_video = $all_videos_array[ $key ];
-		if ( $next_video > time() ) {
-			$cache_length = $next_video - time() + 900;  // add 15-minute “grace period” in case breadcast starts late.
-		} else {
-			$cache_length = 600;
+		$key          = key( $all_videos_array );
+		$cache_length = 600;
+		if ( $key ) {
+			$next_video = $all_videos_array[ $key ];
+			if ( $next_video > time() ) {
+				$cache_length = $next_video - time() + 900;  // add 15-minute “grace period” in case breadcast starts late.
+			}
 		}
 
 		return set_transient( 'youtube-live-upcoming-videos', maybe_serialize( $all_videos_array ), $cache_length );

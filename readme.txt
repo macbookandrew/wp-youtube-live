@@ -4,7 +4,7 @@ Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
 Tested up to:      5.9.3
-Stable tag:        1.8.6
+Stable tag:        1.8.8
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -178,8 +178,14 @@ Because this plugin helps you use the YouTube service, you should refer to these
 
 == Changelog ==
 
-= 1.8.6 =
+= 1.8.8 =
 - Prevent undefined index error
+
+= 1.8.7 =
+- Fix deployment
+
+= 1.8.6 =
+- Fix undefined index error when no upcoming videos are available
 
 = 1.8.5 =
 - Prevent any errors from showing up when debug mode is disabled
