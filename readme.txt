@@ -3,8 +3,8 @@ Contributors:      macbookandrew
 Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
-Tested up to:      5.9.3
-Stable tag:        1.8.8
+Tested up to:      6.3.2
+Stable tag:        1.9.0
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -177,6 +177,9 @@ Because this plugin helps you use the YouTube service, you should refer to these
 1. Settings screen
 
 == Changelog ==
+
+= 1.9.0 =
+- Add YouTube Terms of Service and Google Privacy Policy
 
 = 1.8.8 =
 - Prevent undefined index error
