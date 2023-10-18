@@ -438,7 +438,7 @@ function youtube_live_terms_render() {
 /**
  * Admin notices.
  */
-if ( is_admin() && get_option( 'wp-youtube-live-1714-notice-dismissed' ) === false ) {
+if ( is_admin() && get_option( 'wp-youtube-live-1714-notice-dismissed', true ) === false ) {
 	add_action( 'admin_notices', 'wp_youtube_live_admin_notices_1714' );
 	add_action( 'wp_ajax_wp_youtube_live_dismiss_notice_1714', 'wp_youtube_live_dismiss_notice_1714' );
 }
