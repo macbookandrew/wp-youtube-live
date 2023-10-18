@@ -144,6 +144,17 @@ function get_youtube_live_content( $request_options ) {
 			$is_live = true;
 			// TODO: load a placeholder or nothing on initial page load?
 			echo $youtube_live->embedCode(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the method.
+
+			/**
+			 * Control visibility of the YouTube terms of service and Google Privacy Policy.
+			 *
+			 * @param boolean $display Whether the terms of service should display or not.
+			 *
+			 * @return boolean
+			 */
+			if ( apply_filters( 'wp_youtube_live_display_youtube_tos', true ) ) {
+				echo '<p class="wp-youtube-live-terms" style="font-size: small; margin-top: 4px; margin-bottom: 8px;">See <a target="_blank" href="https://www.youtube.com/t/terms">YouTube Terms of Service</a> and <a target="blank" href="https://policies.google.com/privacy">Google Privacy Policy</a>.</p>';
+			}
 		}
 	} else {
 		$is_live = false;
