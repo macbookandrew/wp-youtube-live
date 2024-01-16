@@ -188,7 +188,7 @@ function get_youtube_live_content( $request_options ) {
 	}
 
 	// debugging.
-	if ( get_option( 'youtube_live_settings', 'debugging' ) && is_user_logged_in() ) {
+	if ( 'true' === $youtube_options['debugging'] && is_user_logged_in() ) {
 		if ( $youtube_live->getErrorMessage() ) {
 			$error_message = '<p><strong>WP YouTube Live error:</strong></p>
 			<ul>';
