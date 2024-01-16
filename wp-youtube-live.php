@@ -187,8 +187,17 @@ function get_youtube_live_content( $request_options ) {
 		}
 	}
 
+	/**
+	 * Filters the capability required to see debug output.
+	 *
+	 * @var string $capability The capability required.
+	 *
+	 * @return string
+	 */
+	$capability = apply_filters( 'wp_youtube_live_debug_user_capability', 'manage_options' );
+
 	// debugging.
-	if ( 'true' === $youtube_options['debugging'] && is_user_logged_in() ) {
+	if ( 'true' === $youtube_options['debugging'] && is_user_logged_in() && current_user_can( $capability ) ) {
 		if ( $youtube_live->getErrorMessage() ) {
 			$error_message = '<p><strong>WP YouTube Live error:</strong></p>
 			<ul>';
