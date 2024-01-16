@@ -4,7 +4,7 @@ Donate link:       https://cash.me/$AndrewRMinionDesign
 Tags:              youtube, live, video, embed
 Requires at least: 3.6
 Tested up to:      6.3.2
-Stable tag:        1.9.0
+Stable tag:        1.10.0
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,7 +26,7 @@ If no live video is available, you can display a specified video or a “channel
 
 You can also enable auto-refresh to automatically check for a live video every 30 seconds (warning: will increase server load, so use with caution).
 
-By default, the server will check YouTube’s API and then cache that response for 30 seconds before checking the API again. If auto-refresh is enabled, clients will check against your server every 30 seconds and likely will hit that cache as well, so it can potentially take up to 60 seconds before a client will get a live video.
+By default, the server will check YouTube’s API and then cache that response for 15 minutes before checking the API again (you may change this value in the admin settings). If auto-refresh is enabled, clients will check against your server every 30 seconds and likely will hit that cache as well, so it can potentially take up to 16 minutes before a client will get a live video.
 
 The length of both caches can be changed using the `wp_youtube_live_transient_timeout` filter (see below for more information).
 
@@ -177,6 +177,11 @@ Because this plugin helps you use the YouTube service, you should refer to these
 1. Settings screen
 
 == Changelog ==
+
+= 1.10.0 =
+- Fix `show_related` parameter
+- Fix debug output
+- Add capability checking to see debug output
 
 = 1.9.0 =
 - Add YouTube Terms of Service and Google Privacy Policy
