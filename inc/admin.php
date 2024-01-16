@@ -303,8 +303,20 @@ function youtube_live_debugging_render() {
 	if ( ! array_key_exists( 'debugging', $options ) ) {
 		$options['debugging'] = false;
 	}
+
+	/**
+	 * Filters the capability required to see debug output.
+	 *
+	 * @since 1.10.0
+	 *
+	 * @var string $capability The capability required.
+	 *
+	 * @return string
+	 */
+	$capability = apply_filters( 'wp_youtube_live_debug_user_capability', 'manage_options' );
+
 	?>
-	Show debugging information in an HTML comment for logged-in users? <label><input type="radio" name="youtube_live_settings[debugging]" value="true" <?php checked( $options['debugging'], 'true' ); ?>> Yes</label> <label><input type="radio" name="youtube_live_settings[debugging]" value="false" <?php checked( $options['debugging'], 'false' ); ?>> No</label>
+	Show debugging information in an HTML comment for logged-in users with the <code><?php echo esc_attr( $capability ); ?></code> capability? <label><input type="radio" name="youtube_live_settings[debugging]" value="true" <?php checked( $options['debugging'], 'true' ); ?>> Yes</label> <label><input type="radio" name="youtube_live_settings[debugging]" value="false" <?php checked( $options['debugging'], 'false' ); ?>> No</label>
 	<?php
 }
 
