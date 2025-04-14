@@ -9,7 +9,7 @@ require 'EmbedYoutubeLiveStreaming.php';
 /**
  * Enqueue backend assets
  */
-function youtube_live_backend_assets() {
+function youtube_live_backend_assets(): void {
 	wp_enqueue_script( 'wp-youtube-live-backend', plugin_dir_url( __FILE__ ) . '../js/wp-youtube-live-backend.min.js', array( 'jquery' ), WP_YOUTUBE_LIVE_VERSION, true );
 }
 add_action( 'admin_enqueue_scripts', 'youtube_live_backend_assets' );
@@ -23,14 +23,14 @@ add_action( 'admin_init', 'youtube_live_settings_init' );
 /**
  * Add settings page to admin menu
  */
-function youtube_live_add_admin_menu() {
+function youtube_live_add_admin_menu(): void {
 	add_submenu_page( 'options-general.php', 'YouTube Live', 'YouTube Live Settings', 'manage_options', 'youtube-live', 'youtube_live_options_page' );
 }
 
 /**
  * Add settings section and fields
  */
-function youtube_live_settings_init() {
+function youtube_live_settings_init(): void {
 	register_setting( 'youtube_live_options', 'youtube_live_settings' );
 
 	// API settings.
@@ -125,11 +125,13 @@ function youtube_live_settings_init() {
 /**
  * Print API Key field
  */
-function youtube_live_api_key_render() {
+function youtube_live_api_key_render(): void {
 	$options = get_option( 'youtube_live_settings' ); ?>
-	<input type="text" name="youtube_live_settings[youtube_live_api_key]" placeholder="AIzaSyD4iE2xVSpkLLOXoyqT-RuPwURN3ddScAI" size="45" value="<?php echo esc_attr( $options['youtube_live_api_key'] ); ?>">
+	<label>
+    <input type="text" name="youtube_live_settings[youtube_live_api_key]" placeholder="AIzaSyD4iE2xVSpkLLOXoyqT-RuPwURN3ddScAI" size="45" value="<?php echo esc_attr( $options['youtube_live_api_key'] ); ?>">
+  </label>
 
-	<p>Don&rsquo;t have an API key?</p>
+  <p>Don&rsquo;t have an API key?</p>
 	<ol>
 		<li>Go to the <a href="https://console.developers.google.com/apis/" target="_blank">Google APIs developers console</a> (create an account if necessary).</li>
 		<li>Create a new project (if necessary).</li>
@@ -146,7 +148,7 @@ function youtube_live_api_key_render() {
 /**
  * Print Channel ID field
  */
-function youtube_live_channel_id_render() {
+function youtube_live_channel_id_render(): void {
 	$options = get_option( 'youtube_live_settings' );
 	?>
 	<input type="text" name="youtube_live_settings[youtube_live_channel_id]" placeholder="UcZliPwLMjeJbhOAnr1Md4gA" size="45" value="<?php echo esc_attr( $options['youtube_live_channel_id'] ); ?>">
@@ -158,7 +160,7 @@ function youtube_live_channel_id_render() {
 /**
  * Print subdomain field
  */
-function youtube_live_subdomain_render() {
+function youtube_live_subdomain_render(): void {
 	$options = get_option( 'youtube_live_settings', array( 'subdomain' => 'www' ) );
 	?>
 	<label><select name="youtube_live_settings[subdomain]">
@@ -171,7 +173,7 @@ function youtube_live_subdomain_render() {
 /**
  * Print player settings fields
  */
-function youtube_live_player_settings_render() {
+function youtube_live_player_settings_render(): void {
 	$options = get_option( 'youtube_live_settings' );
 	if ( ! array_key_exists( 'default_width', $options ) || is_null( $options['default_width'] ) ) {
 		$options['default_width'] = 720;
@@ -203,7 +205,7 @@ function youtube_live_player_settings_render() {
 /**
  * Print fallback behavior fields
  */
-function fallback_behavior_render() {
+function fallback_behavior_render(): void {
 	$options = get_option( 'youtube_live_settings' );
 	if ( ! array_key_exists( 'fallback_behavior', $options ) ) {
 		$options['fallback_behavior'] = 'message';
@@ -228,9 +230,11 @@ function fallback_behavior_render() {
 
 	<p class="fallback message">
 		<label for="youtube_live_settings[fallback_message]">Custom HTML message:</label><br/>
-		<textarea cols="50" rows="8" name="youtube_live_settings[fallback_message]" placeholder="<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target='_blank' href='<?php echo esc_url( 'https://youtube.com/channel/' . $options['youtube_live_channel_id'] ); ?>'>all of our videos</a>.</p>
-		<p><button type='button' class='button' id='check-again'>Check again</button><span class='spinner' style='display:none;'></span></p>."><?php echo wp_kses_post( $options['fallback_message'] ); ?></textarea>
-	</p>
+    <label>
+<textarea cols="50" rows="8" name="youtube_live_settings[fallback_message]" placeholder="<p>Sorry, there&rsquo;s no live stream at the moment. Please check back later or take a look at <a target='_blank' href='<?php echo esc_url( 'https://youtube.com/channel/' . $options['youtube_live_channel_id'] ); ?>'>all of our videos</a>.</p>
+<p><button type='button' class='button' id='check-again'>Check again</button><span class='spinner' style='display:none;'></span></p>."><?php echo wp_kses_post( $options['fallback_message'] ); ?></textarea>
+    </label>
+  </p>
 
 	<div class="fallback upcoming">
 		<p>This option will fetch all your upcoming scheduled live videos from the YouTube API and cache them for 24 hours or until the first video is scheduled to begin, whichever is soonest. If you schedule more live videos, press the button below to manually flush the server’s cache. <strong>Note:</strong> if you have no upcoming scheduled videos, the last scheduled video will be shown instead.</p>
@@ -252,13 +256,17 @@ function fallback_behavior_render() {
 
 	<p class="fallback playlist">
 		<label for="youtube_live_settings[fallback_playlist]">Fallback Playlist URL:</label><br/>
-		<input type="text" name="youtube_live_settings[fallback_playlist]" size="45" placeholder="https://www.youtube.com/watch?v=abc123…&list=PLABC123…" value="<?php echo esc_attr( $options['fallback_playlist'] ); ?>" />
-	</p>
+    <label>
+      <input type="text" name="youtube_live_settings[fallback_playlist]" size="45" placeholder="https://www.youtube.com/watch?v=abc123…&list=PLABC123…" value="<?php echo esc_attr( $options['fallback_playlist'] ); ?>" />
+    </label>
+  </p>
 
 	<p class="fallback video">
 		<label for="youtube_live_settings[fallback_video]">Fallback Video URL:</label><br/>
-		<input type="text" name="youtube_live_settings[fallback_video]" size="45" placeholder="https://youtu.be/dQw4w9WgXcQ" value="<?php echo esc_attr( $options['fallback_video'] ); ?>" />
-	</p>
+    <label>
+      <input type="text" name="youtube_live_settings[fallback_video]" size="45" placeholder="https://youtu.be/dQw4w9WgXcQ" value="<?php echo esc_attr( $options['fallback_video'] ); ?>" />
+    </label>
+  </p>
 
 	<p>For more information on quota usage, read the <a href="https://github.com/macbookandrew/wp-youtube-live#quota-units">plugin documentation</a> as well as the <a href="https://developers.google.com/youtube/v3/getting-started#quota" target="_blank">YouTube API documentation</a>.</p>
 	<?php
@@ -267,7 +275,7 @@ function fallback_behavior_render() {
 /**
  * Print auto-refresh field
  */
-function youtube_live_auto_refresh_render() {
+function youtube_live_auto_refresh_render(): void {
 	$options = get_option( 'youtube_live_settings' );
 	if ( ! array_key_exists( 'auto_refresh', $options ) ) {
 		$options['auto_refresh'] = false;
@@ -281,7 +289,7 @@ function youtube_live_auto_refresh_render() {
 /**
  * Print transient timeout field
  */
-function youtube_live_transient_timeout_render() {
+function youtube_live_transient_timeout_render(): void {
 	$options = get_option( 'youtube_live_settings' );
 	if ( ! array_key_exists( 'transient_timeout', $options ) ) {
 		$options['transient_timeout'] = 900;
@@ -298,7 +306,7 @@ function youtube_live_transient_timeout_render() {
 /**
  * Print debugging field
  */
-function youtube_live_debugging_render() {
+function youtube_live_debugging_render(): void {
 	$options = get_option( 'youtube_live_settings' );
 	if ( ! array_key_exists( 'debugging', $options ) ) {
 		$options['debugging'] = false;
@@ -323,14 +331,14 @@ function youtube_live_debugging_render() {
 /**
  * Print API settings field
  */
-function youtube_live_api_settings_section_callback() {
+function youtube_live_api_settings_section_callback(): void {
 	echo wp_kses_post( __( 'Enter your YouTube details below. Once you&rsquo;ve entered the required details below, add the shortcode <code>[youtube_live]</code> to any post/page to display the live player.', 'youtube_live' ) );
 }
 
 /**
  * Print settings form
  */
-function youtube_live_options_page() {
+function youtube_live_options_page(): void {
 	?>
 	<div class="wrap">
 		<form action="options.php" method="post">
@@ -388,7 +396,7 @@ add_action( 'wp_ajax_updatewpYTUpcomingCache', 'refresh_youtube_live_upcoming_ca
  * @param  array $input possibly serialized array of $id => $start_time values.
  * @return string HTML output
  */
-function format_upcoming_videos( $input ) {
+function format_upcoming_videos( $input ): string {
 	if ( $input ) {
 		$video_array = maybe_unserialize( $input );
 	}
@@ -422,7 +430,7 @@ function format_upcoming_videos( $input ) {
  *
  * @return void
  */
-function youtube_live_tools_render() {
+function youtube_live_tools_render(): void {
 	?>
 	<p><a class="btn primary" target="_blank" href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=youtube_live_flush_cache' ) ); ?>">Flush Cache</a></p>
 	<?php
@@ -433,7 +441,7 @@ function youtube_live_tools_render() {
  *
  * @return void
  */
-function youtube_live_terms_render() {
+function youtube_live_terms_render(): void {
 	?>
 	<p>This plugin stores your channel ID and API token in your WordPress options table, but does not store or collect any other information.</p>
 
@@ -461,7 +469,7 @@ if ( is_admin() && get_option( 'wp-youtube-live-1714-notice-dismissed', true ) =
  *
  * @since 1.7.14
  */
-function wp_youtube_live_admin_notices_1714() {
+function wp_youtube_live_admin_notices_1714(): void {
 	?>
 	<div class="notice notice-error wp-youtube-live-notice is-dismissible" data-version="1714">
 		<h2>YouTube Live Notice</h2>
@@ -476,7 +484,7 @@ function wp_youtube_live_admin_notices_1714() {
  *
  * @since 1.8.0
  */
-function wp_youtube_live_dismiss_notice_1714() {
+function wp_youtube_live_dismiss_notice_1714(): void {
 	update_option( 'wp-youtube-live-1714-notice-dismissed', true, false );
 }
 

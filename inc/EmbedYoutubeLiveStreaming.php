@@ -9,37 +9,37 @@
  * YouTube Embed class.
  */
 class EmbedYoutubeLiveStreaming {
-	public $channelId;
-	public $API_Key;
+	public string $channelId;
+	public string $API_Key;
 
 	public $jsonResponse; // pure server response.
 	public $objectResponse; // response decoded as object.
 	public $arrayResponse; // response decoded as array.
 
-	public $errorMessage; // error message.
+	public string $errorMessage; // error message.
 	public $errorArray; // all error codes.
 
 	public $isLive; // true if there is a live streaming at the channel.
 
 	public $queryData; // query values as an array.
-	public $getAddress; // address to request GET.
+	public string $getAddress; // address to request GET.
 	public $getQuery; // data to request, encoded.
 
 	public $queryString; // Address + Data to request.
 
-	public $part;
-	public $eventType;
-	public $type;
+	public string $part;
+	public string $eventType;
+	public string $type;
 
 	public $subdomain;
 
-	public $default_embed_width;
-	public $default_embed_height;
-	public $default_ratio;
+	public string $default_embed_width;
+	public string $default_embed_height;
+	public int|float $default_ratio;
 
 	public $embed_code; // contain the embed code.
-	public $embed_autoplay;
-	public $embed_width;
+	public bool $embed_autoplay;
+	public string $embed_width;
 	public $embed_height;
 	public $show_related;
 
@@ -47,12 +47,13 @@ class EmbedYoutubeLiveStreaming {
 	public $live_video_title;
 	public $live_video_description;
 
-	public $live_video_publishedAt;
+	public $live_video_published_at;
 
 	public $live_video_thumb_default;
 	public $live_video_thumb_medium;
 	public $live_video_thumb_high;
 
+  public string $resource;
 	public $resource_type;
 
 	public $uploads_id;
@@ -99,7 +100,7 @@ class EmbedYoutubeLiveStreaming {
 	 * @param string [ $resource_type           = 'live'] type of video resource (live, video, channel, etc.).
 	 * @param string [ $event_type              = 'live'] type of event (live, upcoming, completed).
 	 */
-	public function getVideoInfo( $resource_type = 'live', $event_type = 'live' ) {
+	public function getVideoInfo( $resource_type = 'live', $event_type = 'live' ): void {
 		// check transient before performing query.
 		$upcoming_cache = get_transient( 'wp-youtube-live-api-response' );
 		if ( false === $upcoming_cache ) {
@@ -233,6 +234,7 @@ class EmbedYoutubeLiveStreaming {
 	 * Cache info for all scheduled upcoming videos
 	 *
 	 * @return boolean whether 24-hour transient was set
+	 * @throws \JsonException
 	 */
 	public function cacheUpcomingVideoInfo() {
 		// set up query data.
@@ -246,7 +248,7 @@ class EmbedYoutubeLiveStreaming {
 		);
 
 		// run the query.
-		$all_upcoming_videos = json_decode( $this->queryAPI() );
+		$all_upcoming_videos = json_decode( $this->queryAPI(), FALSE, 100, JSON_THROW_ON_ERROR );
 		$all_videos_array    = array();
 
 		$previous_resource_type = $this->resource;
@@ -403,10 +405,10 @@ class EmbedYoutubeLiveStreaming {
 	/**
 	 * Calculate embed size by width
 	 *
-	 * @param integer   $width        width in pixels.
+	 * @param integer $width        width in pixels.
 	 * @param boolean [ $refill_code = true] whether to generate embed code or not.
 	 */
-	public function setEmbedSizeByWidth( $width, $refill_code = true ) {
+	public function setEmbedSizeByWidth( int $width, $refill_code = true ): void {
 		$ratio              = $this->default_embed_width / $this->default_embed_height;
 		$this->embed_width  = $width;
 		$this->embed_height = $width / $ratio;
@@ -422,7 +424,7 @@ class EmbedYoutubeLiveStreaming {
 	 * @param integer   $height       height in pixels.
 	 * @param boolean [ $refill_code = true] whether to generate embed code or not.
 	 */
-	public function setEmbedSizeByHeight( $height, $refill_code = true ) {
+	public function setEmbedSizeByHeight( $height, $refill_code = true ): void {
 		$ratio              = $this->default_embed_width / $this->default_embed_height;
 		$this->embed_height = $height;
 		$this->embed_width  = $height * $ratio;
@@ -437,7 +439,7 @@ class EmbedYoutubeLiveStreaming {
 	 *
 	 * @return string HTML embed code
 	 */
-	public function embedCode() {
+	public function embedCode(): string {
 		$autoplay = 'true' === $this->embed_autoplay ? 1 : 0;
 		$related  = $this->show_related ? 1 : 0;
 		if ( 'channel' === $this->resource_type ) {
